@@ -1,4 +1,16 @@
+# encoding: UTF-8
 load 'config.rb'
+load 'tag_hunter.rb'
+require 'fileutils'
+
+def is_output_different tags_a, tags_b, zlevel, type
+	turn_tags_into_image(tags_a, zlevel, type)
+	turn_tags_into_image(tags_b, zlevel, type)
+	filename_a = get_filename tags_a, zlevel, type	
+	filename_b = get_filename tags_b, zlevel, type	
+	#Returns true if the contents of a file A and a file B are identical.
+	return !FileUtils.compare_file(filename_a, filename_b)
+end
 
 def get_filename tags, zlevel, type
 	return get_path_to_folder_for_temporary_files+tags.to_s+"_"+zlevel.to_s+"_"+type+".png"
@@ -18,7 +30,7 @@ def turn_tags_into_image(tags, zlevel, type)
 	generate_image tags, type, zlevel, lat, lon, debug
 	
 	if !File.exists?(export_filename)
-		raise "turn_tags_into_image failed"
+		raise "turn_tags_into_image failed tags: #{tags}, zlevel: #{zlevel}, type: #{type}"
 	end
 end
 
