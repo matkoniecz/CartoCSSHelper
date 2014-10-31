@@ -13,7 +13,7 @@ def is_output_different tags_a, tags_b, zlevel, type
 end
 
 def get_filename tags, zlevel, type
-	return get_path_to_folder_for_temporary_files+tags.to_s+"_"+zlevel.to_s+"_"+type+".png"
+	return get_path_to_folder_for_temporary_files+tags.sort.to_s+"_"+zlevel.to_s+"_"+type+".png"
 end
 
 def turn_tags_into_image(tags, zlevel, type)
@@ -25,7 +25,8 @@ def turn_tags_into_image(tags, zlevel, type)
 	if File.exists?(export_filename)
 		return
 	end
-	generate_data_file tags, lat, lon
+	puts "#{tags.to_s} #{zlevel} #{type}"
+	generate_data_file tags, lat, lon, type
 	load_data_into_database debug
 	generate_image tags, type, zlevel, lat, lon, debug
 	
@@ -38,13 +39,17 @@ def get_data_filename
 	return get_path_to_folder_for_temporary_files+'data.osm'
 end
 
+def get_size
+	return 0.2
+end
+
 def generate_image tags, type, zlevel, lat, lon, debug
 	silence = "> /dev/null 2>&1"
 	if debug
 		silence = ""
 	end
 	export_filename = get_filename tags, zlevel, type
-	size = 0.2
+	size = get_size
 	#--bbox=[xmin,ymin,xmax,ymax] 
 	bbox = "#{lon-size/2},#{lat-size/2},#{lon+size/2},#{lat+size/2}"
 	params = "--format=png --width=200 --height=200 --static_zoom=#{zlevel} --bbox=\"#{bbox}\""
@@ -55,16 +60,53 @@ def generate_image tags, type, zlevel, lat, lon, debug
 	system command
 end
 
-def generate_data_file tags, lat, lon
-	data_file = open(get_data_filename, 'w')
-	data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
-
-	data_file.write "  <node id='-2387' visible='true' lat='#{lat}' lon='#{lon}'>"
+def add_node_to_data_file tags, lat, lon, data_file, id #TODO kill godawful ID
+	data_file.write "\n"
+	data_file.write "  <node id='#{id}' visible='true' lat='#{lat}' lon='#{lon}'>"
 	for tag in tags
 		data_file.write "\n"
 		data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
 	end
-	data_file.write "</node>\n</osm>"
+	data_file.write "</node>"
+end
+
+def add_way_to_data_file tags, nodes, data_file, id #TODO kill godawful ID
+	data_file.write "\n"
+	data_file.write "  <way id='#{id}' visible='true'>"
+	for node in nodes
+		data_file.write "\n"
+		data_file.write "    <nd ref='#{node}' />"
+	end
+	for tag in tags
+		data_file.write "\n"
+		data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
+	end
+	data_file.write "\n  </way>"
+end
+
+def generate_data_file tags, lat, lon, type
+	if type == "area"
+		tags.push(["area", "yes"])
+		return generate_data_file tags, lat, lon, "closed way"
+	end
+	data_file = open(get_data_filename, 'w')
+	data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
+	if type == "node"
+		add_node_to_data_file tags, lat, lon, data_file, 2387
+	elsif type == "way"
+		add_node_to_data_file [], lat, lon-get_size/3, data_file, 1
+		add_node_to_data_file [], lat, lon+get_size/3, data_file, 2
+		add_way_to_data_file tags, [1, 2], data_file, 3
+	elsif type == "closed_way"
+		add_node_to_data_file [], lat-get_size/3, lon-get_size/3, data_file, 1
+		add_node_to_data_file [], lat-get_size/3, lon+get_size/3, data_file, 2
+		add_node_to_data_file [], lat+get_size/3, lon+get_size/3, data_file, 3
+		add_node_to_data_file [], lat+get_size/3, lon-get_size/3, data_file, 4
+		add_way_to_data_file tags, [1, 2, 3, 4, 1], data_file, 5
+	else
+		raise
+	end
+	data_file.write "\n</osm>"
 	data_file.close
 end
 

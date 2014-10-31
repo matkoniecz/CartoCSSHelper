@@ -42,6 +42,6 @@ def is_object_displaying_name key, value, name, zlevel
 end
 
 def is_object_displaying_anything key, value, zlevel
-	tag = [[key, value]]
+	tag = [[key, value], ["name", "a"]]
 	return is_output_different(tag, [], zlevel, "node")
 end
