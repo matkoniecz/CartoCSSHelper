@@ -29,23 +29,16 @@ def list_render_state
 end
 
 def is_rendered key, value
-	if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", 19
-		return true
-	end
-	if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", 5
-		return true
-	end
-	if rendered_on_zlevel [[key, value]], "way", 19
-		return true
-	end
-	if rendered_on_zlevel [[key, value]], "way", 5
-		return true
-	end
-	if rendered_on_zlevel [[key, value]], "node", 19
-		return true
-	end
-	if rendered_on_zlevel [[key, value]], "node", 5
-		return true
+	for zlevel in [19, 5]
+		if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel
+			return true
+		end
+		if rendered_on_zlevel [[key, value]], "way", zlevel
+			return true
+		end
+		if rendered_on_zlevel [[key, value]], "node", zlevel
+			return true
+		end
 	end
 	return false
 end
@@ -59,29 +52,19 @@ def is_rendered_as_composite key, value, suggested_composite
 end
 
 def how_rendered_as_composite key, value, suggested_composite
-	result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", 19, true, suggested_composite
-	if result != nil
-		return result
-	end
-	result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", 5, true, suggested_composite
-	if result != nil
-		return result
-	end
-	result = how_rendered_on_zlevel_as_composite [[key, value]], "way", 19, false, suggested_composite
-	if result != nil
-		return result
-	end
-	result = how_rendered_on_zlevel_as_composite [[key, value]], "way", 5, false, suggested_composite
-	if result != nil
-		return result
-	end
-	result = how_rendered_on_zlevel_as_composite [[key, value]], "node", 19, false, suggested_composite
-	if result != nil
-		return result
-	end
-	result = how_rendered_on_zlevel_as_composite [[key, value]], "node", 5, false, suggested_composite
-	if result != nil
-		return result
+	for zlevel in [19, 5]
+		result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", zlevel, true, suggested_composite
+		if result != nil
+			return result
+		end
+		result = how_rendered_on_zlevel_as_composite [[key, value]], "way", zlevel, false, suggested_composite
+		if result != nil
+			return result
+		end
+		result = how_rendered_on_zlevel_as_composite [[key, value]], "node", zlevel, false, suggested_composite
+		if result != nil
+			return result
+		end
 	end
 	if suggested_composite != nil
 		return how_rendered_as_composite key, value, nil
