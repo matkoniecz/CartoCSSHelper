@@ -3,32 +3,41 @@ load 'config.rb'
 load 'tag_hunter.rb'
 require 'fileutils'
 
-def is_output_different tags_a, tags_b, zlevel, type
-	turn_tags_into_image(tags_a, zlevel, type)
-	turn_tags_into_image(tags_b, zlevel, type)
-	filename_a = get_filename tags_a, zlevel, type	
-	filename_b = get_filename tags_b, zlevel, type	
+def is_output_different tags_a, tags_b, zlevel, type, on_water=false
+	turn_tags_into_image(tags_a, zlevel, type, on_water)
+	turn_tags_into_image(tags_b, zlevel, type, on_water)
+	filename_a = get_filename tags_a, zlevel, type, on_water
+	filename_b = get_filename tags_b, zlevel, type, on_water
 	#Returns true if the contents of a file A and a file B are identical.
 	return !FileUtils.compare_file(filename_a, filename_b)
 end
 
-def get_filename tags, zlevel, type
-	return get_path_to_folder_for_temporary_files+tags.sort.to_s+"_"+zlevel.to_s+"_"+type+".png"
+def get_filename tags, zlevel, type, on_water
+	water_part = ""
+	if on_water
+		water_part = "_water"
+	end
+	return get_path_to_folder_for_temporary_files+tags.sort.to_s+"_"+zlevel.to_s+water_part+"_"+type+".png"
 end
 
-def turn_tags_into_image(tags, zlevel, type)
+def turn_tags_into_image(tags, zlevel, type, on_water=false)
 	debug = false
 	
 	lat = 0
 	lon = 20
-	export_filename = get_filename tags, zlevel, type
+	on_water_string = ""
+	if on_water
+		lon = 0
+		on_water_string = "on_water"
+	end
+	export_filename = get_filename tags, zlevel, type, on_water
 	if File.exists?(export_filename)
 		return
 	end
-	puts "#{tags.to_s} #{zlevel} #{type}"
+	puts "#{tags.to_s} #{zlevel} #{type} #{on_water_string}"
 	generate_data_file tags, lat, lon, type
 	load_data_into_database debug
-	generate_image tags, type, zlevel, lat, lon, debug
+	generate_image tags, type, zlevel, lat, lon, on_water, debug
 	
 	if !File.exists?(export_filename)
 		raise "turn_tags_into_image failed tags: #{tags}, zlevel: #{zlevel}, type: #{type}"
@@ -43,12 +52,12 @@ def get_size
 	return 0.2
 end
 
-def generate_image tags, type, zlevel, lat, lon, debug
+def generate_image tags, type, zlevel, lat, lon, on_water, debug
 	silence = "> /dev/null 2>&1"
 	if debug
 		silence = ""
 	end
-	export_filename = get_filename tags, zlevel, type
+	export_filename = get_filename tags, zlevel, type, on_water
 	size = get_size
 	#--bbox=[xmin,ymin,xmax,ymax] 
 	bbox = "#{lon-size/2},#{lat-size/2},#{lon+size/2},#{lat+size/2}"

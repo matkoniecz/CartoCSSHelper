@@ -29,15 +29,17 @@ def list_render_state
 end
 
 def is_rendered key, value
-	for zlevel in [19]
-		if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel
-			return true
-		end
-		if rendered_on_zlevel [[key, value]], "way", zlevel
-			return true
-		end
-		if rendered_on_zlevel [[key, value]], "node", zlevel
-			return true
+	for on_water in [false, true]
+		for zlevel in [19]
+			if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel, on_water
+				return true
+			end
+			if rendered_on_zlevel [[key, value]], "way", zlevel, on_water
+				return true
+			end
+			if rendered_on_zlevel [[key, value]], "node", zlevel, on_water
+				return true
+			end
 		end
 	end
 	return false
@@ -52,18 +54,20 @@ def is_rendered_as_composite key, value, suggested_composite
 end
 
 def how_rendered_as_composite key, value, suggested_composite
-	for zlevel in [19]
-		result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", zlevel, true, suggested_composite
-		if result != nil
-			return result
-		end
-		result = how_rendered_on_zlevel_as_composite [[key, value]], "way", zlevel, false, suggested_composite
-		if result != nil
-			return result
-		end
-		result = how_rendered_on_zlevel_as_composite [[key, value]], "node", zlevel, false, suggested_composite
-		if result != nil
-			return result
+	for on_water in [false, true]
+		for zlevel in [19]
+			result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", zlevel, true, on_water, suggested_composite
+			if result != nil
+				return result
+			end
+			result = how_rendered_on_zlevel_as_composite [[key, value]], "way", zlevel, false, on_water, suggested_composite
+			if result != nil
+				return result
+			end
+			result = how_rendered_on_zlevel_as_composite [[key, value]], "node", zlevel, false, on_water, suggested_composite
+			if result != nil
+				return result
+			end
 		end
 	end
 	if suggested_composite != nil
@@ -72,13 +76,13 @@ def how_rendered_as_composite key, value, suggested_composite
 	return nil
 end
 
-def rendered_on_zlevel tags, type, zlevel
-	return is_output_different(tags, [], zlevel, type)
+def rendered_on_zlevel tags, type, zlevel, on_water
+	return is_output_different(tags, [], zlevel, type, on_water)
 end
 
-def how_rendered_on_zlevel_as_composite tags, type, zlevel, area, suggested_composite
+def how_rendered_on_zlevel_as_composite tags, type, zlevel, area, on_water, suggested_composite
 	if suggested_composite != nil
-		if is_rendered_with_this_composite tags, type, suggested_composite, zlevel, area
+		if is_rendered_with_this_composite tags, type, suggested_composite, zlevel, area, on_water
 			return suggested_composite
 		end
 		return nil
@@ -96,14 +100,14 @@ def how_rendered_on_zlevel_as_composite tags, type, zlevel, area, suggested_comp
 	[['waterway', 'river']]
 	]
 	for composite in composite_sets
-		if is_rendered_with_this_composite tags, type, composite, zlevel, area
+		if is_rendered_with_this_composite tags, type, composite, zlevel, area, on_water
 			return composite
 		end
 	end
 	return nil
 end
 
-def is_rendered_with_this_composite tags, type, composite, zlevel, area
+def is_rendered_with_this_composite tags, type, composite, zlevel, area, on_water
 	#puts "<<<\n#{tags}\n#{composite}<<<\n\n"
 	tags_with_composite = Marshal.load(Marshal.dump(tags))
 	used_composite = Marshal.load(Marshal.dump(composite))
@@ -114,7 +118,7 @@ def is_rendered_with_this_composite tags, type, composite, zlevel, area
 		used_composite.push(["area", "yes"])
 	end
 	if is_output_different(tags_with_composite, [], zlevel, type)
-		if is_output_different(tags_with_composite, used_composite, zlevel, type)
+		if is_output_different(tags_with_composite, used_composite, zlevel, type, on_water)
 			return true
 		end
 	end
