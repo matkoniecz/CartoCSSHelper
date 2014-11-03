@@ -34,7 +34,7 @@ def is_rendered key, value
 			if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel, on_water
 				return true
 			end
-			if rendered_on_zlevel [[key, value]], "way", zlevel, on_water
+			if rendered_on_zlevel [[key, value]], "closed_way", zlevel, on_water
 				return true
 			end
 			if rendered_on_zlevel [[key, value]], "node", zlevel, on_water
@@ -60,7 +60,7 @@ def how_rendered_as_composite key, value, suggested_composite
 			if result != nil
 				return result
 			end
-			result = how_rendered_on_zlevel_as_composite [[key, value]], "way", zlevel, false, on_water, suggested_composite
+			result = how_rendered_on_zlevel_as_composite [[key, value]], "closed_way", zlevel, false, on_water, suggested_composite
 			if result != nil
 				return result
 			end
@@ -88,16 +88,16 @@ def how_rendered_on_zlevel_as_composite tags, type, zlevel, area, on_water, sugg
 		return nil
 	end
 	composite_sets = [
-	[["name", "a"]],
-	[["highway", "secondary"]],
-	[["boundary", "administrative"]],
-	[["admin_level", "2"]],
-	[["natural", "peak"]],
-	[["ref", "3"]],
-	[["ele", "4"]],
-	[["amenity", "place_of_worship"]],
-	[["amenity", "place_of_worship"], ["religion", "christian"]],
-	[['waterway', 'river']]
+	[["name", "a"]], #place=*
+	[["highway", "secondary"]], #access, ref, bridge, tunnel...
+	[["boundary", "administrative"]], #admin_level
+	[["admin_level", "2"]], #boundary=administrative
+	[["natural", "peak"]], #ele
+	[["ref", "3"]], #aeroway=gate
+	[["amenity", "place_of_worship"]], #religion
+	[["amenity", "place_of_worship"], ["religion", "christian"]], #denomination
+	[['waterway', 'river']], #bridge=aqueduct, tunnel=culvert
+	[['barrier', 'hedge']], #area=yes
 	]
 	for composite in composite_sets
 		if is_rendered_with_this_composite tags, type, composite, zlevel, area, on_water
