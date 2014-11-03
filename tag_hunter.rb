@@ -1,18 +1,43 @@
 require 'set'
 
 def get_tags
+	tags = get_tags_from_mss
+	tags.merge(get_tags_from_yaml)
+	return tags.to_a.sort
+end
+
+def get_tags_from_mss
 	tags = Set.new
-	style_filenames = Dir[get_style_path+'*.mss']
-	for style_filename in style_filenames
-		#puts style_filename
-		style_file = open(style_filename)
-		style = style_file.read()
-		matched = style.scan(/\[feature = '(man_made|[^_]+)_([^']+)'\]/)
-		for element in matched
-			tags.add([element[0], element[1]])
-		end
+	filenames = Dir[get_style_path+'*.mss']
+	for filename in filenames
+		tags.merge(get_tags_from_mss_file filename)
 	end
-	yaml_filename = get_style_path+'project.yaml'
+	return tags
+end
+
+def get_tags_from_yaml
+	tags = Set.new
+	filenames = Dir[get_style_path+'*.yaml']
+	for filename in filenames
+		tags.merge(get_tags_from_yaml_file filename)
+	end
+	return  tags
+end
+
+def get_tags_from_mss_file style_filename
+	tags = Set.new
+	#puts style_filename
+	style_file = open(style_filename)
+	style = style_file.read()
+	matched = style.scan(/\[feature = '(man_made|[^_]+)_([^']+)'\]/)
+	for element in matched
+		tags.add([element[0], element[1]])
+	end
+	return tags
+end
+
+def get_tags_from_yaml_file yaml_filename
+	tags = Set.new
 	yaml_file = open(yaml_filename)
 	yaml = yaml_file.read()
 	#(.*\.|)     #WHERE p.highway = 'turning_circle'
@@ -35,5 +60,5 @@ def get_tags
 			tags.add([tag, value[0]])
 		end
 	end
-	return tags.to_a.sort
+	return tags
 end
