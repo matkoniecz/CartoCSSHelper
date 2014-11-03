@@ -19,7 +19,7 @@ def list_render_state
 				last_composite = nil
 			else
 				last_composite = how_rendered_as_composite key, value, last_composite
-				puts "#{tag[0]}=#{tag[1]} - composite with #{last_composite} - and maybe other tags"
+				puts "#{tag[0]}=#{tag[1]} - composite with #{last_composite[0]} - and maybe other tags"
 			end
 		else
 			puts "#{tag[0]}=#{tag[1]} - primary"
@@ -29,7 +29,7 @@ def list_render_state
 end
 
 def is_rendered key, value
-	for zlevel in [19, 5]
+	for zlevel in [19]
 		if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel
 			return true
 		end
@@ -52,7 +52,7 @@ def is_rendered_as_composite key, value, suggested_composite
 end
 
 def how_rendered_as_composite key, value, suggested_composite
-	for zlevel in [19, 5]
+	for zlevel in [19]
 		result = how_rendered_on_zlevel_as_composite [[key, value], ["area", "yes"]], "closed_way", zlevel, true, suggested_composite
 		if result != nil
 			return result
