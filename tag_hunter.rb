@@ -82,7 +82,7 @@ def get_tags_from_osm2pqsql_file style_filename
 	style = style_file.read()
 	matched = style.scan(/^(node,way|node|way)   ([^ ]+)/)
 	for element in matched
-		tags.add([element[1], "any_tag_value"])
+		tags.add([element[1], "*"])
 	end
 	return tags
 end
