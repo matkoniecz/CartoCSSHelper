@@ -38,10 +38,11 @@ end
 def is_object_displaying_name key, value, name, zlevel
 	nameless = [[key, value]]
 	name = [[key, value], ["name", name]]
-	return is_output_different(nameless, name, zlevel, "node")
+	return is_output_different(nameless, name, zlevel, "node", on_water)
 end
 
 def is_object_displaying_anything key, value, zlevel
+	on_water = false
 	tag = [[key, value], ["name", "a"]]
-	return is_output_different(tag, [], zlevel, "node")
+	return is_output_different(tag, [], zlevel, "node", on_water)
 end

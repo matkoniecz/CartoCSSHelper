@@ -3,7 +3,7 @@ load 'config.rb'
 load 'tag_hunter.rb'
 require 'fileutils'
 
-def is_output_different tags_a, tags_b, zlevel, type, on_water=false
+def is_output_different tags_a, tags_b, zlevel, type, on_water
 	turn_tags_into_image(tags_a, zlevel, type, on_water)
 	turn_tags_into_image(tags_b, zlevel, type, on_water)
 	filename_a = get_filename tags_a, zlevel, type, on_water
@@ -20,7 +20,7 @@ def get_filename tags, zlevel, type, on_water
 	return get_path_to_folder_for_temporary_files+tags.sort.to_s+"_"+zlevel.to_s+water_part+"_"+type+".png"
 end
 
-def turn_tags_into_image(tags, zlevel, type, on_water=false)
+def turn_tags_into_image(tags, zlevel, type, on_water)
 	debug = false
 	
 	lat = 0
@@ -34,13 +34,14 @@ def turn_tags_into_image(tags, zlevel, type, on_water=false)
 	if File.exists?(export_filename)
 		return
 	end
-	puts "#{tags.to_s} #{zlevel} #{type} #{on_water_string}"
+	description = "tags: #{tags.to_s}, zlevel: #{zlevel}, type: #{type} #{on_water_string}"
+	puts description
 	generate_data_file tags, lat, lon, type
 	load_data_into_database debug
 	generate_image tags, type, zlevel, lat, lon, on_water, debug
 	
 	if !File.exists?(export_filename)
-		raise "turn_tags_into_image failed tags: #{tags}, zlevel: #{zlevel}, type: #{type}"
+		raise "turn_tags_into_image failed #{description}"
 	end
 end
 

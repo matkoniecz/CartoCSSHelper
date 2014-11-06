@@ -108,7 +108,7 @@ def is_rendered_with_this_composite tags, type, composite, zlevel, area, on_wate
 	if area
 		used_composite.push(["area", "yes"])
 	end
-	if is_output_different(tags_with_composite, [], zlevel, type)
+	if is_output_different(tags_with_composite, [], zlevel, type, on_water)
 		if is_output_different(tags_with_composite, used_composite, zlevel, type, on_water)
 			return true
 		end
