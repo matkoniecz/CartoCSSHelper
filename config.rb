@@ -1,4 +1,8 @@
 # encoding: UTF-8
+def get_max_z
+	return 22
+end
+
 def get_style_path
 	return ENV['HOME']+"/Desktop/OSM/tilemill/osm-carto/"
 end

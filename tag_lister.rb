@@ -1,3 +1,5 @@
+load 'config.rb'
+
 def list_render_state
 	tags = get_tags
 	last_composite = nil
@@ -21,7 +23,7 @@ end
 
 def is_rendered key, value
 	for on_water in [false, true]
-		for zlevel in [19]
+		for zlevel in [get_max_z]
 			if rendered_on_zlevel [[key, value], ["area", "yes"]], "closed_way", zlevel, on_water
 				return true
 			end
@@ -68,7 +70,7 @@ def how_rendered_as_composite key, value, suggested_composite
 end
 
 def rendered_on_zlevel tags, type, zlevel, on_water
-	return is_output_different(tags, [], zlevel, type, on_water)
+	return is_output_different(tags, [], zlevel, type, type, on_water)
 end
 
 def how_rendered_on_zlevel_as_composite tags, type, zlevel, area, on_water, suggested_composite
@@ -108,8 +110,8 @@ def is_rendered_with_this_composite tags, type, composite, zlevel, area, on_wate
 	if area
 		used_composite.push(["area", "yes"])
 	end
-	if is_output_different(tags_with_composite, [], zlevel, type, on_water)
-		if is_output_different(tags_with_composite, used_composite, zlevel, type, on_water)
+	if is_output_different(tags_with_composite, [], zlevel, type, type, on_water)
+		if is_output_different(tags_with_composite, used_composite, zlevel, type, type, on_water)
 			return true
 		end
 	end

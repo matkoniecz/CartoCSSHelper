@@ -4,14 +4,41 @@ load 'image_generator.rb'
 load 'config.rb'
 
 def run_tests
+	run_global_check_problems_with_closed_line
+	run_global_check_dy
+end
+
+def run_global_check_problems_with_closed_line
 	tags = get_tags
 	count = 0
 	for element in tags
-		for zlevel in 4..19
+		for zlevel in get_max_z..get_max_z
+			check_problems_with_closed_line element[0], element[1], zlevel
+		end
+		count += 1
+		puts "#{count} of #{tags.length}"
+	end
+end
+
+def run_global_check_dy
+	tags = get_tags
+	count = 0
+	for element in tags
+		for zlevel in 4..get_max_z
 			check_dy element[0], element[1], zlevel
 		end
 		count += 1
 		puts "#{count} of #{tags.length}"
+	end
+end
+
+def check_problems_with_closed_line key, value, zlevel
+	on_water = false
+	tag = [[key, value]]
+	if is_output_different(tag, [], zlevel, "way", "closed_way", on_water)
+		if !is_output_different(tag, [], zlevel, "closed_way", "closed_way", on_water)
+			puts key+"="+value+" - failed display of closed way"
+		end
 	end
 end
 
@@ -38,11 +65,11 @@ end
 def is_object_displaying_name key, value, name, zlevel
 	nameless = [[key, value]]
 	name = [[key, value], ["name", name]]
-	return is_output_different(nameless, name, zlevel, "node", on_water)
+	return is_output_different(nameless, name, zlevel, "node", "node", on_water)
 end
 
 def is_object_displaying_anything key, value, zlevel
 	on_water = false
 	tag = [[key, value], ["name", "a"]]
-	return is_output_different(tag, [], zlevel, "node", on_water)
+	return is_output_different(tag, [], zlevel, "node", "node", on_water)
 end

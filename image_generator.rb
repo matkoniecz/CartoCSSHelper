@@ -3,11 +3,11 @@ load 'config.rb'
 load 'tag_hunter.rb'
 require 'fileutils'
 
-def is_output_different tags_a, tags_b, zlevel, type, on_water
-	turn_tags_into_image(tags_a, zlevel, type, on_water)
-	turn_tags_into_image(tags_b, zlevel, type, on_water)
-	filename_a = get_filename tags_a, zlevel, type, on_water
-	filename_b = get_filename tags_b, zlevel, type, on_water
+def is_output_different tags_a, tags_b, zlevel, type_a, type_b, on_water
+	turn_tags_into_image(tags_a, zlevel, type_a, on_water)
+	turn_tags_into_image(tags_b, zlevel, type_b, on_water)
+	filename_a = get_filename tags_a, zlevel, type_a, on_water
+	filename_b = get_filename tags_b, zlevel, type_b, on_water
 	#Returns true if the contents of a file A and a file B are identical.
 	return !FileUtils.compare_file(filename_a, filename_b)
 end
