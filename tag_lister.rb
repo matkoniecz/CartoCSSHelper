@@ -102,9 +102,11 @@ end
 
 def is_rendered_with_this_composite(tags, type, composite, zlevel, area, on_water)
 	#puts "<<<\n#{tags}\n#{composite}<<<\n\n"
-	# noinspection RubyResolve - see https://youtrack.jetbrains.com/issue/RUBY-16061
+	# noinspection RubyResolve
+	# see https://youtrack.jetbrains.com/issue/RUBY-16061
 	tags_with_composite = Marshal.load(Marshal.dump(tags))
-	# noinspection RubyResolve - see https://youtrack.jetbrains.com/issue/RUBY-16061
+	# noinspection RubyResolve
+	# see https://youtrack.jetbrains.com/issue/RUBY-16061
 	used_composite = Marshal.load(Marshal.dump(composite))
 	composite.each { |added|
 		tags_with_composite.push(added)
