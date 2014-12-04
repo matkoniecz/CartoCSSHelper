@@ -58,7 +58,7 @@ def check_dy(key, value, zlevel)
 		puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
 		puts 'press enter'
 		gets
-		File.delete(get_filename([[key, value], ["name", name]], zlevel, 'node', on_water))
+		File.delete(get_filename([[key, value], ['name', name]], zlevel, 'node', on_water))
 		puts 'calculating'
 	end
 	#puts key+"="+value+" - name is OK for name '#{name}'"
