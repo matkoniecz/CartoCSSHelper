@@ -1,4 +1,5 @@
 load 'config.rb'
+load 'image_generator.rb'
 
 def list_render_state
 	tags = get_tags
@@ -6,17 +7,17 @@ def list_render_state
 	tags.each { |tag|
 		key = tag[0]
 		value = tag[1]
-		if !is_rendered key, value
-			if !is_rendered_as_composite key, value, last_composite
-				puts "#{tag[0]}=#{tag[1]} - not displayed"
-				last_composite = nil
-			else
-				last_composite = how_rendered_as_composite key, value, last_composite
-				puts "#{tag[0]}=#{tag[1]} - composite with #{last_composite[0]} - and maybe other tags"
-			end
-		else
+		if is_rendered key, value
 			puts "#{tag[0]}=#{tag[1]} - primary"
 			last_composite = nil
+		else
+			if is_rendered_as_composite key, value, last_composite
+				last_composite = how_rendered_as_composite key, value, last_composite
+				puts "#{tag[0]}=#{tag[1]} - composite with #{last_composite} - and maybe other tags"
+			else
+				puts "#{tag[0]}=#{tag[1]} - not displayed"
+				last_composite = nil
+			end
 		end
 	}
 end
@@ -24,13 +25,13 @@ end
 def is_rendered(key, value)
 	[false, true].each { |on_water|
 		[get_max_z].each { |zlevel|
-			if rendered_on_zlevel [[key, value], ['area', 'yes']], 'closed_way', zlevel, on_water
+			if rendered_on_zlevel({key => value, 'area' => 'yes'}, 'closed_way', zlevel, on_water)
 				return true
 			end
-			if rendered_on_zlevel [[key, value]], 'closed_way', zlevel, on_water
+			if rendered_on_zlevel({key => value}, 'closed_way', zlevel, on_water)
 				return true
 			end
-			if rendered_on_zlevel [[key, value]], 'node', zlevel, on_water
+			if rendered_on_zlevel({key => value}, 'node', zlevel, on_water)
 				return true
 			end
 		}
@@ -49,15 +50,15 @@ end
 def how_rendered_as_composite(key, value, suggested_composite)
 	[false, true].each { |on_water|
 		[19].each { |zlevel|
-			result = how_rendered_on_zlevel_as_composite [[key, value], ['area', 'yes']], 'closed_way', zlevel, true, on_water, suggested_composite
+			result = how_rendered_on_zlevel_as_composite({key => value, 'area' => 'yes'}, 'closed_way', zlevel, true, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
-			result = how_rendered_on_zlevel_as_composite [[key, value]], 'closed_way', zlevel, false, on_water, suggested_composite
+			result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, false, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
-			result = how_rendered_on_zlevel_as_composite [[key, value]], 'node', zlevel, false, on_water, suggested_composite
+			result = how_rendered_on_zlevel_as_composite({key => value}, 'node', zlevel, false, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
@@ -70,7 +71,9 @@ def how_rendered_as_composite(key, value, suggested_composite)
 end
 
 def rendered_on_zlevel(tags, type, zlevel, on_water)
-	return is_output_different(tags, [], zlevel, type, type, on_water)
+	empty = Scene.new({}, zlevel, on_water, type)
+	tested = Scene.new(tags, zlevel, on_water, type)
+	return tested.is_output_different(empty)
 end
 
 def how_rendered_on_zlevel_as_composite(tags, type, zlevel, area, on_water, suggested_composite)
@@ -81,16 +84,16 @@ def how_rendered_on_zlevel_as_composite(tags, type, zlevel, area, on_water, sugg
 		return nil
 	end
 	composite_sets = [
-			[['name', 'a']], #place=*
-			[['highway', 'secondary']], #access, ref, bridge, tunnel...
-			[['boundary', 'administrative']], #admin_level
-			[['admin_level', '2']], #boundary=administrative
-			[['natural', 'peak']], #ele
-			[['ref', '3']], #aeroway=gate
-			[['amenity', 'place_of_worship']], #religion
-			[['amenity', 'place_of_worship'], ['religion', 'christian']], #denomination
-			[['waterway', 'river']], #bridge=aqueduct, tunnel=culvert
-			[['barrier', 'hedge']], #area=yes
+			{'name' => 'a'}, #place=*
+			{'highway' => 'secondary'}, #access, ref, bridge, tunnel...
+			{'boundary' => 'administrative'}, #admin_level
+			{'admin_level' => '2'}, #boundary=administrative
+			{'natural' => 'peak'}, #ele
+			{'ref' => '3'}, #aeroway=gate
+			{'amenity' => 'place_of_worship'}, #religion
+			{'amenity' => 'place_of_worship', 'religion' => 'christian'}, #denomination
+			{'waterway' => 'river'}, #bridge=aqueduct, tunnel=culvert
+			#{'barrier' => 'hedge'}, #area=yes
 	]
 	composite_sets.each { |composite|
 		if is_rendered_with_this_composite tags, type, composite, zlevel, area, on_water
@@ -108,14 +111,17 @@ def is_rendered_with_this_composite(tags, type, composite, zlevel, area, on_wate
 	# noinspection RubyResolve
 	# see https://youtrack.jetbrains.com/issue/RUBY-16061
 	used_composite = Marshal.load(Marshal.dump(composite))
-	composite.each { |added|
-		tags_with_composite.push(added)
+	composite.each { |key, value|
+		tags_with_composite[key] = value
 	}
 	if area
-		used_composite.push(['area', 'yes'])
+		tags_with_composite['area'] = 'yes'
 	end
-	if is_output_different(tags_with_composite, [], zlevel, type, type, on_water)
-		if is_output_different(tags_with_composite, used_composite, zlevel, type, type, on_water)
+	with_composite = Scene.new(tags_with_composite, zlevel, on_water, type)
+	composite = Scene.new(used_composite, zlevel, on_water, type)
+	empty = Scene.new({}, zlevel, on_water, type)
+	if with_composite.is_output_different(empty)
+		if with_composite.is_output_different(composite)
 			return true
 		end
 	end

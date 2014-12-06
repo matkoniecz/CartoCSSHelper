@@ -32,11 +32,12 @@ def run_global_check_dy
 	}
 end
 
-def check_problems_with_closed_line(key, value, zlevel)
-	on_water = false
-	tag = [[key, value]]
-	if is_output_different(tag, [], zlevel, 'way', 'closed_way', on_water)
-		if !is_output_different(tag, [], zlevel, 'closed_way', 'closed_way', on_water)
+def check_problems_with_closed_line(key, value, zlevel, on_water = false)
+	way = Scene.new({key => value}, zlevel, on_water, 'way')
+	closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
+	empty = Scene.new({}, zlevel, on_water, 'node')
+	if way.is_output_different(empty)
+		if !closed_way.is_output_different(empty)
 			puts key+'='+value+' - failed display of closed way'
 		end
 	end
@@ -58,19 +59,23 @@ def check_dy(key, value, zlevel)
 		puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
 		puts 'press enter'
 		gets
-		flush_cashe([[key, value], ['name', name]], zlevel, 'node', on_water)
+		with_name = Scene.new({key => value, 'name' => name}, zlevel, on_water, 'node')
+		with_name.flush_cache
 		puts 'calculating'
 	end
 	#puts key+"="+value+" - name is OK for name '#{name}'"
 end
 
 def is_object_displaying_name(key, value, name, zlevel, on_water)
-	nameless = [[key, value]]
-	name = [[key, value], ['name', name]]
-	return is_output_different(nameless, name, zlevel, 'node', 'node', on_water)
+	name_tags = {key => value, 'name' => name}
+	with_name = Scene.new(name_tags, zlevel, on_water, 'node')
+	nameless_tags = {key => value}
+	nameless = Scene.new(nameless_tags, zlevel, on_water, 'node')
+	return with_name.is_output_different(nameless)
 end
 
 def is_object_displaying_anything(key, value, zlevel, on_water)
-	tag = [[key, value], ['name', 'a']]
-	return is_output_different(tag, [], zlevel, 'node', 'node', on_water)
+	object = Scene.new({key => value}, zlevel, on_water, 'node')
+	empty = Scene.new({}, zlevel, on_water, 'node')
+	return object.is_output_different(empty)
 end
