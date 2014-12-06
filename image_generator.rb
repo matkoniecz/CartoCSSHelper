@@ -4,10 +4,8 @@ load 'tag_hunter.rb'
 require 'fileutils'
 
 def is_output_different(tags_a, tags_b, zlevel, type_a, type_b, on_water)
-	turn_tags_into_image(tags_a, zlevel, type_a, on_water)
-	turn_tags_into_image(tags_b, zlevel, type_b, on_water)
-	filename_a = get_filename tags_a, zlevel, type_a, on_water
-	filename_b = get_filename tags_b, zlevel, type_b, on_water
+	filename_a = get_image_from_tags(tags_a, zlevel, type_a, on_water)
+	filename_b = get_image_from_tags(tags_b, zlevel, type_b, on_water)
 	#Returns true if the contents of a file A and a file B are identical.
 	return !FileUtils.compare_file(filename_a, filename_b)
 end
@@ -20,29 +18,37 @@ def get_filename(tags, zlevel, type, on_water)
 	return get_path_to_folder_for_temporary_files+tags.sort.to_s+'_'+zlevel.to_s+water_part+'_'+type+'.png'
 end
 
-def turn_tags_into_image(tags, zlevel, type, on_water)
-	debug = false
-	
+def flush_cashe(tags, zlevel, type, on_water, debug = false)
+	File.delete(get_filename(tags, zlevel, type, on_water))
+end
+
+def get_image_from_tags(tags, zlevel, type, on_water, debug = false)
 	lat = 0
 	lon = 20
-	on_water_string = ''
 	if on_water
 		lon = 0
-		on_water_string = 'on_water'
 	end
 	export_filename = get_filename tags, zlevel, type, on_water
 	if File.exists?(export_filename)
-		return
+		return export_filename
+	end
+	turn_tags_into_image(tags, zlevel, type, on_water, lat, lon)
+	if !File.exists?(export_filename)
+		raise "turn_tags_into_image failed #{description}"
+	end
+	return export_filename
+end
+
+def turn_tags_into_image(tags, zlevel, type, on_water, lat, lon, debug = false)
+	on_water_string = ''
+	if on_water
+		on_water_string = 'on_water'
 	end
 	description = "tags: #{tags.to_s}, zlevel: #{zlevel}, type: #{type} #{on_water_string}"
 	puts description
 	generate_data_file tags, lat, lon, type
 	load_data_into_database debug
 	generate_image tags, type, zlevel, lat, lon, on_water, debug
-	
-	if !File.exists?(export_filename)
-		raise "turn_tags_into_image failed #{description}"
-	end
 end
 
 def get_data_filename
@@ -97,8 +103,12 @@ end
 def generate_data_file(tags, lat, lon, type)
 	if type == 'area'
 		tags.push(['area', 'yes'])
-		return generate_data_file tags, lat, lon, 'closed way'
+		return raw_generate_data_file tags, lat, lon, 'closed way'
 	end
+	return raw_generate_data_file(tags, lat, lon, type)
+end
+
+def raw_generate_data_file(tags, lat, lon, type)
 	data_file = open(get_data_filename, 'w')
 	data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
 	if type == 'node'
