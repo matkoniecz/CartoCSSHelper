@@ -89,6 +89,7 @@ class ComparisonOfImages
       b = Magick::Image.read(filename_b)[0]
       y = (i+1)*@margin+(i)*@image_size+@header_space
       label_drawer.text(@margin, y-@standard_pointsize*2/3, processed.description)
+      label_drawer.draw(@canvas)
       @canvas.composite!(a, @margin, y, Magick::OverCompositeOp)
       @canvas.composite!(b, @margin*2+@image_size, y, Magick::OverCompositeOp)
     }
