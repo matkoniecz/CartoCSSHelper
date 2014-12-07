@@ -5,7 +5,7 @@ def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch
 	old = collect_images(tags, type, on_water, zlevel_range)
 	switch_to_branch(new_branch)
 	new = collect_images(tags, type, on_water, zlevel_range)
-  diff = ComparisonOfImages.new(old, new)
+  diff = ComparisonOfImages.new(old, new, "#{ tags.to_s } #{ type } #{ on_water }")
   diff.render
 end
 
@@ -42,7 +42,8 @@ class ImagePair
 end
 
 class ComparisonOfImages
-  def initialize(before, after)
+  def initialize(before, after, header)
+    @header = header
     @compared = [ImagePair.new(before[0], after[0])]
     (1...before.length).each { |i|
       if before[i].identical(before[i-1]) && after[i].identical(after[i-1])
@@ -60,7 +61,7 @@ class ComparisonOfImages
     header_margin = standard_pointsize*3
     count = @compared.length
 
-    y = size*count+margin*(count+1)
+    y = size*count+margin*(count+2)
     y += header_margin
     x = size*2+3*margin
 
@@ -68,7 +69,7 @@ class ComparisonOfImages
 
     header_drawer = Magick::Draw.new
     header_drawer.pointsize(standard_pointsize*3)
-    header_drawer.text(margin, header_margin, tags.to_s)
+    header_drawer.text(margin, header_margin, @header)
     header_drawer.draw(canvas)
 
     label_drawer = Magick::Draw.new
@@ -87,6 +88,6 @@ class ComparisonOfImages
     label_drawer.draw(canvas)
 
     canvas.display
-    canvas.write('tmp/diff.png')
+    canvas.write("tmp/#{@header}.png")
   end
 end
