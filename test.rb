@@ -2,18 +2,11 @@
 
 load 'validator.rb'
 load 'tag_lister.rb'
+load 'git.rb'
+require 'open3'
 
 def main
-	Dir.chdir(get_style_path) {
-		require 'open3'
-		Open3.popen3('git log -n 1 --pretty=format:"%H"') {|_, stdout, stderr, _|
-			$commit = stdout.read.chomp
-			error = stderr.read.chomp
-			if error != ''
-				raise error
-			end
-		}
-	}
+	init_commit_hash
 	list_render_state
 	run_tests
 end
