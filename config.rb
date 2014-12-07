@@ -8,5 +8,5 @@ def get_style_path
 end
 
 def get_path_to_folder_for_temporary_files
-	return ENV['HOME']+'/Documents/OSM/tilemill/CartoCSSHelper/tmp/' #TODO - stop hardcoding this
+	return ENV['HOME']+"/Documents/OSM/tilemill/CartoCSSHelper/tmp/#{$commit}/" #TODO - stop hardcoding this
 end
