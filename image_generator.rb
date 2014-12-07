@@ -97,10 +97,7 @@ class Scene
 	def add_node_to_data_file(tags, lat, lon, data_file, id) #TODO kill godawful ID
 		data_file.write "\n"
 		data_file.write "  <node id='#{id}' visible='true' lat='#{lat}' lon='#{lon}'>"
-		tags.each { |tag|
-			data_file.write "\n"
-			data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
-		}
+		add_tags_to_data_file(tags, data_file)
 		data_file.write '</node>'
 	end
 
@@ -111,11 +108,15 @@ class Scene
 			data_file.write "\n"
 			data_file.write "    <nd ref='#{node}' />"
 		}
+		add_tags_to_data_file(tags, data_file)
+		data_file.write "\n  </way>"
+	end
+
+	def add_tags_to_data_file(tags, data_file)
 		tags.each { |tag|
 			data_file.write "\n"
 			data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
 		}
-		data_file.write "\n  </way>"
 	end
 
 	def generate_data_file(tags, lat, lon)
