@@ -50,15 +50,15 @@ end
 def how_rendered_as_composite(key, value, suggested_composite)
 	[false, true].each { |on_water|
 		[19].each { |zlevel|
-			result = how_rendered_on_zlevel_as_composite({key => value, 'area' => 'yes'}, 'closed_way', zlevel, true, on_water, suggested_composite)
+			result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
-			result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, false, on_water, suggested_composite)
+			result = how_rendered_on_zlevel_as_composite({key => value}, 'way', zlevel, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
-			result = how_rendered_on_zlevel_as_composite({key => value}, 'node', zlevel, false, on_water, suggested_composite)
+			result = how_rendered_on_zlevel_as_composite({key => value}, 'node', zlevel, on_water, suggested_composite)
 			if result != nil
 				return result
 			end
@@ -76,9 +76,9 @@ def rendered_on_zlevel(tags, type, zlevel, on_water)
 	return tested.is_output_different(empty)
 end
 
-def how_rendered_on_zlevel_as_composite(tags, type, zlevel, area, on_water, suggested_composite)
+def how_rendered_on_zlevel_as_composite(tags, type, zlevel, on_water, suggested_composite)
 	if suggested_composite != nil
-		if is_rendered_with_this_composite tags, type, suggested_composite, zlevel, area, on_water
+		if is_rendered_with_this_composite tags, type, suggested_composite, zlevel, on_water
 			return suggested_composite
 		end
 		return nil
@@ -96,14 +96,14 @@ def how_rendered_on_zlevel_as_composite(tags, type, zlevel, area, on_water, sugg
 			#{'barrier' => 'hedge'}, #area=yes
 	]
 	composite_sets.each { |composite|
-		if is_rendered_with_this_composite tags, type, composite, zlevel, area, on_water
+		if is_rendered_with_this_composite tags, type, composite, zlevel, on_water
 			return composite
 		end
 	}
 	return nil
 end
 
-def is_rendered_with_this_composite(tags, type, composite, zlevel, area, on_water)
+def is_rendered_with_this_composite(tags, type, composite, zlevel, on_water)
 	#puts "<<<\n#{tags}\n#{composite}<<<\n\n"
 	# noinspection RubyResolve
 	# see https://youtrack.jetbrains.com/issue/RUBY-16061
@@ -114,9 +114,6 @@ def is_rendered_with_this_composite(tags, type, composite, zlevel, area, on_wate
 	composite.each { |key, value|
 		tags_with_composite[key] = value
 	}
-	if area
-		tags_with_composite['area'] = 'yes'
-	end
 	with_composite = Scene.new(tags_with_composite, zlevel, on_water, type)
 	composite = Scene.new(used_composite, zlevel, on_water, type)
 	empty = Scene.new({}, zlevel, on_water, type)

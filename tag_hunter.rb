@@ -4,8 +4,8 @@ def get_tags
 	tags = get_tags_from_mss
 	tags.merge(get_tags_from_yaml)
 	tags.merge(get_tags_from_osm2pqsql)
-	unrecovable = Set.new [['area', 'yes'], ['area', 'no']]
-	tags.merge(unrecovable)
+	#unrecovable = Set.new [['area', 'yes'], ['area', 'no']] #TODO - how this should be handled?
+	#tags.merge(unrecovable)
 	return tags.to_a.sort
 end
 
