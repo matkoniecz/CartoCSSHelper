@@ -47,8 +47,7 @@ class ComparisonOfImages
     @compared = [ImagePair.new(before[0], after[0])]
     (1...before.length).each { |i|
       if before[i].identical(before[i-1]) && after[i].identical(after[i-1])
-        append = ', ' + before[i].description
-        @compared[-1].description << append
+        @compared[-1].description << ', ' << before[i].description
       else
         @compared.push(ImagePair.new(before[i], after[i]))
       end
