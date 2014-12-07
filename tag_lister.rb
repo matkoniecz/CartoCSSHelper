@@ -49,7 +49,7 @@ end
 
 def how_rendered_as_composite(key, value, suggested_composite)
 	[false, true].each { |on_water|
-		[19].each { |zlevel|
+		[get_max_z].each { |zlevel|
 			result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)
 			if result != nil
 				return result
