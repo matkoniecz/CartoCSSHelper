@@ -25,8 +25,6 @@ class Scene
 		File.delete(self.get_filename)
 	end
 
-	protected
-
 	def get_image(debug=false, silent=false)
 		lat = 0
 		lon = 20
@@ -45,10 +43,19 @@ class Scene
 		end
 		generate_map(lat, lon,  debug)
 		if !File.exists?(export_filename)
-			raise "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
+			description = "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
+			if debug
+				raise description
+			else
+				puts description
+				return get_image(true, false)
+			end
 		end
 		return export_filename
 	end
+
+	protected
+
 	def get_filename
 		water_part = ''
 		if @on_water
