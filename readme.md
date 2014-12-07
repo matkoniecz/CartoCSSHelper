@@ -5,3 +5,5 @@ It is proof of concept and work in progress - there are still major problems, in
 * Current rendering method is obnoxiously slow. Using https://github.com/gravitystorm/mapnik-legendary would be preferable, but it relies on https://github.com/mapnik/Ruby-Mapnik that is currently broken (see bugs https://github.com/mapnik/Ruby-Mapnik/issues/47 and https://github.com/mapnik/Ruby-Mapnik/issues/48).
 * Hardcoded location of map style and scrip (file config.rb)
 * It is unknown whatever it will be usable for CartoCSS projects other than https://github.com/gravitystorm/openstreetmap-carto
+
+[![Code Climate](https://codeclimate.com/github/mkoniecz/CartoCSSHelper/badges/gpa.svg)](https://codeclimate.com/github/mkoniecz/CartoCSSHelper)
