@@ -129,24 +129,44 @@ class Scene
 
 	def raw_generate_data_file(lat, lon, type)
 		data_file = open(get_data_filename, 'w')
-		data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
+		generate_data_file_prefix(data_file)
 		if type == 'node'
-			add_node_to_data_file tags, lat, lon, data_file, 2387
+			generate_node_data_file(lat, lon, data_file)
 		elsif type == 'way'
-			add_node_to_data_file [], lat, lon-get_size/3, data_file, 1
-			add_node_to_data_file [], lat, lon+get_size/3, data_file, 2
-			add_way_to_data_file tags, [1, 2], data_file, 3
+			generate_way_data_file(lat, lon, data_file)
 		elsif type == 'closed_way'
-			add_node_to_data_file [], lat-get_size/3, lon-get_size/3, data_file, 1
-			add_node_to_data_file [], lat-get_size/3, lon+get_size/3, data_file, 2
-			add_node_to_data_file [], lat+get_size/3, lon+get_size/3, data_file, 3
-			add_node_to_data_file [], lat+get_size/3, lon-get_size/3, data_file, 4
-			add_way_to_data_file tags, [1, 2, 3, 4, 1], data_file, 5
+			generate_closed_way_data_file(lat, lon, data_file)
 		else
 			raise
 		end
-		data_file.write "\n</osm>"
+		generate_data_file_sufix(data_file)
 		data_file.close
+	end
+
+	def generate_node_data_file(lat, lon, data_file)
+		add_node_to_data_file tags, lat, lon, data_file, 2387
+	end
+
+	def generate_way_data_file(lat, lon, data_file)
+		add_node_to_data_file [], lat, lon-get_size/3, data_file, 1
+		add_node_to_data_file [], lat, lon+get_size/3, data_file, 2
+		add_way_to_data_file tags, [1, 2], data_file, 3
+	end
+
+	def generate_closed_way_data_file(lat, lon, data_file)
+		add_node_to_data_file [], lat-get_size/3, lon-get_size/3, data_file, 1
+		add_node_to_data_file [], lat-get_size/3, lon+get_size/3, data_file, 2
+		add_node_to_data_file [], lat+get_size/3, lon+get_size/3, data_file, 3
+		add_node_to_data_file [], lat+get_size/3, lon-get_size/3, data_file, 4
+		add_way_to_data_file tags, [1, 2, 3, 4, 1], data_file, 5
+	end
+
+	def generate_data_file_prefix(data_file)
+		data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
+	end
+
+	def generate_data_file_sufix(data_file)
+		data_file.write "\n</osm>"
 	end
 
 	def load_data_into_database(debug)
