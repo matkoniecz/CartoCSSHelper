@@ -85,6 +85,8 @@ class ComparisonOfImages
       canvas.composite!(a, margin, y, Magick::OverCompositeOp)
       canvas.composite!(b, margin*2+size, y, Magick::OverCompositeOp)
     }
+    y = (count+1)*margin+(count)*size+header_margin
+    label_drawer.text(margin, y-standard_pointsize*2/3, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
     label_drawer.draw(canvas)
 
     canvas.display
