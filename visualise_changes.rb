@@ -6,7 +6,7 @@ def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch
 	switch_to_branch(new_branch)
 	new = collect_images(tags, type, on_water, zlevel_range)
   diff = ComparisonOfImages.new(old, new, "#{ tags.to_s } #{ type } #{ on_water }")
-  diff.render
+  diff.save
 end
 
 class Image
@@ -52,43 +52,61 @@ class ComparisonOfImages
         @compared.push(ImagePair.new(before[i], after[i]))
       end
     }
+    render
   end
   def render
-    size = 200
-    margin = 20
-    standard_pointsize = 10
-    header_margin = standard_pointsize*3
-    count = @compared.length
+    @image_size = 200
+    @margin = 20
+    @standard_pointsize = 10
+    @header_space = @standard_pointsize*3
 
-    y = size*count+margin*(count+2)
-    y += header_margin
-    x = size*2+3*margin
+    y = @image_size*@compared.length+@margin*(@compared.length+2)
+    y += @header_space
+    x = @image_size*2+3*@margin
 
-    canvas = Magick::Image.new(x, y)
+    @canvas = Magick::Image.new(x, y)
 
+    render_header
+    render_images_with_labels
+    render_footer
+  end
+
+  def render_header
     header_drawer = Magick::Draw.new
-    header_drawer.pointsize(standard_pointsize*3)
-    header_drawer.text(margin, header_margin, @header)
-    header_drawer.draw(canvas)
+    header_drawer.pointsize(@header_space)
+    header_drawer.text(@margin, @header_space, @header)
+    header_drawer.draw(@canvas)
+  end
 
+  def render_images_with_labels
     label_drawer = Magick::Draw.new
-    label_drawer.pointsize(standard_pointsize)
-    (0...count).each { |i|
+    label_drawer.pointsize(@standard_pointsize)
+    (0...@compared.length).each { |i|
       processed = @compared[i]
       filename_a = processed.left_file_location
       filename_b = processed.right_file_location
       a = Magick::Image.read(filename_a)[0]
       b = Magick::Image.read(filename_b)[0]
-      y = (i+1)*margin+(i)*size+header_margin
-      label_drawer.text(margin, y-standard_pointsize*2/3, processed.description)
-      canvas.composite!(a, margin, y, Magick::OverCompositeOp)
-      canvas.composite!(b, margin*2+size, y, Magick::OverCompositeOp)
+      y = (i+1)*@margin+(i)*@image_size+@header_space
+      label_drawer.text(@margin, y-@standard_pointsize*2/3, processed.description)
+      @canvas.composite!(a, @margin, y, Magick::OverCompositeOp)
+      @canvas.composite!(b, @margin*2+@image_size, y, Magick::OverCompositeOp)
     }
-    y = (count+1)*margin+(count)*size+header_margin
-    label_drawer.text(margin, y-standard_pointsize*2/3, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
-    label_drawer.draw(canvas)
+  end
 
-    canvas.display
-    canvas.write("tmp/#{@header}.png")
+  def render_footer
+    label_drawer = Magick::Draw.new
+    label_drawer.pointsize(@standard_pointsize)
+    y = (@compared.length+1)*@margin+(@compared.length)*@image_size+@header_space
+    label_drawer.text(@margin, y-@standard_pointsize*2/3, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
+    label_drawer.draw(@canvas)
+  end
+
+  def popup
+    @canvas.display
+  end
+
+  def save
+    @canvas.write("tmp/#{@header}.png")
   end
 end
