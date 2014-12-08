@@ -122,6 +122,9 @@ class Info
 		# see https://youtrack.jetbrains.com/issue/RUBY-16061
 		used_composite = Marshal.load(Marshal.dump(composite))
 		composite.each { |key, value|
+			if tags_with_composite[key] != nil
+				return false #shadowing
+			end
 			tags_with_composite[key] = value
 		}
 		with_composite = Scene.new(tags_with_composite, zlevel, on_water, type)
