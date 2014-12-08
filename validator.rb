@@ -5,28 +5,16 @@ load 'config.rb'
 
 module Validator
 	def run_tests
-		run_global_check_problems_with_closed_line
-		run_global_check_dy
+		run_global_check(:check_problems_with_closed_line)
+		run_global_check(:check_dy)
 	end
 
-	def run_global_check_problems_with_closed_line
+	def run_global_check(function)
 		tags = get_tags
 		count = 0
 		tags.each { |element|
 			(Config.get_max_z..Config.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
-				check_problems_with_closed_line element[0], element[1], zlevel
-			}
-			count += 1
-			puts "#{count} of #{tags.length}"
-		}
-	end
-
-	def run_global_check_dy
-		tags = get_tags
-		count = 0
-		tags.each { |element|
-			(Config.get_max_z..Config.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
-				check_dy element[0], element[1], zlevel
+				send(function, element[0], element[1], zlevel)
 			}
 			count += 1
 			puts "#{count} of #{tags.length}"
