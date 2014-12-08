@@ -1,11 +1,16 @@
 require 'RMagick'
+load 'util.rb'
 
 def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch)
 	switch_to_branch(old_branch)
 	old = collect_images(tags, type, on_water, zlevel_range)
 	switch_to_branch(new_branch)
 	new = collect_images(tags, type, on_water, zlevel_range)
-  diff = ComparisonOfImages.new(old, new, "#{ tags.to_s } #{ type }")
+  on_water_string = ''
+  if on_water
+    on_water_string = 'on water'
+  end
+  diff = ComparisonOfImages.new(old, new, "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }")
   diff.save
 end
 
@@ -52,8 +57,8 @@ class ComparisonOfImages
     @image_size = 200 #TODO - stop hardcoding
     @margin = 20
     @standard_pointsize = 10
-    @header_space = @standard_pointsize*2.5
-    @diff_note_space = @standard_pointsize*2
+    @header_space = @standard_pointsize*1.5
+    @diff_note_space = @standard_pointsize
 
     render
   end
@@ -102,7 +107,7 @@ class ComparisonOfImages
 
   def render_header
     header_drawer = Magick::Draw.new
-    header_drawer.pointsize(@header_space*2/2.5)
+    header_drawer.pointsize(@header_space*3/5)
     header_drawer.text(@margin, @header_space, @header)
     header_drawer.draw(@canvas)
   end
