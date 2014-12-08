@@ -65,18 +65,16 @@ class Scene
 	end
 
 	def generate_map(lat, lon, debug)
-		generate_data_file tags, lat, lon
+		data_file_maker = DataFileGenerator.new(tags, @type, lat, lon, get_size)
+		data_file_maker.generate
 		load_data_into_database debug
 		generate_image lat, lon, debug
-	end
-
-	def get_data_filename
-		return get_path_to_folder_for_temporary_files+'data.osm'
 	end
 
 	def get_size
 		return 0.2
 	end
+
 	def generate_image(lat, lon, debug)
 		silence = '> /dev/null 2>&1'
 		if debug
@@ -94,81 +92,6 @@ class Scene
 		system command
 	end
 
-	def add_node_to_data_file(tags, lat, lon, data_file, id) #TODO kill godawful ID
-		data_file.write "\n"
-		data_file.write "  <node id='#{id}' visible='true' lat='#{lat}' lon='#{lon}'>"
-		add_tags_to_data_file(tags, data_file)
-		data_file.write '</node>'
-	end
-
-	def add_way_to_data_file(tags, nodes, data_file, id) #TODO kill godawful ID
-		data_file.write "\n"
-		data_file.write "  <way id='#{id}' visible='true'>"
-		nodes.each { |node|
-			data_file.write "\n"
-			data_file.write "    <nd ref='#{node}' />"
-		}
-		add_tags_to_data_file(tags, data_file)
-		data_file.write "\n  </way>"
-	end
-
-	def add_tags_to_data_file(tags, data_file)
-		tags.each { |tag|
-			data_file.write "\n"
-			data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
-		}
-	end
-
-	def generate_data_file(tags, lat, lon)
-		if @type == 'area'
-			tags.push(['area', 'yes'])
-			return raw_generate_data_file lat, lon, 'closed way'
-		end
-		return raw_generate_data_file(lat, lon, @type)
-	end
-
-	def raw_generate_data_file(lat, lon, type)
-		data_file = open(get_data_filename, 'w')
-		generate_data_file_prefix(data_file)
-		if type == 'node'
-			generate_node_data_file(lat, lon, data_file)
-		elsif type == 'way'
-			generate_way_data_file(lat, lon, data_file)
-		elsif type == 'closed_way'
-			generate_closed_way_data_file(lat, lon, data_file)
-		else
-			raise
-		end
-		generate_data_file_sufix(data_file)
-		data_file.close
-	end
-
-	def generate_node_data_file(lat, lon, data_file)
-		add_node_to_data_file tags, lat, lon, data_file, 2387
-	end
-
-	def generate_way_data_file(lat, lon, data_file)
-		add_node_to_data_file [], lat, lon-get_size/3, data_file, 1
-		add_node_to_data_file [], lat, lon+get_size/3, data_file, 2
-		add_way_to_data_file tags, [1, 2], data_file, 3
-	end
-
-	def generate_closed_way_data_file(lat, lon, data_file)
-		add_node_to_data_file [], lat-get_size/3, lon-get_size/3, data_file, 1
-		add_node_to_data_file [], lat-get_size/3, lon+get_size/3, data_file, 2
-		add_node_to_data_file [], lat+get_size/3, lon+get_size/3, data_file, 3
-		add_node_to_data_file [], lat+get_size/3, lon-get_size/3, data_file, 4
-		add_way_to_data_file tags, [1, 2, 3, 4, 1], data_file, 5
-	end
-
-	def generate_data_file_prefix(data_file)
-		data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
-	end
-
-	def generate_data_file_sufix(data_file)
-		data_file.write "\n</osm>"
-	end
-
 	def load_data_into_database(debug)
 		silence = '> /dev/null 2>&1'
 		if debug
@@ -180,5 +103,87 @@ class Scene
 			puts command
 		end
 		system command
+	end
+end
+
+class DataFileGenerator
+	def initialize(tags, type, lat, lon, size)
+		@lat = lat
+		@lon = lon
+		@tags = tags
+		@type = type
+		@size = size
+		if type == 'area'
+			@tags.push(['area', 'yes'])
+			@type = 'closed way'
 		end
+	end
+
+	def generate
+		@data_file = open(get_data_filename, 'w')
+		generate_prefix
+		if @type == 'node'
+			generate_node_topology(@lat, @lon, @tags)
+		elsif @type == 'way'
+			generate_way_topology(@lat, @lon, @tags)
+		elsif @type == 'closed_way'
+			generate_closed_way_topology(@lat, @lon, @tags)
+		else
+			raise
+		end
+		generate_sufix
+		@data_file.close
+	end
+
+	def generate_node_topology(lat, lon, tags)
+		add_node lat, lon, tags, 2387
+	end
+
+	def generate_way_topology(lat, lon, tags)
+		add_node lat, lon-@size/3, [], 1
+		add_node lat, lon+@size/3, [], 2
+		add_way tags, [1, 2], 3
+	end
+
+	def generate_closed_way_topology(lat, lon, tags)
+		delta = @size/3
+		add_node lat-delta, lon-delta, [], 1
+		add_node lat-delta, lon+delta, [], 2
+		add_node lat+delta, lon+delta, [], 3
+		add_node lat+delta, lon-delta, [], 4
+		add_way tags, [1, 2, 3, 4, 1], 5
+	end
+
+	def generate_prefix
+		@data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
+	end
+
+	def generate_sufix
+		@data_file.write "\n</osm>"
+	end
+
+	def add_node(lat, lon, tags, id)
+		@data_file.write "\n"
+		@data_file.write "  <node id='#{id}' visible='true' lat='#{lat}' lon='#{lon}'>"
+		add_tags(tags)
+		@data_file.write '</node>'
+	end
+
+	def add_way(tags, nodes, id)
+		@data_file.write "\n"
+		@data_file.write "  <way id='#{id}' visible='true'>"
+		nodes.each { |node|
+			@data_file.write "\n"
+			@data_file.write "    <nd ref='#{node}' />"
+		}
+		add_tags(tags)
+		@data_file.write "\n  </way>"
+	end
+
+	def add_tags(tags)
+		tags.each { |tag|
+			@data_file.write "\n"
+			@data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
+		}
+	end
 end

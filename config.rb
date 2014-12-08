@@ -15,3 +15,7 @@ def get_path_to_folder_for_temporary_files
 	FileUtils::mkdir_p location
 	return location
 end
+
+def get_data_filename
+	return get_path_to_folder_for_temporary_files+'data.osm'
+end
