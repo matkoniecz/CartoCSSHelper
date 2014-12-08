@@ -10,14 +10,10 @@ module Validator
 	end
 
 	def run_global_check(function)
-		tags = get_tags
-		count = 0
-		tags.each { |element|
+		get_tags.each { |element|
 			(Config.get_max_z..Config.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
 				send(function, element[0], element[1], zlevel)
 			}
-			count += 1
-			puts "#{count} of #{tags.length}"
 		}
 	end
 
