@@ -21,6 +21,7 @@ module Validator
 		}
 	end
 
+	#TODO - what about composite tags?
 	def check_problems_with_closed_line(key, value, zlevel, on_water = false)
 		way = Scene.new({key => value}, zlevel, on_water, 'way')
 		closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
