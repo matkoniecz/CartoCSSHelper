@@ -37,6 +37,10 @@ class Info
 				if rendered_on_zlevel({key => value}, 'closed_way', zlevel, on_water)
 					return true
 				end
+				#workaround for bug detected by check_problems_with_closed_line
+				if rendered_on_zlevel({key => value}, 'way', zlevel, on_water)
+					return true
+				end
 				if rendered_on_zlevel({key => value}, 'node', zlevel, on_water)
 					return true
 				end
