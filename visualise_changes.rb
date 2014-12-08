@@ -5,7 +5,7 @@ def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch
 	old = collect_images(tags, type, on_water, zlevel_range)
 	switch_to_branch(new_branch)
 	new = collect_images(tags, type, on_water, zlevel_range)
-  diff = ComparisonOfImages.new(old, new, "#{ tags.to_s } #{ type } #{ on_water }")
+  diff = ComparisonOfImages.new(old, new, "#{ tags.to_s } #{ type }")
   diff.save
 end
 
