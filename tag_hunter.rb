@@ -1,4 +1,5 @@
 require 'set'
+include Config
 
 def get_tags
 	tags = get_tags_from_mss
@@ -11,7 +12,7 @@ end
 
 def get_tags_from_mss
 	tags = Set.new
-	filenames = Dir[get_style_path+'*.mss']
+	filenames = Dir[Config.get_style_path+'*.mss']
 	filenames.each { |filename|
 		tags.merge(get_tags_from_mss_file filename)
 	}
@@ -20,7 +21,7 @@ end
 
 def get_tags_from_yaml
 	tags = Set.new
-	filenames = Dir[get_style_path+'*.yaml']
+	filenames = Dir[Config.get_style_path+'*.yaml']
 	filenames.each { |filename|
 		tags.merge(get_tags_from_yaml_file filename)
 	}
@@ -29,7 +30,7 @@ end
 
 def get_tags_from_osm2pqsql
 	tags = Set.new
-	filenames = Dir[get_style_path+'*.style']
+	filenames = Dir[Config.get_style_path+'*.style']
 	filenames.each { |filename|
 		tags.merge(get_tags_from_osm2pqsql_file filename)
 	}
