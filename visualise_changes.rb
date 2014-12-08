@@ -39,6 +39,9 @@ class ImagePair
     @right_file_location = right_image.file_location
     @description = left_image.description
   end
+  def merge_description_from_next_image(image)
+    @description << ', ' << image.description
+  end
 end
 
 class ComparisonOfImages
@@ -59,19 +62,16 @@ class ComparisonOfImages
     returned = [ImagePair.new(before[0], after[0])]
     (1...before.length).each { |i|
       if before[i].identical(before[i-1]) && after[i].identical(after[i-1])
-        returned[-1].description << ', ' << before[i].description
+        returned[-1].merge_description_from_next_image(before[i])
       else
         returned.push(ImagePair.new(before[i], after[i]))
       end
     }
     return returned
   end
+
   def render
-    y = get_needed_y
-    x = @image_size*2+3*@margin
-
-    @canvas = Magick::Image.new(x, y)
-
+    create_canvas
     offset = 0
     render_header
     offset += @header_space + @margin*1.5
@@ -80,6 +80,13 @@ class ComparisonOfImages
     render_images_with_labels offset
     offset += (@compared.length)*(@margin + @image_size)
     render_footer offset
+  end
+
+  def create_canvas
+    y = get_needed_y
+    x = @image_size*2+3*@margin
+
+    @canvas = Magick::Image.new(x, y)
   end
 
   def get_needed_y
@@ -111,14 +118,15 @@ class ComparisonOfImages
 
   def render_images_with_labels(y_offset)
     (0...@compared.length).each { |i|
-      processed = @compared[i]
-      left_image = Magick::Image.read(processed.left_file_location)[0]
-      right_image = Magick::Image.read(processed.right_file_location)[0]
-      y = y_offset + i * (@margin + @image_size) - @margin + @standard_pointsize*2
-      render_label(y, processed.description)
-      y = y_offset + i * (@margin + @image_size)
-      render_row_of_images(y, left_image, right_image)
+      render_row_of_labelled_images(@compared[i], y_offset + i * (@margin + @image_size))
     }
+  end
+
+  def render_row_of_labelled_images(processed, y_offset)
+    left_image = Magick::Image.read(processed.left_file_location)[0]
+    right_image = Magick::Image.read(processed.right_file_location)[0]
+    render_label(y_offset, processed.description)
+    render_row_of_images(y_offset, left_image, right_image)
   end
 
   def render_label(y_offset, label)
