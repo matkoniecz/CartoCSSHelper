@@ -58,27 +58,49 @@ class ComparisonOfImages
     @image_size = 200
     @margin = 20
     @standard_pointsize = 10
-    @header_space = @standard_pointsize*3
+    @header_space = @standard_pointsize*2.5
+    @diff_note_space = @standard_pointsize*2
 
-    y = @image_size*@compared.length+@margin*(@compared.length+2)
+    y = 0
     y += @header_space
+    y += @margin*1.5
+    y += @diff_note_space
+    y += @margin*0.5
+    y += (@compared.length) * (@image_size + @margin)
+    y += @diff_note_space
+
     x = @image_size*2+3*@margin
 
     @canvas = Magick::Image.new(x, y)
 
+    offset = 0
     render_header
-    render_images_with_labels
-    render_footer
+    offset += @header_space + @margin*1.5
+    render_diff_note offset
+    offset += @diff_note_space + @margin*0.5
+    render_images_with_labels offset
+    offset += (@compared.length)*(@margin + @image_size)
+    render_footer offset
+
   end
 
   def render_header
     header_drawer = Magick::Draw.new
-    header_drawer.pointsize(@header_space)
+    header_drawer.pointsize(@header_space*2/2.5)
     header_drawer.text(@margin, @header_space, @header)
     header_drawer.draw(@canvas)
   end
 
-  def render_images_with_labels
+  def render_diff_note(y_offset)
+    drawer = Magick::Draw.new
+    drawer.pointsize(@diff_note_space)
+    drawer.text(@margin, y_offset, 'before')
+    drawer.draw(@canvas)
+    drawer.text(@margin*2 + @image_size, y_offset, 'after')
+    drawer.draw(@canvas)
+  end
+
+  def render_images_with_labels(y_offset)
     label_drawer = Magick::Draw.new
     label_drawer.pointsize(@standard_pointsize)
     (0...@compared.length).each { |i|
@@ -87,7 +109,7 @@ class ComparisonOfImages
       filename_b = processed.right_file_location
       a = Magick::Image.read(filename_a)[0]
       b = Magick::Image.read(filename_b)[0]
-      y = (i+1)*@margin+(i)*@image_size+@header_space
+      y = (i)*@margin+(i)*@image_size+y_offset
       label_drawer.text(@margin, y-@standard_pointsize*2/3, processed.description)
       label_drawer.draw(@canvas)
       @canvas.composite!(a, @margin, y, Magick::OverCompositeOp)
@@ -95,11 +117,10 @@ class ComparisonOfImages
     }
   end
 
-  def render_footer
+  def render_footer(y_offset)
     label_drawer = Magick::Draw.new
     label_drawer.pointsize(@standard_pointsize)
-    y = (@compared.length+1)*@margin+(@compared.length)*@image_size+@header_space
-    label_drawer.text(@margin, y-@standard_pointsize*2/3, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
+    label_drawer.text(@margin, y_offset, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
     label_drawer.draw(@canvas)
   end
 
