@@ -5,7 +5,6 @@ load 'tag_lister.rb'
 load 'visualise_changes.rb'
 load 'git.rb'
 require 'open3'
-include Info
 include Validator
 
 def main
@@ -14,7 +13,8 @@ def main
 	#visualise_changes({'amenity' => 'parking', 'name' => 'name'}, 'closed_way', false, 4..22, 'master', 'master')
 	#visualise_changes({'amenity' => 'parking', 'name' => 'name'}, 'way', false, 4..22, 'master', 'master')
 	init_commit_hash
-	Info.list_render_state
+	info = Info.new
+	info.list_render_state_of_tags
 	Validator.run_tests
 end
 

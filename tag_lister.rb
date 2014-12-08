@@ -2,27 +2,31 @@ load 'config.rb'
 load 'image_generator.rb'
 include Config
 
-module Info
-	def list_render_state
+class Info
+	def list_render_state_of_tags
 		tags = get_tags
-		last_composite = nil
+		@last_composite = nil
 		tags.each { |tag|
-			key = tag[0]
-			value = tag[1]
-			if is_rendered key, value
-				puts "#{tag[0]}=#{tag[1]} - primary"
-				last_composite = nil
-			else
-				if is_rendered_as_composite key, value, last_composite
-					last_composite = how_rendered_as_composite key, value, last_composite
-					puts "#{tag[0]}=#{tag[1]} - composite with #{last_composite} - and maybe other tags"
-				else
-					puts "#{tag[0]}=#{tag[1]} - not displayed"
-					last_composite = nil
-				end
-			end
+			print_render_state_of_tag tag[0], tag[1]
 		}
 	end
+
+	def print_render_state_of_tag(key, value)
+		if is_rendered key, value
+			puts "#{key}=#{value} - primary"
+			@last_composite = nil
+		else
+			if is_rendered_as_composite key, value, @last_composite
+				@last_composite = how_rendered_as_composite key, value, @last_composite
+				puts "#{key}=#{value} - composite with #{@last_composite} - and maybe other tags"
+			else
+				puts "#{key}=#{value} - not displayed"
+				@last_composite = nil
+			end
+		end
+	end
+
+	protected
 
 	def is_rendered(key, value)
 		[false, true].each { |on_water|
