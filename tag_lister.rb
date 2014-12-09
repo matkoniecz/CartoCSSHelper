@@ -26,8 +26,6 @@ class Info
 		end
 	end
 
-	protected
-
 	def is_rendered(key, value)
 		[false, true].each { |on_water|
 			[Config.get_max_z].each { |zlevel|
@@ -49,13 +47,15 @@ class Info
 		return false
 	end
 
-	def is_rendered_as_composite(key, value, suggested_composite)
+	def is_rendered_as_composite(key, value, suggested_composite=nil)
 		reason = how_rendered_as_composite key, value, suggested_composite
 		if reason == nil
 			return false
 		end
 		return true
 	end
+
+	protected
 
 	def how_rendered_as_composite(key, value, suggested_composite)
 		[false, true].each { |on_water|
@@ -95,7 +95,8 @@ class Info
 		end
 		composite_sets = [
 				{'name' => 'a'}, #place=*
-				{'highway' => 'secondary'}, #access, ref, bridge, tunnel...
+				{'highway' => 'service'}, #access, ref, bridge, tunnel, service=parking_aisle...
+				{'railway' => 'rail'}, #service=siding
 				{'boundary' => 'administrative'}, #admin_level
 				{'admin_level' => '2'}, #boundary=administrative
 				{'natural' => 'peak'}, #ele
