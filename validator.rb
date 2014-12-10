@@ -5,7 +5,9 @@ load 'config.rb'
 
 module Validator
 	def run_tests
+		puts 'failed display of closed way, unlosed way works:'
 		run_global_check(:check_problems_with_closed_line)
+		puts "bad dy values (tall names like 'É' are not displayed, short names like 'a' are):"
 		run_global_check(:check_dy)
 	end
 
@@ -24,7 +26,7 @@ module Validator
 		empty = Scene.new({}, zlevel, on_water, 'node')
 		if way.is_output_different(empty)
 			if !closed_way.is_output_different(empty)
-				puts key+'='+value+' - failed display of closed way'
+				puts key+'='+value
 			end
 		end
 	end
