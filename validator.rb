@@ -31,7 +31,7 @@ module Validator
 		end
 	end
 
-	def check_dy(key, value, zlevel)
+	def check_dy(key, value, zlevel, interactive=false)
 		on_water = false #TODO -is it OK
 		if !is_object_displaying_anything key, value, zlevel, on_water
 			#puts key+"="+value+" - not displayed as node on z#{zlevel}"
@@ -45,9 +45,13 @@ module Validator
 		on_water = false #TODO -is it OK
 		while !is_object_displaying_name key, value, test_name, zlevel, on_water
 			puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
-			puts 'press enter'
-			gets
-			with_name = Scene.new({key => value, 'name' => name}, zlevel, on_water, 'node')
+			if interactive
+				puts 'press enter'
+				gets
+			else
+				return
+			end
+			with_name = Scene.new({key => value, 'name' => test_name}, zlevel, on_water, 'node')
 			with_name.flush_cache
 			puts 'calculating'
 		end
