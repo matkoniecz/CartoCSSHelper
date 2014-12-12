@@ -142,8 +142,12 @@ class ComparisonOfImages
   end
 
   def render_row_of_images(y_offset, left_image, right_image)
-    @canvas.composite!(left_image, @margin, y_offset, Magick::OverCompositeOp)
-    @canvas.composite!(right_image, @margin*2+@image_size, y_offset, Magick::OverCompositeOp)
+    if left_image == right_image
+      @canvas.composite!(left_image, @margin*1.5 + @image_size/2, y_offset, Magick::OverCompositeOp)
+    else
+      @canvas.composite!(left_image, @margin, y_offset, Magick::OverCompositeOp)
+      @canvas.composite!(right_image, @margin*2+@image_size, y_offset, Magick::OverCompositeOp)
+    end
   end
 
   def render_footer(y_offset)
