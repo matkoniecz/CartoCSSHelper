@@ -13,35 +13,57 @@ class Info
 
 	def print_render_state_of_tag(key, value)
 		if is_rendered key, value
-			puts "#{key}=#{value} - primary"
 			@last_composite = nil
+			if value == get_generic_tag_value
+				puts "#{key}=#{value} - primary generic tag value"
+			elsif is_key_rendered_and_value_ignored(key, value)
+				puts "#{key}=#{value} - primary, but rendering the same as generic value"
+			elsif
+				puts "#{key}=#{value} - primary"
+			end
 		else
 			if is_rendered_as_composite key, value, @last_composite
 				@last_composite = how_rendered_as_composite key, value, @last_composite
 				puts "#{key}=#{value} - composite with #{@last_composite} - and maybe other tags"
 			else
-				puts "#{key}=#{value} - not displayed"
 				@last_composite = nil
+				puts "#{key}=#{value} - not displayed"
 			end
 		end
+	end
+
+	def is_key_rendered_and_value_ignored(key, value)
+		if not is_rendered key,get_generic_tag_value
+			return false
+		end
+		[false, true].each { |on_water|
+			[Config.get_max_z].each { |zlevel|
+				['area', 'closed_way', 'way', 'node'].each{ |type|
+					if rendered_on_zlevel({key => value}, type, zlevel, on_water)
+						if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
+							return false
+						end
+					end
+				}
+			}
+		}
+		return true
+	end
+
+	def is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
+		with_tested_value = Scene.new({key => value}, zlevel, on_water, type)
+		with_generic_value = Scene.new({key => get_generic_tag_value}, zlevel, on_water, type)
+		return !with_tested_value.is_output_different(with_generic_value)
 	end
 
 	def is_rendered(key, value)
 		[false, true].each { |on_water|
 			[Config.get_max_z].each { |zlevel|
-				if rendered_on_zlevel({key => value, 'area' => 'yes'}, 'closed_way', zlevel, on_water)
-					return true
-				end
-				if rendered_on_zlevel({key => value}, 'closed_way', zlevel, on_water)
-					return true
-				end
-				#workaround for bug detected by check_problems_with_closed_line
-				if rendered_on_zlevel({key => value}, 'way', zlevel, on_water)
-					return true
-				end
-				if rendered_on_zlevel({key => value}, 'node', zlevel, on_water)
-					return true
-				end
+				['area', 'closed_way', 'way', 'node'].each{ |type|
+					if rendered_on_zlevel({key => value}, type, zlevel, on_water)
+						return true
+					end
+				}
 			}
 		}
 		return false
