@@ -114,14 +114,14 @@ class Info
 		return nil
 	end
 
-	def is_rendered_with_this_composite(tags, type, composite, zlevel, on_water)
+	def is_rendered_with_this_composite(tags, type, provided_composite, zlevel, on_water)
 		#puts "<<<\n#{tags}\n#{composite}<<<\n\n"
 		# noinspection RubyResolve
 		# see https://youtrack.jetbrains.com/issue/RUBY-16061
 		tags_with_composite = Marshal.load(Marshal.dump(tags))
 		# noinspection RubyResolve
 		# see https://youtrack.jetbrains.com/issue/RUBY-16061
-		used_composite = Marshal.load(Marshal.dump(composite))
+		composite = Marshal.load(Marshal.dump(provided_composite))
 		composite.each { |key, value|
 			if tags_with_composite[key] != nil
 				return false #shadowing
@@ -129,11 +129,18 @@ class Info
 			tags_with_composite[key] = value
 		}
 		with_composite = Scene.new(tags_with_composite, zlevel, on_water, type)
-		composite = Scene.new(used_composite, zlevel, on_water, type)
+		only_composite = Scene.new(composite, zlevel, on_water, type)
 		empty = Scene.new({}, zlevel, on_water, type)
 		if with_composite.is_output_different(empty)
-			if with_composite.is_output_different(composite)
-				return true
+			if with_composite.is_output_different(only_composite)
+				if composite['area'] != nil
+					return true
+				end
+				composite['area'] = 'yes'
+				composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type)
+				if with_composite.is_output_different(composite_interpreted_as_area)
+					return true
+				end
 			end
 		end
 		return false
