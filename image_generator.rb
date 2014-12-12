@@ -12,6 +12,10 @@ class Scene
 		@zlevel = zlevel
 		@on_water = on_water
 		@type = type
+		if type == 'area'
+			@tags['area'] = 'yes'
+			@type = 'closed_way'
+		end
 	end
 
 	def is_output_different(another_scene)
@@ -114,10 +118,6 @@ class DataFileGenerator
 		@tags = tags
 		@type = type
 		@size = size
-		if type == 'area'
-			@tags.push(['area', 'yes'])
-			@type = 'closed way'
-		end
 	end
 
 	def generate
