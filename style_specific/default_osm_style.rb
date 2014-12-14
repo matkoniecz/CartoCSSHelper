@@ -10,6 +10,7 @@ def get_composite_sets
       {'amenity' => 'place_of_worship'}, #religion
       {'amenity' => 'place_of_worship', 'religion' => 'christian'}, #denomination=jehovahs_witness
       {'waterway' => 'river'}, #bridge=aqueduct, tunnel=culvert
+      {'power' => 'generator'}, #power_source=wind
   #{'barrier' => 'hedge'}, #area=yes
   ]
 end
