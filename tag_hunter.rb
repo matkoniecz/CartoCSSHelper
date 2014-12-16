@@ -38,18 +38,32 @@ def get_tags_from_osm2pqsql
 end
 
 def get_tags_from_mss_file(style_filename)
+	possible_tags = get_tags_from_osm2pqsql
 	tags = Set.new
 	#puts style_filename
 	style_file = open(style_filename)
 	style = style_file.read
 	matched = style.scan(/\[feature = '(man_made|[^_]+)_([^']+)'\]/)
 	matched.each { |element|
-		tags.add([element[0], element[1]])
+		key = element[0]
+		if possible_tags.include?([key, get_generic_tag_value])
+			tags.add([key, element[1]])
+		end
+	}
+	matched = style.scan(/(\w+) = '(\w+)'/)
+	matched.each { |element|
+		key = element[0]
+		if key != 'feature'
+			if possible_tags.include?([key, get_generic_tag_value])
+				tags.add([key, element[1]])
+			end
+		end
 	}
 	return tags
 end
 
 def get_tags_from_yaml_file(yaml_filename)
+	possible_tags = get_tags_from_osm2pqsql
 	tags = Set.new
 	yaml_file = open(yaml_filename)
 	yaml = yaml_file.read
@@ -61,17 +75,23 @@ def get_tags_from_yaml_file(yaml_filename)
 	#'([^'()]+)' #quoted value
 	matched = yaml.scan(/(.*\.|)("|)([^"() ]+)("|) = '([^'()]+)'/)
 	matched.each { |element|
-		tags.add([element[2], element[4]])
+		key = element[2]
+		value = element[4]
+		if possible_tags.include?([key, get_generic_tag_value])
+			tags.add([key, value])
+		end
 	}
 	matched = yaml.scan(/("|)([^"() ]+)("|) (NOT |)IN \(([^()]*)\)/)
 	matched.each { |element|
 		tag = element[1]
-		tag = tag.gsub(/.*\./, '')
+		key = tag.gsub(/.*\./, '')
 		values = element[4]
 		values_matched = values.scan(/'([^']+)'/)
-		values_matched.each { |value|
-			tags.add([tag, value[0]])
-		}
+		if possible_tags.include?([key, get_generic_tag_value])
+			values_matched.each { |value|
+				tags.add([key, value[0]])
+			}
+		end
 	}
 	return tags
 end
@@ -85,7 +105,7 @@ def get_tags_from_osm2pqsql_file(style_filename)
 	#puts style_filename
 	style_file = open(style_filename)
 	style = style_file.read
-	matched = style.scan(/^(node,way|node|way)   ([^ ]+)/)
+	matched = style.scan(/^(node,way|node|way)\s*([^ ]+)\s*text\s*($|linear|polygon)/)
 	matched.each { |element|
 		tags.add([element[1], get_generic_tag_value])
 	}
