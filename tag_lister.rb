@@ -2,13 +2,75 @@ load 'config.rb'
 load 'image_generator.rb'
 include Config
 
+class Status
+	attr_accessor :key, :value, :state, :composite
+	def initialize(key, value, state, composite)
+		@key = key
+		@value = value
+		@state = state
+		@composite = composite
+	end
+	def print
+		composite_string = ''
+		if composite
+			composite_string = "- rendered with #{@composite.to_s.gsub('=>', '=')}, maybe also other sets of tags"
+		end
+		puts "#{@key}=#{@value} #{@state} #{composite_string}"
+	end
+	def code_print
+		composite_string = @composite.to_s
+		if @composite == nil
+			composite_string = 'nil'
+		end
+		puts "Status.new('#{@key}', '#{@value}', :#{@state}, #{composite_string}),"
+	end
+end
+
 class Info
-	def list_render_state_of_tags
+	def get_expected_composite(key, value)
+		get_expected_tag_status.each { |expected|
+			if expected.key == key
+				if expected.value == value
+					return expected.composite
+				end
+			end
+		}
+		return nil
+	end
+
+	def print_render_state_of_tags
+		get_render_state_of_tags.each { |state|
+			state.code_print
+		}
+	end
+
+	def get_render_state_of_tags
+		states = []
 		tags = get_tags
 		@last_composite = nil
 		tags.each { |tag|
-			print_render_state_of_tag tag[0], tag[1]
+			key = tag[0]
+			value = tag[1]
+			#print_render_state_of_tag key, value
+			state = get_render_state_of_tag(key, value)
+			states.push(Status.new(key, value, state, @last_composite))
 		}
+		return states
+	end
+
+	def get_render_state_of_tag(key, value)
+		if is_rendered key, value
+			@last_composite = nil
+			return :primary
+		else
+			if is_rendered_as_composite key, value, get_expected_composite(key, value)
+				@last_composite = how_rendered_as_composite key, value, get_expected_composite(key, value)
+				return :composite
+			else
+				@last_composite = nil
+				return :ignored
+			end
+		end
 	end
 
 	def print_render_state_of_tag(key, value)
@@ -19,7 +81,7 @@ class Info
 			elsif is_key_rendered_and_value_ignored(key, value)
 				puts "#{key}=#{value} - primary, but rendering the same as generic value"
 			elsif
-				puts "#{key}=#{value} - primary"
+			puts "#{key}=#{value} - primary"
 			end
 		else
 			if is_rendered_as_composite key, value, @last_composite

@@ -14,7 +14,7 @@ def main
 	switch_to_branch 'master'
 	init_commit_hash
 	info = Info.new
-	info.list_render_state_of_tags
+	info.print_render_state_of_tags
 	Validator.run_tests
 end
 
