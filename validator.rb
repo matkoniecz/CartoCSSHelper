@@ -5,10 +5,43 @@ load 'config.rb'
 
 module Validator
 	def run_tests
+		compare_expected_with_real_rendering
+		puts
 		puts 'failed display of closed way, unlosed way works:'
 		run_global_check(:check_problems_with_closed_line)
+		puts
 		puts "bad dy values (tall names like 'É' are not displayed, short names like 'a' are):"
 		run_global_check(:check_dy)
+	end
+
+	def compare_expected_with_real_rendering
+		list_of_expected = get_expected_tag_status
+		info = Info.new
+		info.get_render_state_of_tags.each { |state|
+			compare_expected_with_state list_of_expected, state
+		}
+	end
+
+	def compare_expected_with_state(list_of_expected, state)
+		list_of_expected.each { |expected|
+			if expected.key == state.key
+				if expected.value == state.value
+					if expected.equal? state
+						puts 'expected'
+						expected.print
+						puts 'real'
+						state.print
+						puts
+					end
+					return
+				end
+			end
+		}
+		puts 'expected'
+		puts 'missing'
+		puts 'real'
+		state.print
+		puts
 	end
 
 	def run_global_check(function)
