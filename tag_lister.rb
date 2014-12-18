@@ -1,6 +1,7 @@
 load 'config.rb'
 load 'image_generator.rb'
 include Config
+include Heuristic
 
 class Status
 	attr_accessor :key, :value, :state, :composite
@@ -47,9 +48,8 @@ class Info
 
 	def get_render_state_of_tags
 		states = []
-		tags = get_tags
 		@last_composite = nil
-		tags.each { |tag|
+		Heuristic.get_tags.each { |tag|
 			key = tag[0]
 			value = tag[1]
 			#print_render_state_of_tag key, value

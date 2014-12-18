@@ -1,8 +1,9 @@
 # encoding: UTF-8
 load 'config.rb'
-load 'tag_hunter.rb'
+load 'heuristic.rb'
 require 'fileutils'
 include Config
+include Heuristic
 
 class Scene
 	attr_reader :tags, :zlevel, :on_water, :type
