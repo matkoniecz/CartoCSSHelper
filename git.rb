@@ -1,5 +1,5 @@
 def switch_to_branch(branch)
-  Dir.chdir(Config.get_style_path) {
+  Dir.chdir(Configuration.get_style_path) {
     require 'open3'
     if !system("git checkout #{branch}")
       raise 'failed checkout'
@@ -9,7 +9,7 @@ def switch_to_branch(branch)
 end
 
 def init_commit_hash
-  Dir.chdir(Config.get_style_path) {
+  Dir.chdir(Configuration.get_style_path) {
     Open3.popen3('git log -n 1 --pretty=format:"%H"') {|_, stdout, stderr, _|
       $commit = stdout.read.chomp
       error = stderr.read.chomp

@@ -1,9 +1,10 @@
 # encoding: UTF-8
 load 'heuristic.rb'
 load 'image_generator.rb'
-load 'config.rb'
+load 'configuration.rb'
 
 include Heuristic
+include Configuration
 
 module Validator
 	def run_tests
@@ -71,7 +72,7 @@ module Validator
 
 	def run_global_check(function)
 		Heuristic.get_tags.each { |element|
-			(Config.get_max_z..Config.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
+			(Configuration.get_max_z..Configuration.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
 				send(function, element[0], element[1], zlevel)
 			}
 		}

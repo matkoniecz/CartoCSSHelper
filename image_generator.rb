@@ -1,8 +1,8 @@
 # encoding: UTF-8
-load 'config.rb'
+load 'configuration.rb'
 load 'heuristic.rb'
 require 'fileutils'
-include Config
+include Configuration
 include Heuristic
 
 class Scene
@@ -67,7 +67,7 @@ class Scene
 		if @on_water
 			water_part = '_water'
 		end
-		return Config.get_path_to_folder_for_temporary_files+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
+		return Configuration.get_path_to_folder_for_temporary_files+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
 	end
 
 	def generate_map(lat, lon, debug)
@@ -106,7 +106,7 @@ class Scene
 		end
 
 		#TODO - openstreetmap-carto.style is hardcoded
-		command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Config.get_style_path}openstreetmap-carto.style --multi-geometry #{Config.get_data_filename} #{silence}"
+		command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_path}openstreetmap-carto.style --multi-geometry #{Configuration.get_data_filename} #{silence}"
 		if debug
 			puts command
 		end
@@ -124,7 +124,7 @@ class DataFileGenerator
 	end
 
 	def generate
-		@data_file = open(Config.get_data_filename, 'w')
+		@data_file = open(Configuration.get_data_filename, 'w')
 		generate_prefix
 		if @type == 'node'
 			generate_node_topology(@lat, @lon, @tags)

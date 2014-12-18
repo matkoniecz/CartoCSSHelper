@@ -1,6 +1,6 @@
-load 'config.rb'
+load 'configuration.rb'
 load 'image_generator.rb'
-include Config
+include Configuration
 include Heuristic
 
 class Status
@@ -100,7 +100,7 @@ class Info
 			return false
 		end
 		[false, true].each { |on_water|
-			[Config.get_max_z].each { |zlevel|
+			[Configuration.get_max_z].each { |zlevel|
 				['area', 'closed_way', 'way', 'node'].each{ |type|
 					if rendered_on_zlevel({key => value}, type, zlevel, on_water)
 						if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
@@ -121,7 +121,7 @@ class Info
 
 	def is_rendered(key, value)
 		[false, true].each { |on_water|
-			[Config.get_max_z].each { |zlevel|
+			[Configuration.get_max_z].each { |zlevel|
 				['area', 'closed_way', 'way', 'node'].each{ |type|
 					if rendered_on_zlevel({key => value}, type, zlevel, on_water)
 						return true
@@ -144,7 +144,7 @@ class Info
 
 	def how_rendered_as_composite(key, value, suggested_composite)
 		[false, true].each { |on_water|
-			[Config.get_max_z].each { |zlevel|
+			[Configuration.get_max_z].each { |zlevel|
 				result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)
 				if result != nil
 					return result

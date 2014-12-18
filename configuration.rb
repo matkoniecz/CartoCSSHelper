@@ -2,7 +2,7 @@
 require 'fileutils'
 load 'style_specific/default_osm_style.rb' #TODO - stop hardcoding thisi
 
-module Config
+module Configuration
 	def get_max_z
 		return 22
 	end
