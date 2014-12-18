@@ -19,9 +19,37 @@ module Validator
 	def compare_expected_with_real_rendering
 		list_of_expected = get_expected_tag_status
 		info = Info.new
-		info.get_render_state_of_tags.each { |state|
+		list_of_rendered = info.get_render_state_of_tags
+		list_of_rendered.each { |state|
 			compare_expected_with_state list_of_expected, state
+			if !is_tag_listed(list_of_expected, state.key, state.value)
+				puts 'expected'
+				puts 'missing'
+				puts 'real'
+				state.print
+				puts
+			end
 		}
+		list_of_expected.each { |expected|
+			if !is_tag_listed(list_of_rendered, expected.key, expected.value)
+				puts 'expected'
+				expected.print
+				puts 'real'
+				puts 'missing'
+				puts
+			end
+		}
+	end
+
+	def is_tag_listed(list, key, value)
+		list.each { |state|
+			if key == state.key
+				if value == state.value
+					return true
+				end
+			end
+		}
+		return false
 	end
 
 	def compare_expected_with_state(list_of_expected, state)
@@ -39,11 +67,6 @@ module Validator
 				end
 			end
 		}
-		puts 'expected'
-		puts 'missing'
-		puts 'real'
-		state.print
-		puts
 	end
 
 	def run_global_check(function)
