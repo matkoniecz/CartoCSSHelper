@@ -4,7 +4,7 @@ include Config
 
 class Status
 	attr_accessor :key, :value, :state, :composite
-	def initialize(key, value, state, composite)
+	def initialize(key, value, state, composite=nil)
 		@key = key
 		@value = value
 		@state = state
@@ -18,11 +18,12 @@ class Status
 		puts "#{@key}=#{@value} #{@state} #{composite_string}"
 	end
 	def code_print
-		composite_string = @composite.to_s
-		if @composite == nil
-			composite_string = 'nil'
+		string = "Status.new('#{@key}', '#{@value}', :#{@state}"
+		if @composite != nil
+			string << ", #{@composite.to_s}"
 		end
-		puts "Status.new('#{@key}', '#{@value}', :#{@state}, #{composite_string}),"
+		string << '),'
+		puts string
 	end
 end
 
