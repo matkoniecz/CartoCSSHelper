@@ -91,6 +91,7 @@ class Scene
 		bbox = "#{lon-size/2},#{lat-size/2},#{lon+size/2},#{lat+size/2}"
 		params = "--format=png --width=200 --height=200 --static_zoom=#{@zlevel} --bbox=\"#{bbox}\""
 		command = "node /usr/share/tilemill/index.js export osm-carto '#{export_filename}' #{params} #{silence}"
+		#TODO - osm-carto is hardcoded
 		if debug
 			puts command
 		end
@@ -103,6 +104,7 @@ class Scene
 			silence = ''
 		end
 
+		#TODO - openstreetmap-carto.style is hardcoded
 		command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Config.get_style_path}openstreetmap-carto.style --multi-geometry #{Config.get_data_filename} #{silence}"
 		if debug
 			puts command
