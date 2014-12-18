@@ -366,7 +366,7 @@ def get_expected_tag_status
         Status.new('service', 'siding', :composite, {'railway'=>'rail'}),
         Status.new('service', 'spur', :composite, {'railway'=>'rail'}),
         Status.new('service', 'yard', :composite, {'railway'=>'rail'}),
-        Status.new('shop', '*', :composite, {'natural'=>'peak'}),
+        Status.new('shop', '*', :ignored),
         Status.new('shop', 'accessories', :primary),
         Status.new('shop', 'alcohol', :primary),
         Status.new('shop', 'antique', :primary),
