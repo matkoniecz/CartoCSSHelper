@@ -106,7 +106,7 @@ module Heuristic
 		#puts style_filename
 		style_file = open(style_filename)
 		style = style_file.read
-		matched = style.scan(/^(node,way|node|way)\s*([^ ]+)\s*text\s*($|linear|polygon)/)
+		matched = style.scan(/^(node,way|node|way)\s*([^ ]+)\s*text\s*($|linear|polygon|nocache)/)
 		matched.each { |element|
 			tags.add([element[1], get_generic_tag_value])
 		}
