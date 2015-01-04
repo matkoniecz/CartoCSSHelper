@@ -17,8 +17,10 @@ def wrapper(main_key, main_value, variable_key, variable_key_values, type, branc
 	}
 end
 def main
-	wrapper('leisure', 'playground', 'access', Set.new(['private', 'yes']), 'closed_way', 'master', 'private_transparent')
-	wrapper('amenity', 'recycling', 'access', Set.new(['private', 'yes']), 'closed_way', 'master', 'private_transparent')
+	#this code generates diff images for https://github.com/gravitystorm/openstreetmap-carto/pull/1191
+	#new code resided on branch named 'private_transparent'
+	#wrapper('leisure', 'playground', 'access', Set.new(['private', 'yes']), 'closed_way', 'master', 'private_transparent')
+	#wrapper('amenity', 'recycling', 'access', Set.new(['private', 'yes']), 'closed_way', 'master', 'private_transparent')
 	switch_to_branch 'master'
 	init_commit_hash
 	info = Info.new
