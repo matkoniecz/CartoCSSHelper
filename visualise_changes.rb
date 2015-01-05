@@ -10,7 +10,9 @@ def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch
   if on_water
     on_water_string = 'on water'
   end
-  diff = ComparisonOfImages.new(old, new, "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }")
+  header = "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }"
+  filename_sufix = "#{ old_branch } -> #{ new_branch }"
+  diff = ComparisonOfImages.new(old, new, header, filename_sufix)
   diff.save
 end
 
@@ -50,8 +52,9 @@ class ImagePair
 end
 
 class ComparisonOfImages
-  def initialize(before, after, header)
+  def initialize(before, after, header, filename_sufix)
     @header = header
+    @filename_sufix = filename_sufix
     @compared = compress(before, after)
 
     @image_size = 200 #TODO - stop hardcoding
@@ -162,6 +165,6 @@ class ComparisonOfImages
   end
 
   def save
-    @canvas.write("tmp/#{@header}.png")
+    @canvas.write("tmp/#{@header} #{@filename_sufix}.png")
   end
 end
