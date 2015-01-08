@@ -1,20 +1,32 @@
 require 'RMagick'
-load 'util.rb'
 
-def visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch)
-	switch_to_branch(old_branch)
-	old = collect_images(tags, type, on_water, zlevel_range)
-	switch_to_branch(new_branch)
-	new = collect_images(tags, type, on_water, zlevel_range)
-  on_water_string = ''
-  if on_water
-    on_water_string = 'on water'
+class VisualDiff
+  def self.visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch)
+    Git.switch_to_branch(old_branch)
+    old = collect_images(tags, type, on_water, zlevel_range)
+    Git.switch_to_branch(new_branch)
+    new = collect_images(tags, type, on_water, zlevel_range)
+    on_water_string = ''
+    if on_water
+      on_water_string = 'on water'
+    end
+    header = "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }"
+    filename_sufix = "#{ old_branch } -> #{ new_branch }"
+    diff = ComparisonOfImages.new(old, new, header, filename_sufix)
+    diff.save
   end
-  header = "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }"
-  filename_sufix = "#{ old_branch } -> #{ new_branch }"
-  diff = ComparisonOfImages.new(old, new, header, filename_sufix)
-  diff.save
+  def dict_to_pretty_tag_list dict
+    result = ''
+    dict.to_a.each {|tag|
+      if result != ''
+        result << '; '
+      end
+      result << "#{tag[0]}='#{tag[1]}'"
+    }
+    return result
+    end
 end
+
 
 class Image
   attr_reader :file_location, :description

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 require 'fileutils'
-load 'style_specific/default_osm_style.rb' #TODO - stop hardcoding thisi
+load 'style_specific/default_osm_style.rb' #TODO - stop hardcoding this
 
 module Configuration
 	def get_max_z
