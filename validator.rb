@@ -7,7 +7,8 @@ include Heuristic
 include Configuration
 
 module Validator
-	def run_tests
+	def run_tests(git_branch)
+		Git.switch_to_branch git_branch
 		compare_expected_with_real_rendering
 		puts
 		puts 'failed display of closed way, unlosed way works:'

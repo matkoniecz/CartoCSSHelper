@@ -1,34 +1,6 @@
 require 'RMagick'
 
-class VisualDiff
-  def self.visualise_changes(tags, type, on_water, zlevel_range, old_branch, new_branch)
-    Git.switch_to_branch(old_branch)
-    old = collect_images(tags, type, on_water, zlevel_range)
-    Git.switch_to_branch(new_branch)
-    new = collect_images(tags, type, on_water, zlevel_range)
-    on_water_string = ''
-    if on_water
-      on_water_string = 'on water'
-    end
-    header = "#{ dict_to_pretty_tag_list(tags) } #{ type } #{ on_water_string }"
-    filename_sufix = "#{ old_branch } -> #{ new_branch }"
-    diff = ComparisonOfImages.new(old, new, header, filename_sufix)
-    diff.save
-  end
-  def dict_to_pretty_tag_list dict
-    result = ''
-    dict.to_a.each {|tag|
-      if result != ''
-        result << '; '
-      end
-      result << "#{tag[0]}='#{tag[1]}'"
-    }
-    return result
-    end
-end
-
-
-class Image
+class ImageForComparison
   attr_reader :file_location, :description
   def initialize(file_location, description)
     @file_location = file_location
@@ -40,16 +12,7 @@ class Image
   end
 end
 
-def collect_images(tags, type, on_water, zlevel_range)
-  collection = []
-	zlevel_range.each { |zlevel|
-		scene = Scene.new(tags, zlevel, on_water, type)
-    collection.push(Image.new(scene.get_image, "z#{zlevel}"))
-	}
-  return collection
-end
-
-class ImagePair
+class PairOfComparedImages
   attr_reader :left_file_location, :right_file_location
   attr_accessor :description
   def initialize(left_image, right_image)
@@ -63,13 +26,13 @@ class ImagePair
   end
 end
 
-class ComparisonOfImages
-  def initialize(before, after, header, filename_sufix)
+class FullSetOfComparedImages
+  def initialize(before, after, header, filename, image_size)
     @header = header
-    @filename_sufix = filename_sufix
+    @filename = filename
     @compared = compress(before, after)
 
-    @image_size = 200 #TODO - stop hardcoding
+    @image_size = image_size
     @margin = 20
     @standard_pointsize = 10
     @header_space = @standard_pointsize*1.5
@@ -79,12 +42,12 @@ class ComparisonOfImages
   end
 
   def compress(before, after)
-    returned = [ImagePair.new(before[0], after[0])]
+    returned = [PairOfComparedImages.new(before[0], after[0])]
     (1...before.length).each { |i|
       if before[i].identical(before[i-1]) && after[i].identical(after[i-1])
         returned[-1].merge_description_from_next_image(before[i])
       else
-        returned.push(ImagePair.new(before[i], after[i]))
+        returned.push(PairOfComparedImages.new(before[i], after[i]))
       end
     }
     return returned
@@ -156,6 +119,7 @@ class ComparisonOfImages
     label_drawer.draw(@canvas)
   end
 
+  # noinspection RubyResolve
   def render_row_of_images(y_offset, left_image, right_image)
     if left_image == right_image
       @canvas.composite!(left_image, @margin*1.5 + @image_size/2, y_offset, Magick::OverCompositeOp)
@@ -177,6 +141,6 @@ class ComparisonOfImages
   end
 
   def save
-    @canvas.write("tmp/#{@header} #{@filename_sufix}.png")
+    @canvas.write(@filename)
   end
 end

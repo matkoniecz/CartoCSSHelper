@@ -1,6 +1,7 @@
 # encoding: UTF-8
 load 'configuration.rb'
 load 'heuristic.rb'
+load 'data_file_handling.rb'
 require 'fileutils'
 include Configuration
 include Heuristic
@@ -24,14 +25,14 @@ class Scene
 			raise 'on_water mismatch'
 		end
 		#Returns true if the contents of a file A and a file B are identical.
-		return !FileUtils.compare_file(self.get_image, another_scene.get_image)
+		return !FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
 	end
 
 	def flush_cache
 		File.delete(self.get_filename)
 	end
 
-	def get_image(debug=false, silent=false)
+	def get_image_filename(silent=true, debug=false)
 		lat = 0
 		lon = 20
 		on_water_string = ''
@@ -54,7 +55,7 @@ class Scene
 				raise description
 			else
 				puts description
-				return get_image(true, false)
+				return get_image_filename(false, true)
 			end
 		end
 		return export_filename
@@ -67,30 +68,37 @@ class Scene
 		if @on_water
 			water_part = '_water'
 		end
-		return Configuration.get_path_to_folder_for_temporary_files+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
+		return Configuration.get_path_to_folder_for_branch_specific_temporary_files+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
 	end
 
 	def generate_map(lat, lon, debug)
-		data_file_maker = DataFileGenerator.new(tags, @type, lat, lon, get_size)
+		data_file_maker = DataFileGenerator.new(tags, @type, lat, lon, get_bbox_size)
 		data_file_maker.generate
-		load_data_into_database debug
+		DataFileLoader.load_data_into_database(Configuration.get_data_filename, debug)
 		generate_image lat, lon, debug
 	end
 
-	def get_size
+	def get_bbox_size
 		return 0.2
 	end
 
 	def generate_image(lat, lon, debug)
+		export_filename = self.get_filename
+		bbox_size = self.get_bbox_size
+		Scene.run_tilemill_export_image(lat, lon,  @zlevel, bbox_size, 200, export_filename, debug)
+	end
+
+	def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug=false)
+		if File.exists?(export_filename)
+			return
+		end
 		silence = '> /dev/null 2>&1'
 		if debug
 			silence = ''
 		end
-		export_filename = self.get_filename
-		size = self.get_size
 		#--bbox=[xmin,ymin,xmax,ymax]
-		bbox = "#{lon-size/2},#{lat-size/2},#{lon+size/2},#{lat+size/2}"
-		params = "--format=png --width=200 --height=200 --static_zoom=#{@zlevel} --bbox=\"#{bbox}\""
+		bbox = "#{lon-bbox_size/2},#{lat-bbox_size/2},#{lon+bbox_size/2},#{lat+bbox_size/2}"
+		params = "--format=png --width=#{image_size} --height=#{image_size} --static_zoom=#{zlevel} --bbox=\"#{bbox}\""
 		command = "node /usr/share/tilemill/index.js export osm-carto '#{export_filename}' #{params} #{silence}"
 		#TODO - osm-carto is hardcoded
 		if debug
@@ -99,95 +107,5 @@ class Scene
 		system command
 	end
 
-	def load_data_into_database(debug)
-		silence = '> /dev/null 2>&1'
-		if debug
-			silence = ''
-		end
-
-		#TODO - openstreetmap-carto.style is hardcoded
-		command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_path}openstreetmap-carto.style --multi-geometry #{Configuration.get_data_filename} #{silence}"
-		if debug
-			puts command
-		end
-		system command
-	end
 end
 
-class DataFileGenerator
-	def initialize(tags, type, lat, lon, size)
-		@lat = lat
-		@lon = lon
-		@tags = tags
-		@type = type
-		@size = size
-	end
-
-	def generate
-		@data_file = open(Configuration.get_data_filename, 'w')
-		generate_prefix
-		if @type == 'node'
-			generate_node_topology(@lat, @lon, @tags)
-		elsif @type == 'way'
-			generate_way_topology(@lat, @lon, @tags)
-		elsif @type == 'closed_way'
-			generate_closed_way_topology(@lat, @lon, @tags)
-		else
-			raise
-		end
-		generate_sufix
-		@data_file.close
-	end
-
-	def generate_node_topology(lat, lon, tags)
-		add_node lat, lon, tags, 2387
-	end
-
-	def generate_way_topology(lat, lon, tags)
-		add_node lat, lon-@size/3, [], 1
-		add_node lat, lon+@size/3, [], 2
-		add_way tags, [1, 2], 3
-	end
-
-	def generate_closed_way_topology(lat, lon, tags)
-		delta = @size/3
-		add_node lat-delta, lon-delta, [], 1
-		add_node lat-delta, lon+delta, [], 2
-		add_node lat+delta, lon+delta, [], 3
-		add_node lat+delta, lon-delta, [], 4
-		add_way tags, [1, 2, 3, 4, 1], 5
-	end
-
-	def generate_prefix
-		@data_file.write "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' generator='script'>"
-	end
-
-	def generate_sufix
-		@data_file.write "\n</osm>"
-	end
-
-	def add_node(lat, lon, tags, id)
-		@data_file.write "\n"
-		@data_file.write "  <node id='#{id}' visible='true' lat='#{lat}' lon='#{lon}'>"
-		add_tags(tags)
-		@data_file.write '</node>'
-	end
-
-	def add_way(tags, nodes, id)
-		@data_file.write "\n"
-		@data_file.write "  <way id='#{id}' visible='true'>"
-		nodes.each { |node|
-			@data_file.write "\n"
-			@data_file.write "    <nd ref='#{node}' />"
-		}
-		add_tags(tags)
-		@data_file.write "\n  </way>"
-	end
-
-	def add_tags(tags)
-		tags.each { |tag|
-			@data_file.write "\n"
-			@data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
-		}
-	end
-end

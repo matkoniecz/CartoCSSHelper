@@ -1,5 +1,6 @@
 *.kate-swp
-/tmp/*
+/cache/*
+/output/*
 
 ### Ruby template
 *.gem

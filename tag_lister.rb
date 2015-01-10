@@ -40,7 +40,8 @@ class Info
 		return nil
 	end
 
-	def print_render_state_of_tags
+	def print_render_state_of_tags(git_branch)
+		Git.switch_to_branch git_branch
 		get_render_state_of_tags.each { |state|
 			state.code_print
 		}

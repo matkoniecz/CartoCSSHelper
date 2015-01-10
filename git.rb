@@ -1,8 +1,12 @@
 module Git
-  def switch_to_branch(branch)
+  def switch_to_branch(branch, debug=false)
+    silence = '> /dev/null 2>&1'
+    if debug
+      silence = ''
+    end
     Dir.chdir(Configuration.get_style_path) {
       require 'open3'
-      if !system("git checkout #{branch}")
+      if !system("git checkout #{branch} #{silence}")
         raise 'failed checkout'
       end
     }
