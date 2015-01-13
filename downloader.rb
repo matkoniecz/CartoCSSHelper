@@ -72,7 +72,11 @@ class Downloader
     element="(#{type}"
     element += "\n"
     tags.each {|tag|
-      element+="\t[#{tag[0]}=#{tag[1]}]"
+      if tag[1] == :any_value
+        element+="\t[#{tag[0]}]"
+      else
+        element+="\t[#{tag[0]}=#{tag[1]}]"
+      end
       element += "\n"
     }
     element+="\t(around:#{range},#{latitude},#{longitude});"

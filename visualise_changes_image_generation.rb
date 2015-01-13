@@ -4,6 +4,7 @@ require_relative 'downloader'
 
 class VisualDiff
   def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, old_branch, new_branch)
+    tags = VisualDiff.remove_magic_from_tags(tags)
     on_water_string = ''
     if on_water
       on_water_string = ' on water'
@@ -15,6 +16,17 @@ class VisualDiff
     Git.switch_to_branch(new_branch)
     new = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
     VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 200
+  end
+
+  def self.remove_magic_from_tags(tags)
+    magicless_tags = Hash.new
+    tags.each {|key, value|
+      if value == :any
+        value = 'any tag value'
+      end
+      magicless_tags[key]=value
+    }
+    return magicless_tags
   end
 
   def self.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
@@ -123,7 +135,11 @@ class VisualDiff
       if result != ''
         result << '; '
       end
-      result << "#{tag[0]}='#{tag[1]}'"
+      value = "'#{tag[1]}'"
+      if tag[1] == :any_value
+        value = '{any value}'
+      end
+      result << "#{tag[0]}=#{value}"
     }
     return result
   end
