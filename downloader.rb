@@ -69,13 +69,14 @@ class Downloader
   end
 
   def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
+    #TODO - escape value with quotation signs in them
     element="(#{type}"
     element += "\n"
     tags.each {|tag|
       if tag[1] == :any_value
-        element+="\t[#{tag[0]}]"
+        element+="\t['#{tag[0]}']"
       else
-        element+="\t[#{tag[0]}=#{tag[1]}]"
+        element+="\t['#{tag[0]}'='#{tag[1]}']"
       end
       element += "\n"
     }
