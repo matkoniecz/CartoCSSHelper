@@ -76,7 +76,7 @@ class VisualDiff
     old = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
     Git.switch_to_branch new_branch
     new = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
-    header = "#{latitude} #{longitude} #{ VisualDiff.dict_to_pretty_tag_list(tags) }"
+    header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{latitude} #{longitude}"
     VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400
   end
 
