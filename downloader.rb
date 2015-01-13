@@ -102,6 +102,7 @@ class Downloader
     begin
       cached = RestClient::Request.execute(:method => :get, :url => Downloader.format_query_into_url(query), :timeout => 3600)
     rescue RestClient::RequestFailed => e
+      puts query
       puts e.response
       puts e.http_code
       puts start
