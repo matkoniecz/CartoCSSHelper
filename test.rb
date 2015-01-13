@@ -40,6 +40,9 @@ def test_tag_on_real_data(tags, zlevels, old_branch, new_branch)
 	georgia_latitude = 41.4
 	georgia_longitude = 44.5
 	VisualDiff.visualise_changes_on_real_data(tags, georgia_latitude, georgia_longitude, zlevels, old_branch, new_branch)
+	london_latitude = 51.5
+	london_longitude = -0.1
+	VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
 end
 
 def test(tags, type, range, new_branch, old_brach='master')
