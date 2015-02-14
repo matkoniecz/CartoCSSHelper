@@ -1,10 +1,12 @@
 
 def get_expected_tag_status
     return [
-        Status.new('access', '*', :ignored),
+        Status.new('access', '*', :composite, {'amenity'=>'parking'}),
         Status.new('access', 'destination', :composite, {'highway'=>'service'}),
         Status.new('access', 'no', :composite, {'highway'=>'service'}),
         Status.new('access', 'private', :composite, {'highway'=>'service'}),
+        Status.new('access', 'public', :composite, {'amenity'=>'parking'}),
+        Status.new('access', 'yes', :composite, {'amenity'=>'parking'}),
         Status.new('addr:housename', '*', :primary),
         Status.new('addr:housenumber', '*', :primary),
         Status.new('addr:interpolation', '*', :primary),
@@ -48,9 +50,12 @@ def get_expected_tag_status
         Status.new('amenity', 'cinema', :primary),
         Status.new('amenity', 'college', :primary),
         Status.new('amenity', 'courthouse', :primary),
+        Status.new('amenity', 'dentist', :primary),
         Status.new('amenity', 'drinking_water', :primary),
+        Status.new('amenity', 'doctors', :primary),
         Status.new('amenity', 'embassy', :primary),
         Status.new('amenity', 'emergency_phone', :primary),
+        Status.new('amenity', 'food_court', :primary),
         Status.new('amenity', 'fast_food', :primary),
         Status.new('amenity', 'fire_station', :primary),
         Status.new('amenity', 'fuel', :primary),
@@ -73,6 +78,8 @@ def get_expected_tag_status
         Status.new('amenity', 'telephone', :primary),
         Status.new('amenity', 'theatre', :primary),
         Status.new('amenity', 'toilets', :primary),
+        Status.new('amenity', 'toilets', :primary),
+        Status.new('amenity', 'townhall', :primary),
         Status.new('amenity', 'university', :primary),
         Status.new('area', '*', :ignored),
         Status.new('area', 'no', :composite, {'barrier' => 'hedge'}),
@@ -180,6 +187,7 @@ def get_expected_tag_status
         Status.new('horse', '*', :ignored),
         Status.new('horse', 'designated', :composite, {'highway'=>'path'}),
         Status.new('intermittent', '*', :ignored),
+        Status.new('intermittent', 'yes', :composite, {'waterway'=>'river'}),
         Status.new('junction', '*', :ignored),
         Status.new('junction', 'yes', :composite, {'name'=>'a'}),
         Status.new('landuse', '*', :ignored),
@@ -225,6 +233,7 @@ def get_expected_tag_status
         Status.new('leisure', 'garden', :primary),
         Status.new('leisure', 'golf_course', :primary),
         Status.new('leisure', 'marina', :primary),
+        Status.new('leisure', 'miniature_golf', :primary),
         Status.new('leisure', 'nature_reserve', :primary),
         Status.new('leisure', 'park', :primary),
         Status.new('leisure', 'picnic_table', :primary),
@@ -236,6 +245,7 @@ def get_expected_tag_status
         Status.new('leisure', 'stadium', :primary),
         Status.new('leisure', 'swimming_pool', :primary),
         Status.new('leisure', 'track', :primary),
+        Status.new('leisure', 'water_park', :primary),
         Status.new('lock', '*', :ignored),
         Status.new('lock', 'yes', :primary),
         Status.new('man_made', '*', :ignored),
@@ -262,7 +272,6 @@ def get_expected_tag_status
         Status.new('natural', 'glacier', :primary),
         Status.new('natural', 'grassland', :primary),
         Status.new('natural', 'heath', :primary),
-        Status.new('natural', 'lake', :primary),
         Status.new('natural', 'marsh', :primary),
         Status.new('natural', 'mud', :primary),
         Status.new('natural', 'peak', :primary),
@@ -583,11 +592,12 @@ def get_composite_sets
       {'aeroway' => 'gate'}, #ref=*
       {'amenity' => 'place_of_worship'}, #religion=christian
       {'amenity' => 'place_of_worship', 'religion' => 'christian'}, #denomination=jehovahs_witness
-      {'waterway' => 'river'}, #bridge=aqueduct, tunnel=culvert
+      {'waterway' => 'river'}, #bridge=aqueduct, tunnel=culvert, intermittent=yes
       {'power' => 'generator'}, #power_source=wind
       {'highway' => 'path'}, #bicycle=designated
       {'highway' => 'construction'}, #construction=motorway...
       {'highway' => 'track'}, #tracktype=grade1...
-  #{'barrier' => 'hedge'}, #area=yes
+      {'amenity' => 'parking'}, #access=yes, access=public, access=*...
+      #{'barrier' => 'hedge'}, #area=yes
   ]
 end
