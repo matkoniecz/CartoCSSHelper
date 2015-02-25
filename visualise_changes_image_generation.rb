@@ -103,6 +103,7 @@ class VisualDiff
       image_size /= ratio
       render_bbox_size /= ratio
       image_size /= mutiplier
+      image_size = image_size.to_i
       if image_size!=wanted_image_size
         puts VisualDiff.scale zlevel, image_size_for_16_zoom_level, 16
         puts zlevel
