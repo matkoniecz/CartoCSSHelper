@@ -40,7 +40,7 @@ module Heuristic
 	end
 
 	def get_tags_from_mss_file(style_filename)
-		possible_tags = get_tags_from_osm2pqsql
+    possible_key_values = get_tags_from_osm2pqsql
 		tags = Set.new
 		#puts style_filename
 		style_file = open(style_filename)
@@ -48,7 +48,7 @@ module Heuristic
 		matched = style.scan(/\[feature = '(man_made|[^_]+)_([^']+)'\]/)
 		matched.each { |element|
 			key = element[0]
-			if possible_tags.include?([key, get_generic_tag_value])
+			if possible_key_values.include?([key, get_generic_tag_value])
 				tags.add([key, element[1]])
 			end
 		}
@@ -56,7 +56,7 @@ module Heuristic
 		matched.each { |element|
 			key = element[0]
 			if key != 'feature'
-				if possible_tags.include?([key, get_generic_tag_value])
+				if possible_key_values.include?([key, get_generic_tag_value])
 					tags.add([key, element[1]])
 				end
 			end
@@ -65,7 +65,7 @@ module Heuristic
 	end
 
 	def get_tags_from_yaml_file(yaml_filename)
-		possible_tags = get_tags_from_osm2pqsql
+		possible_key_values = get_tags_from_osm2pqsql
 		tags = Set.new
 		yaml_file = open(yaml_filename)
 		yaml = yaml_file.read
@@ -79,7 +79,7 @@ module Heuristic
 		matched.each { |element|
 			key = element[2]
 			value = element[4]
-			if possible_tags.include?([key, get_generic_tag_value])
+			if possible_key_values.include?([key, get_generic_tag_value])
 				tags.add([key, value])
 			end
 		}
@@ -89,7 +89,7 @@ module Heuristic
 			key = tag.gsub(/.*\./, '')
 			values = element[4]
 			values_matched = values.scan(/'([^']+)'/)
-			if possible_tags.include?([key, get_generic_tag_value])
+			if possible_key_values.include?([key, get_generic_tag_value])
 				values_matched.each { |value|
 					tags.add([key, value[0]])
 				}
