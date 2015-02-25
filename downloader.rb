@@ -41,9 +41,9 @@ class Downloader
     loop do
       list = Downloader.run_overpass_query(Downloader.get_query_to_get_location(tags, latitude, longitude, range))
       if list.length != 0
-        list = list.match(/([\d\.]+)\s+([\d\.]+)/).to_a
+        list = list.match(/((|-)[\d\.]+)\s+((|-)[\d\.]+)/).to_a
         lat = Float(list[1])
-        lon = Float(list[2])
+        lon = Float(list[3])
         return lat, lon
       end
       range=range+[range, 100000].min
