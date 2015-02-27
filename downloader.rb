@@ -113,7 +113,7 @@ class Downloader
     return cached
   end
 
-  def self.run_overpass_query(query)
+  def self.run_overpass_query(query, retry_count=0, retry_max=5)
     #default timeout is set to 180: http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#timeout
     #[timeout:3600]; should be used in all queries executed here
     start = Time.now.to_s
@@ -125,7 +125,12 @@ class Downloader
       puts e.http_code
       puts start
       puts Time.now.to_s
-      e.raise
+      if retry_count < retry_max
+        sleep 60*5
+        Downloader.run_overpass_query(query, retry_count+1, retry_max)
+      else
+        e.raise
+      end
     end
   end
 
