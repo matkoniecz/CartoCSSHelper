@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'rest_client'
+require 'rest-client'
 require 'digest/sha1'
 
 
