@@ -105,6 +105,9 @@ class Scene
 			puts command
 		end
 		system command
+    unless File.exists?(export_filename)
+      raise 'generation of file ' + export_filename + ' failed'
+    end
 	end
 
 end
