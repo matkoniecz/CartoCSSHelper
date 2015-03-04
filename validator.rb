@@ -3,10 +3,10 @@ load 'heuristic.rb'
 load 'image_generator.rb'
 load 'configuration.rb'
 
-include Heuristic
-include Configuration
+include CartoCSSHelper::Heuristic
+include CartoCSSHelper::Configuration
 
-module Validator
+module CartoCSSHelper::Validator
 	def run_tests(git_branch)
 		Git.switch_to_branch git_branch
 		compare_expected_with_real_rendering
@@ -81,6 +81,8 @@ module Validator
 
 	#TODO - what about composite tags?
 	def check_problems_with_closed_line(key, value, zlevel, on_water = false)
+    puts "#268 natural=cliff"
+    puts "#892 man_made=embankment"
 		way = Scene.new({key => value}, zlevel, on_water, 'way')
 		closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
 		empty = Scene.new({}, zlevel, on_water, 'node')

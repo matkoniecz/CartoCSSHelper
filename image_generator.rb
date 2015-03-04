@@ -3,8 +3,8 @@ load 'configuration.rb'
 load 'heuristic.rb'
 load 'data_file_handling.rb'
 require 'fileutils'
-include Configuration
-include Heuristic
+include CartoCSSHelper::Configuration
+include CartoCSSHelper::Heuristic
 
 class Scene
 	attr_reader :tags, :zlevel, :on_water, :type
@@ -68,7 +68,7 @@ class Scene
 		if @on_water
 			water_part = '_water'
 		end
-		return Configuration.get_path_to_folder_for_branch_specific_temporary_files+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
+		return Configuration.get_path_to_folder_for_branch_specific_cache+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
 	end
 
 	def generate_map(lat, lon, debug)
@@ -90,8 +90,8 @@ class Scene
 
 	def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug=false)
 		if File.exists?(export_filename)
-			return
-		end
+    	return
+    end
 		silence = '> /dev/null 2>&1'
 		if debug
 			silence = ''

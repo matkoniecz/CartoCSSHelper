@@ -1,4 +1,4 @@
-module Git
+module CartoCSSHelper::Git
   def switch_to_branch(branch, debug=false)
     silence = '> /dev/null 2>&1'
     if debug

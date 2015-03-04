@@ -1,8 +1,7 @@
-require 'set'
-load 'configuration.rb'
-include Configuration
-
-module Heuristic
+module CartoCSSHelper::Heuristic
+  require 'set'
+  load 'configuration.rb'
+  include CartoCSSHelper::Configuration
 	def get_tags
 		tags = get_tags_from_mss
 		tags.merge(get_tags_from_yaml)
