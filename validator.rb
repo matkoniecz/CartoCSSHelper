@@ -81,8 +81,8 @@ module CartoCSSHelper::Validator
 
 	#TODO - what about composite tags?
 	def check_problems_with_closed_line(key, value, zlevel, on_water = false)
-    puts "#268 natural=cliff"
-    puts "#892 man_made=embankment"
+    puts '#268 natural=cliff' #TODO - remove before gemification
+    puts '#892 man_made=embankment' #TODO - remove before gemification
 		way = Scene.new({key => value}, zlevel, on_water, 'way')
 		closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
 		empty = Scene.new({}, zlevel, on_water, 'node')
