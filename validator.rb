@@ -93,8 +93,7 @@ module CartoCSSHelper::Validator
 		end
 	end
 
-	def check_dy(key, value, zlevel, interactive=false)
-		on_water = false #TODO -is it OK
+	def check_dy(key, value, zlevel, interactive=false, on_water=false)
 		if !is_object_displaying_anything key, value, zlevel, on_water
 			#puts key+"="+value+" - not displayed as node on z#{zlevel}"
 			return
@@ -104,7 +103,6 @@ module CartoCSSHelper::Validator
 			return
 		end
 		test_name = 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ'
-		on_water = false #TODO -is it OK
 		while !is_object_displaying_name key, value, test_name, zlevel, on_water
 			puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
 			if interactive
