@@ -8,15 +8,31 @@ include CartoCSSHelper::Configuration
 
 module CartoCSSHelper::Validator
 	def run_tests(git_branch)
-		Git.switch_to_branch git_branch
-		compare_expected_with_real_rendering
-		puts
-		puts 'failed display of closed way, unlosed way works:'
-		run_global_check(:check_problems_with_closed_line)
-		puts
-		puts "bad dy values (tall names like 'É' are not displayed, short names like 'a' are):"
-		run_global_check(:check_dy)
-	end
+    run_expected_rendering_test(git_branch)
+    run_dy_test(git_branch)
+    run_closed_way_test(git_branch)
+  end
+
+  def run_expected_rendering_test(git_branch)
+    Git.switch_to_branch git_branch
+    puts 'unexpectedly rendered/unrendered keys:'
+    compare_expected_with_real_rendering
+    puts
+  end
+
+  def run_dy_test(git_branch)
+    Git.switch_to_branch git_branch
+    puts "bad dy values (tall names like 'É' are not displayed, short names like 'a' are):"
+    run_global_check(:check_dy)
+    puts
+  end
+
+  def run_closed_way_test(git_branch)
+    Git.switch_to_branch git_branch
+    puts 'failed display of closed way, unlosed way works:'
+    run_global_check(:check_problems_with_closed_line)
+    puts
+  end
 
 	def compare_expected_with_real_rendering
 		list_of_expected = get_expected_tag_status
