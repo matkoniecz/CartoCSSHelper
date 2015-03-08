@@ -12,9 +12,9 @@ module CartoCSSHelper
       end
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{ type }#{ on_water_string }"
       puts "visualise_changes_synthethic_test <#{header}> #{old_branch} -> #{new_branch}"
-      Git.switch_to_branch(old_branch)
+      Git.checkout(old_branch)
       old = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
-      Git.switch_to_branch(new_branch)
+      Git.checkout(new_branch)
       new = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 200
     end
@@ -74,9 +74,9 @@ module CartoCSSHelper
       latitude, longitude = Downloader.locate_element_with_given_tags tags, wanted_latitude, wanted_longitude
       download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
-      Git.switch_to_branch old_branch
+      Git.checkout old_branch
       old = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
-      Git.switch_to_branch new_branch
+      Git.checkout new_branch
       new = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{latitude} #{longitude}"
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400

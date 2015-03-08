@@ -42,7 +42,7 @@ module CartoCSSHelper
     end
 
     def print_render_state_of_tags(git_branch)
-      Git.switch_to_branch git_branch
+      Git.checkout git_branch
       get_render_state_of_tags.each { |state|
         state.code_print
       }
