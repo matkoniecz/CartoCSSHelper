@@ -30,6 +30,8 @@ module CartoCSSHelper::Validator
   def run_closed_way_test(git_branch)
     Git.checkout git_branch
     puts 'failed display of closed way, unlosed way works:'
+    puts '#268 natural=cliff' #TODO - remove before gemification
+    puts '#892 man_made=embankment' #TODO - remove before gemification
     run_global_check(:check_problems_with_closed_line)
     puts
   end
@@ -97,8 +99,6 @@ module CartoCSSHelper::Validator
 
 	#TODO - what about composite tags?
 	def check_problems_with_closed_line(key, value, zlevel, on_water = false)
-    puts '#268 natural=cliff' #TODO - remove before gemification
-    puts '#892 man_made=embankment' #TODO - remove before gemification
 		way = Scene.new({key => value}, zlevel, on_water, 'way')
 		closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
 		empty = Scene.new({}, zlevel, on_water, 'node')
