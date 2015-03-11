@@ -99,8 +99,8 @@ class Scene
 		#--bbox=[xmin,ymin,xmax,ymax]
 		bbox = "#{lon-bbox_size/2},#{lat-bbox_size/2},#{lon+bbox_size/2},#{lat+bbox_size/2}"
 		params = "--format=png --width=#{image_size} --height=#{image_size} --static_zoom=#{zlevel} --bbox=\"#{bbox}\""
-		command = "node /usr/share/tilemill/index.js export osm-carto '#{export_filename}' #{params} #{silence}"
-		#TODO - osm-carto is hardcoded
+    project_name = CartoCSSHelper::Configuration.get_tilemill_project_name
+		command = "node /usr/share/tilemill/index.js export #{project_name} '#{export_filename}' #{params} #{silence}"
 		if debug
 			puts command
 		end

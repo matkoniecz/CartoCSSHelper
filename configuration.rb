@@ -22,6 +22,10 @@ module CartoCSSHelper::Configuration
 		return @style_path
 	end
 
+  def get_tilemill_project_name
+    return get_style_path.split(File::SEPARATOR)[-1]
+  end
+
 	def get_path_to_folder_for_output
 		location = File.join(File.dirname(__FILE__), 'output', '')
 		FileUtils::mkdir_p location
