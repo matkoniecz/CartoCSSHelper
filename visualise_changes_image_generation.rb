@@ -42,7 +42,7 @@ module CartoCSSHelper
     class RealDataSource
       def initialize(latitude, longitude, wanted_download_bbox_size)
         wanted_download_bbox_size = [wanted_download_bbox_size, 0.001].max
-        wanted_download_bbox_size = [wanted_download_bbox_size, 0.500].min #0.9 fails in Tokio
+        wanted_download_bbox_size = [wanted_download_bbox_size, 0.400].min #0.5 is too big for Utrecht
         @download_bbox_size = wanted_download_bbox_size
         @latitude = latitude
         @longitude = longitude
