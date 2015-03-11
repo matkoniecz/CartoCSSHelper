@@ -54,8 +54,8 @@ module CartoCSSHelper
     test_tag_on_real_data(tags, range, old_brach, new_branch)
   end
 
-  def probe(tags, type, zlevels, branch)
-    VisualDiff.visualise_changes_synthethic_test(tags, type, false, zlevels, 'master', branch)
+  def probe(tags, type, zlevels, branch, old_brach='master')
+    VisualDiff.visualise_changes_synthethic_test(tags, type, false, zlevels, old_brach, branch)
   end
 
 end
