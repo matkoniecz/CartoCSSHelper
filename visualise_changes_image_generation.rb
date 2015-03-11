@@ -46,7 +46,6 @@ module CartoCSSHelper
         @download_bbox_size = wanted_download_bbox_size
         @latitude = latitude
         @longitude = longitude
-        puts "\tdownloading location (OverpassAPI)"
         @data_filename = Downloader.download_osm_data_for_location(@latitude, @longitude, @download_bbox_size)
         @loaded = false
       end
@@ -70,7 +69,6 @@ module CartoCSSHelper
       #special support for following tag values:  :any_value
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       puts "visualise_changes_on_real_data <#{header}> #{old_branch} -> #{new_branch}"
-      puts "\tlocating nearby element (OverpassAPI)"
       latitude, longitude = Downloader.locate_element_with_given_tags tags, wanted_latitude, wanted_longitude
       download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
       source = RealDataSource.new(latitude, longitude, download_bbox_size)

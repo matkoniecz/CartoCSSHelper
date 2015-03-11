@@ -106,6 +106,7 @@ module CartoCSSHelper
         file.close
         return cached
       end
+      puts 'Running Overpass query'
       if debug
         puts query
         puts
