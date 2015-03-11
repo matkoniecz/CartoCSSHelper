@@ -10,18 +10,19 @@ module CartoCSSHelper::Git
         raise 'failed checkout'
       end
     }
-    init_commit_hash
   end
 
-  def init_commit_hash
+  def get_commit_hash
     Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
       Open3.popen3('git log -n 1 --pretty=format:"%H"') {|_, stdout, stderr, _|
-        $commit = stdout.read.chomp
+        commit = stdout.read.chomp
         error = stderr.read.chomp
         if error != ''
           raise error
         end
+        return commit
       }
     }
+    raise 'impossible happened'
   end
 end
