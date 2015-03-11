@@ -13,19 +13,6 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def wrapper_for_visual_diff(tags, variable_key, variable_key_values, type, branch_from, branch_to)
-    if variable_key!= nil
-      variable_key_values.add('*')
-      variable_key_values.each { |value|
-        tested_tags = tags.merge({variable_key => value, 'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000'})
-        VisualDiff.visualise_changes_synthethic_test(tested_tags, type, false, Configuration.get_min_z..Configuration.get_max_z, branch_from, branch_to)
-      }
-    end
-    tested_tags = tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000'})
-    VisualDiff.visualise_changes_synthethic_test(tested_tags, type, false, Configuration.get_min_z..Configuration.get_max_z, branch_from, branch_to)
-  end
-
-
   def test_tag_on_real_data(tags, zlevels, old_branch, new_branch)
     #special support for following tag values:  :any_value
     krakow_latitude = 50.1
@@ -46,16 +33,27 @@ module CartoCSSHelper
     london_latitude = 51.5
     london_longitude = -0.1
     VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
+    utrecht_latitude =  52.09
+    utrecht_longitude = 5.11
+    VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
   end
 
-  def test(tags, type, range, new_branch, old_brach='master')
+  def add_common_secondary_tags(tags)
+    return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000'})
+  end
+
+  def test(tags, type, zlevels, new_branch, old_brach='master')
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
-    wrapper_for_visual_diff(tags, nil, nil, type, old_brach, new_branch)
-    test_tag_on_real_data(tags, range, old_brach, new_branch)
+    zlevels_for_synthetic = Configuration.get_min_z..Configuration.get_max_z
+    syn_tags = add_common_secondary_tags(tags)
+    VisualDiff.visualise_changes_synthethic_test(syn_tags, type, false, zlevels_for_synthetic, old_brach, new_branch)
+    test_tag_on_real_data(tags, zlevels, old_brach, new_branch)
   end
 
-  def probe(tags, type, zlevels, branch, old_brach='master')
-    VisualDiff.visualise_changes_synthethic_test(tags, type, false, zlevels, old_brach, branch)
+  def probe(tags, type, zlevels, new_branch, old_brach='master')
+    zlevels_for_synthetic = Configuration.get_min_z..Configuration.get_max_z
+    syn_tags = add_common_secondary_tags(tags)
+    VisualDiff.visualise_changes_synthethic_test(syn_tags, type, false, zlevels_for_synthetic, old_brach, new_branch)
   end
 
 end
