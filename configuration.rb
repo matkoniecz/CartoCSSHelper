@@ -16,6 +16,9 @@ module CartoCSSHelper::Configuration
   end
 
 	def get_style_path
+    if @style_path == nil
+      raise 'Use CartoCSSHelper::Configuration.set_style_path(path) to set path to folder with style'
+    end
 		return @style_path
 	end
 
