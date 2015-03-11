@@ -4,7 +4,7 @@ module CartoCSSHelper::Git
     if debug
       silence = ''
     end
-    Dir.chdir(Configuration.get_style_path) {
+    Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
       require 'open3'
       if !system("git checkout #{branch} #{silence}")
         raise 'failed checkout'
@@ -14,7 +14,7 @@ module CartoCSSHelper::Git
   end
 
   def init_commit_hash
-    Dir.chdir(Configuration.get_style_path) {
+    Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
       Open3.popen3('git log -n 1 --pretty=format:"%H"') {|_, stdout, stderr, _|
         $commit = stdout.read.chomp
         error = stderr.read.chomp

@@ -11,11 +11,11 @@ module CartoCSSHelper::Configuration
 		return 4
 	end
 
-  def set_style_path(path)
+  def set_path_to_tilemill_project_folder(path)
     @style_path = path
   end
 
-	def get_style_path
+	def get_path_to_tilemill_project_folder
     if @style_path == nil
       raise 'Use CartoCSSHelper::Configuration.set_style_path(path) to set path to folder with style'
     end
@@ -23,7 +23,7 @@ module CartoCSSHelper::Configuration
 	end
 
   def get_tilemill_project_name
-    return get_style_path.split(File::SEPARATOR)[-1]
+    return get_path_to_tilemill_project_folder.split(File::SEPARATOR)[-1]
   end
 
 	def get_path_to_folder_for_output

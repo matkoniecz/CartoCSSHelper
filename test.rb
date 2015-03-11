@@ -2,7 +2,8 @@ load 'CartoCSSHelper.rb'
 include CartoCSSHelper
 
 def main
-  CartoCSSHelper::Configuration.set_style_path(File.join(ENV['HOME'], 'Documents', 'OSM', 'tilemill', 'osm-carto', ''))
+  CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', ''))
+
   #https://github.com/gravitystorm/openstreetmap-carto/pull/1242
   #CartoCSSHelper::VisualDiff.visualise_changes_on_real_data({'natural' => 'wetland'}, 49.69745, 20.28088, 13..20, 'master', 'pnorman/random_forest')
   #CartoCSSHelper.test ({'landuse' => 'forest', 'natural' => 'wetland'}), 'closed_way', 3..20, 'pnorman/random_forest'
