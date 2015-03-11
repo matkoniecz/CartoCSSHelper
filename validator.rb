@@ -30,8 +30,6 @@ module CartoCSSHelper::Validator
   def run_closed_way_test(git_branch)
     Git.checkout git_branch
     puts 'failed display of closed way, unlosed way works:'
-    puts '#268 natural=cliff' #TODO - remove before gemification
-    puts '#892 man_made=embankment' #TODO - remove before gemification
     run_global_check(:check_problems_with_closed_line)
     puts
   end
