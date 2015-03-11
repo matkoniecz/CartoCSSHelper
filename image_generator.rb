@@ -89,8 +89,11 @@ class Scene
 	end
 
 	def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug=false)
-		if File.exists?(export_filename)
-    	return
+    if File.exists?(export_filename)
+      if debug
+        puts 'wanted file exists'
+      end
+      return
     end
 		silence = '> /dev/null 2>&1'
 		if debug
