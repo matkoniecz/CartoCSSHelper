@@ -35,7 +35,10 @@ module CartoCSSHelper
     VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
     utrecht_latitude =  52.09
     utrecht_longitude = 5.11
-    VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
+    VisualDiff.visualise_changes_on_real_data(tags, utrecht_latitude, utrecht_longitude, zlevels, old_branch, new_branch)
+    rural_uk_latitude =  53.2
+    rural_uk_longitude = -1.8
+    VisualDiff.visualise_changes_on_real_data(tags, rural_uk_latitude, rural_uk_longitude, zlevels, old_branch, new_branch)
   end
 
   def add_common_secondary_tags(tags)
