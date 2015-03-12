@@ -136,6 +136,10 @@ module CartoCSSHelper
         else
           e.raise
         end
+      rescue ArgumentError => e
+        puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
+        puts 'try overpass query that will return smaller amount of data'
+        e.raise
       end
     end
 
