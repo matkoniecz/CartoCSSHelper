@@ -9,8 +9,7 @@ module CartoCSSHelper
         silence = ''
       end
 
-      #TODO - openstreetmap-carto.style is hardcoded
-      command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_path_to_tilemill_project_folder}openstreetmap-carto.style --multi-geometry '#{data_filename}' #{silence}"
+      command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}' #{silence}"
       if debug
         puts command
       end

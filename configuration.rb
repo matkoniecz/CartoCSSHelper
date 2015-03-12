@@ -26,6 +26,10 @@ module CartoCSSHelper::Configuration
     return get_path_to_tilemill_project_folder.split(File::SEPARATOR)[-1]
   end
 
+  def get_style_file_location
+    return "#{get_path_to_tilemill_project_folder}openstreetmap-carto.style" #TODO - openstreetmap-carto.style is hardcoded
+  end
+
 	def get_path_to_folder_for_output
 		location = File.join(File.dirname(__FILE__), 'output', '')
 		FileUtils::mkdir_p location
