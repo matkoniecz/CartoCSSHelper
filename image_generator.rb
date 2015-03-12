@@ -68,7 +68,7 @@ class Scene
 		if @on_water
 			water_part = '_water'
 		end
-		return Configuration.get_path_to_folder_for_branch_specific_cache+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png' #TODO - tags?
+		return Configuration.get_path_to_folder_for_branch_specific_cache+@tags.to_a.sort.to_s+'_'+@zlevel.to_s+water_part+'_'+@type+'.png'
 	end
 
 	def generate_map(lat, lon, debug)
