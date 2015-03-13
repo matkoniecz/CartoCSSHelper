@@ -1,5 +1,7 @@
 # encoding: UTF-8
 require 'fileutils'
+require 'find'
+
 load 'style_specific/default_osm_style.rb' #TODO - stop hardcoding this
 
 module CartoCSSHelper::Configuration
@@ -27,7 +29,18 @@ module CartoCSSHelper::Configuration
   end
 
   def get_style_file_location
-    return "#{get_path_to_tilemill_project_folder}openstreetmap-carto.style" #TODO - openstreetmap-carto.style is hardcoded
+    if @style_file == nil
+      @style_file = find_style_file_location
+    end
+    return @style_file
+  end
+
+  def find_style_file_location
+    Find.find(get_path_to_tilemill_project_folder) do |path|
+      if path =~ /.*\.style$/
+        return path
+      end
+    end
   end
 
 	def get_path_to_folder_for_output
