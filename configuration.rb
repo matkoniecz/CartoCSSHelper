@@ -9,18 +9,22 @@ module CartoCSSHelper::Configuration
     @style_specific_data = data
   end
 
-	def get_max_z
+  def get_style_specific_data
     if @style_specific_data == nil
-      raise 'Use CartoCSSHelper::Configuration.set_style_specific_data(data)'
+      raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_specific_data(data)'
     end
-    return @style_specific_data.max_z
+    return @style_specific_data
+  end
+
+	def get_max_z
+    return get_style_specific_data.max_z
 	end
 
 	def get_min_z
     if @style_specific_data == nil
-      raise 'Use CartoCSSHelper::Configuration.set_style_specific_data(data)'
+      raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_specific_data(data)'
     end
-    return @style_specific_data.min_z
+    return get_style_specific_data.min_z
 	end
 
   def set_path_to_tilemill_project_folder(path)
@@ -29,7 +33,7 @@ module CartoCSSHelper::Configuration
 
 	def get_path_to_tilemill_project_folder
     if @style_path == nil
-      raise 'Use CartoCSSHelper::Configuration.set_style_path(path) to set path to folder with style'
+      raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_path(path)'
     end
 		return @style_path
 	end
