@@ -2,15 +2,25 @@
 require 'fileutils'
 require 'find'
 
-load 'style_specific/default_osm_style.rb' #TODO - stop hardcoding this
+load 'style_specific/default_osm_style.rb'
 
 module CartoCSSHelper::Configuration
+  def set_style_specific_data(data)
+    @style_specific_data = data
+  end
+
 	def get_max_z
-		return 22
+    if @style_specific_data == nil
+      raise 'Use CartoCSSHelper::Configuration.set_style_specific_data(data)'
+    end
+    return @style_specific_data.max_z
 	end
 
 	def get_min_z
-		return 4
+    if @style_specific_data == nil
+      raise 'Use CartoCSSHelper::Configuration.set_style_specific_data(data)'
+    end
+    return @style_specific_data.min_z
 	end
 
   def set_path_to_tilemill_project_folder(path)

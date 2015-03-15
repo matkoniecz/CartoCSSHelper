@@ -33,9 +33,10 @@ module CartoCSSHelper
     london_latitude = 51.5
     london_longitude = -0.1
     VisualDiff.visualise_changes_on_real_data(tags, london_latitude, london_longitude, zlevels, old_branch, new_branch)
-    utrecht_latitude =  52.09
-    utrecht_longitude = 5.11
-    VisualDiff.visualise_changes_on_real_data(tags, utrecht_latitude, utrecht_longitude, zlevels, old_branch, new_branch)
+    #TODO: solve problems with respons to big to store in memory
+    #utrecht_latitude =  52.09
+    #utrecht_longitude = 5.11
+    #VisualDiff.visualise_changes_on_real_data(tags, utrecht_latitude, utrecht_longitude, zlevels, old_branch, new_branch)
     rural_uk_latitude =  53.2
     rural_uk_longitude = -1.8
     VisualDiff.visualise_changes_on_real_data(tags, rural_uk_latitude, rural_uk_longitude, zlevels, old_branch, new_branch)
