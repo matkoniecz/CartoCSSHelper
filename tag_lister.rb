@@ -4,7 +4,7 @@ include CartoCSSHelper::Configuration
 include CartoCSSHelper::Heuristic
 
 module CartoCSSHelper
-  class Status
+  class TagRenderingStatus
     attr_accessor :key, :value, :state, :composite
     def initialize(key, value, state, composite=nil)
       @key = key
@@ -56,7 +56,7 @@ module CartoCSSHelper
         value = tag[1]
         #print_render_state_of_tag key, value
         state = get_render_state_of_tag(key, value)
-        states.push(Status.new(key, value, state, @last_composite))
+        states.push(TagRenderingStatus.new(key, value, state, @last_composite))
       }
       return states
     end
