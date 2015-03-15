@@ -65,11 +65,11 @@ module CartoCSSHelper
       end
     end
 
-    def self.visualise_changes_on_real_data(tags, wanted_latitude, wanted_longitude, zlevels, old_branch, new_branch)
+    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, old_branch, new_branch)
       #special support for following tag values:  :any_value
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
+      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       puts "visualise_changes_on_real_data <#{header}> #{old_branch} -> #{new_branch}"
-      latitude, longitude = Downloader.locate_element_with_given_tags tags, wanted_latitude, wanted_longitude
+      latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
       download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
       Git.checkout old_branch

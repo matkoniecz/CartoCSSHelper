@@ -42,11 +42,11 @@ module CartoCSSHelper
       return query
     end
 
-    def self.locate_element_with_given_tags(tags, latitude, longitude)
+    def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude)
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
-        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, latitude, longitude, range))
+        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range))
         if list.length != 0
           list = list.match(/((|-)[\d\.]+)\s+((|-)[\d\.]+)/).to_a
           lat = Float(list[1])
@@ -57,14 +57,14 @@ module CartoCSSHelper
       end
     end
 
-    def self.get_query_to_get_location(tags, latitude, longitude, range)
+    def self.get_query_to_get_location(tags, type, latitude, longitude, range)
       #special support for following tag values:  :any_value
       locator = '[timeout:3600][out:csv(::lat,::lon;false)];'
       locator += "\n"
-      locator += Downloader.get_query_element_to_get_location(tags, latitude, longitude, 'way', range)
-      locator +='out center;'
-      locator += "\n"
-      locator += Downloader.get_query_element_to_get_location(tags, latitude, longitude, 'node', range/10)
+      if type == 'closed_way'
+        type = 'way'
+      end
+      locator += Downloader.get_query_element_to_get_location(tags, latitude, longitude, type, range)
       locator +='out center;'
       locator += "\n"
       locator += '/*'
