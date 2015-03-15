@@ -13,7 +13,7 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def test_tag_on_real_data(tags, zlevels, old_branch, new_branch)
+  def self.test_tag_on_real_data(tags, zlevels, old_branch, new_branch)
     #special support for following tag values:  :any_value
     krakow_latitude = 50.1
     krakow_longitude = 19.9
@@ -42,11 +42,11 @@ module CartoCSSHelper
     VisualDiff.visualise_changes_on_real_data(tags, rural_uk_latitude, rural_uk_longitude, zlevels, old_branch, new_branch)
   end
 
-  def add_common_secondary_tags(tags)
+  def self.add_common_secondary_tags(tags)
     return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000'})
   end
 
-  def test(tags, type, zlevels, new_branch, old_brach='master')
+  def self.test(tags, type, zlevels, new_branch, old_brach='master')
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     zlevels_for_synthetic = Configuration.get_min_z..Configuration.get_max_z
     syn_tags = add_common_secondary_tags(tags)
@@ -54,7 +54,7 @@ module CartoCSSHelper
     test_tag_on_real_data(tags, zlevels, old_brach, new_branch)
   end
 
-  def probe(tags, type, zlevels, new_branch, old_brach='master')
+  def self.probe(tags, type, zlevels, new_branch, old_brach='master')
     zlevels_for_synthetic = Configuration.get_min_z..Configuration.get_max_z
     syn_tags = add_common_secondary_tags(tags)
     VisualDiff.visualise_changes_synthethic_test(syn_tags, type, false, zlevels_for_synthetic, old_brach, new_branch)

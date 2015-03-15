@@ -112,7 +112,7 @@ module CartoCSSHelper
           puts ratio
           raise "#{image_size} mismatches #{wanted_image_size}"
         end
-        filename = "#{get_path_to_folder_for_branch_specific_cache+"#{tags.to_a.to_s} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
+        filename = "#{CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache+"#{tags.to_a.to_s} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
         if !File.exists?(filename)
           source.load
           Scene.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
@@ -126,7 +126,7 @@ module CartoCSSHelper
       old_branch = old_branch.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
       new_branch = new_branch.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
       filename_sufix = "#{ old_branch } -> #{ new_branch }"
-      filename = get_path_to_folder_for_output + "#{header} #{filename_sufix}.png"
+      filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header} #{filename_sufix}.png"
       diff = FullSetOfComparedImages.new(old, new, header, filename, image_size)
       diff.save
     end
