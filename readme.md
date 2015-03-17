@@ -1,5 +1,6 @@
 Proper testing of map rendering changes requires checking rendering for mutiple situations. Doing it manually requires preparing test data and/or locating places with applicable real data, loading map data into database, then moving viewport of TileMill to test data location and reviewing multiple zoom levels. It is process that is way too slow.
-Unfortunately it is possible to automate significant part of this workflow. With this tool testing new rendering change requires only specification of tag combination that should be tested and type of element.
+
+Fortunately it is possible to automate significant part of this workflow. With this tool testing new rendering change requires only specification of tag combination that should be tested and type of element.
 It is work in progress, major problems that should be solved include:
 * Lack of documentation
 * It should be possible to install it as a ruby gem
