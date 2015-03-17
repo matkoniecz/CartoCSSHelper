@@ -48,13 +48,25 @@ module CartoCSSHelper
       loop do
         list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range))
         if list.length != 0
-          list = list.match(/((|-)[\d\.]+)\s+((|-)[\d\.]+)/).to_a
-          lat = Float(list[1])
-          lon = Float(list[3])
-          return lat, lon
+          return self.list_returned_by_overpass_to_a_single_location(list)
         end
         range=range+[range, 100000].min
+        if range >= 3660*1000
+          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity))
+          if list.length != 0
+            return self.list_returned_by_overpass_to_a_single_location(list)
+          else
+            raise 'failed to find such location'
+          end
+        end
       end
+    end
+
+    def self.list_returned_by_overpass_to_a_single_location(list)
+      list = list.match(/((|-)[\d\.]+)\s+((|-)[\d\.]+)/).to_a
+      lat = Float(list[1])
+      lon = Float(list[3])
+      return lat, lon
     end
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
@@ -68,7 +80,13 @@ module CartoCSSHelper
       locator +='out center;'
       locator += "\n"
       locator += '/*'
-      locator += "\nrange: #{range/1000}km"
+      range_string = ''
+      if range == :infinity
+        range_string = 'infinity'
+      else
+        range_string = "#{range/1000}km"
+      end
+      locator += "\nrange: #{range_string}"
       locator += "\nhttp://www.openstreetmap.org/#map=17/#{latitude}/#{longitude}"
       locator += "\n"
       locator += '*/'
@@ -89,8 +107,10 @@ module CartoCSSHelper
         end
         element += "\n"
       }
-      element+="\t(around:#{range},#{latitude},#{longitude});"
-      element += "\n"
+      if range != :infinity
+        element+="\t(around:#{range},#{latitude},#{longitude});"
+        element += "\n"
+      end
       element+=');'
       element += "\n"
       return element
