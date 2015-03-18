@@ -17,7 +17,7 @@ It is work in progress, major problems that should be solved include:
 
 `CartoCSSHelper.test ({'landuse' => 'village_green', 'tourism' => 'attraction'}), 'closed_way', 3..20, 'master', 'v2.28.1'`
 
-Runs quick test for specified tag combination rendering only this element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and compared with release tag `v2.28.1`. Finally tool generates before/after images for each case. Some of generated images were used in https://github.com/gravitystorm/openstreetmap-carto/issues/1371.
+Runs quick test for specified tag combination rendering only this element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and release `v2.28.1` across multiple zoom levels. Finally tool generates before/after comparisons for each case. Some of generated images were used in https://github.com/gravitystorm/openstreetmap-carto/issues/1371.
 
 ###Automated stuff
 
