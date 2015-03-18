@@ -9,9 +9,10 @@ Fortunately it is possible to automate it almost entirely. With this tool testin
 ```
 CartoCSSHelper.test ({'landuse' => 'village_green', 'tourism' => 'attraction'}), 'closed_way', 3..20, 'master', 'v2.28.1'
 ```
-It runs quick test for specified tag combination rendering only thias element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and compared with release tag `v2.28.1`. Finally tool generates before/after images for each case.
+It runs quick test for specified tag combination rendering only thias element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and compared with release tag `v2.28.1`. Finally tool generates before/after images for each case. Some of generated images were used in https://github.com/gravitystorm/openstreetmap-carto/issues/1371.
 
 It is work in progress, major problems that should be solved include:
+
 * Lack of documentation
 * It should be possible to install it as a ruby gem
 * Executing git checkout commands on map style git repository during normal script operation (https://github.com/matkoniecz/CartoCSSHelper/issues/9)
