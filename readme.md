@@ -6,9 +6,8 @@ Proper testing of map rendering requires testing covering mutiple situations. Do
 
 Fortunately it is possible to automate it almost entirely. With this tool testing new rendering change requires only specification of tag combination that should be tested and type of element.
 
-```
-CartoCSSHelper.test ({'landuse' => 'village_green', 'tourism' => 'attraction'}), 'closed_way', 3..20, 'master', 'v2.28.1'
-```
+`CartoCSSHelper.test ({'landuse' => 'village_green', 'tourism' => 'attraction'}), 'closed_way', 3..20, 'master', 'v2.28.1'`
+
 It runs quick test for specified tag combination rendering only thias element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and compared with release tag `v2.28.1`. Finally tool generates before/after images for each case. Some of generated images were used in https://github.com/gravitystorm/openstreetmap-carto/issues/1371.
 
 It is work in progress, major problems that should be solved include:
