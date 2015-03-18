@@ -31,7 +31,7 @@ module CartoCSSHelper
 
   class Info
     def get_expected_composite(key, value)
-      get_expected_tag_status.each { |expected|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_expected_tags.each { |expected|
         if expected.key == key
           if expected.value == value
             return expected.composite
