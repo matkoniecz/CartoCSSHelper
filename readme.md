@@ -1,6 +1,16 @@
-Proper testing of map rendering changes requires checking rendering for mutiple situations. Doing it manually requires preparing test data and/or locating places with applicable real data, loading map data into database, then moving viewport of TileMill to test data location and reviewing multiple zoom levels. It is process that is way too slow.
+##CartoCSS Helper
 
-Fortunately it is possible to automate significant part of this workflow. With this tool testing new rendering change requires only specification of tag combination that should be tested and type of element.
+It is a tool making development of CartoCSS styles more efficient.
+
+Proper testing of map rendering requires testing covering mutiple situations. Doing it manually means preparing test data and locating places with applicable real data, loading map data into database, then moving viewport of TileMill to check every data location across multiple zoom levels. It is painfully slow.
+
+Fortunately it is possible to automate it almost entirely. With this tool testing new rendering change requires only specification of tag combination that should be tested and type of element.
+
+```
+CartoCSSHelper.test ({'landuse' => 'village_green', 'tourism' => 'attraction'}), 'closed_way', 3..20, 'master', 'v2.28.1'
+```
+It runs quick test for specified tag combination rendering only thias element, followed by locating multiple places across globe where such tags are used. For each test case images are produced both for current `master` branch and compared with release tag `v2.28.1`. Finally tool generates before/after images for each case.
+
 It is work in progress, major problems that should be solved include:
 * Lack of documentation
 * It should be possible to install it as a ruby gem
