@@ -180,7 +180,7 @@ module CartoCSSHelper
         end
         return nil
       end
-      get_composite_sets.each { |composite|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_expected_compositions.each { |composite|
         if is_rendered_with_this_composite tags, type, composite, zlevel, on_water
           return composite
         end
