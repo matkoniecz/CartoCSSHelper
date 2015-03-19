@@ -94,9 +94,9 @@ module CartoCSSHelper
     def render_diff_note(y_offset)
       drawer = Magick::Draw.new
       drawer.pointsize(@diff_note_space)
-      drawer.text(@margin, y_offset, 'before')
+      #drawer.text(@margin, y_offset, 'before')
       drawer.draw(@canvas)
-      drawer.text(@margin*2 + @image_size, y_offset, 'after')
+      #drawer.text(@margin*2 + @image_size, y_offset, 'after')
       drawer.draw(@canvas)
     end
 
@@ -109,7 +109,17 @@ module CartoCSSHelper
     def render_row_of_labelled_images(processed, y_offset)
       left_image = Magick::Image.read(processed.left_file_location)[0]
       right_image = Magick::Image.read(processed.right_file_location)[0]
-      render_label(y_offset, processed.description)
+      drawer = Magick::Draw.new
+      drawer.pointsize(@diff_note_space*4/5)
+      if left_image == right_image
+        drawer.text(@margin + @image_size/2, y_offset, "#{processed.description} - unchanged")
+        drawer.draw(@canvas)
+      else
+        drawer.text(@margin, y_offset, "#{processed.description} - before")
+        drawer.draw(@canvas)
+        drawer.text(@margin*2 + @image_size, y_offset, "#{processed.description} - after")
+        drawer.draw(@canvas)
+      end
       render_row_of_images(y_offset, left_image, right_image)
     end
 
