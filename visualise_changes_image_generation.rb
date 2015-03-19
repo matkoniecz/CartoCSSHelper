@@ -73,9 +73,9 @@ module CartoCSSHelper
       download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
       Git.checkout old_branch
-      old = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
+      old = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
       Git.checkout new_branch
-      new = VisualDiff.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
+      new = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{latitude} #{longitude}"
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400
     end
@@ -90,7 +90,7 @@ module CartoCSSHelper
       return reference_value*rescaler
     end
 
-    def self.collect_images_for_real_data_test(tags, latitude, longitude, zlevels, source)
+    def self.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
       collection = []
       zlevels.each { |zlevel|
         image_size_for_16_zoom_level = 1000
@@ -112,7 +112,7 @@ module CartoCSSHelper
           puts ratio
           raise "#{image_size} mismatches #{wanted_image_size}"
         end
-        filename = "#{CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache+"#{tags.to_a.to_s} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
+        filename = "#{CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache+"#{tags.to_a.to_s} #{type} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
         if !File.exists?(filename)
           source.load
           Scene.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
