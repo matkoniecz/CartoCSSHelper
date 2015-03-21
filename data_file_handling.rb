@@ -36,7 +36,7 @@ module CartoCSSHelper
       elsif @type == 'closed_way'
         generate_closed_way_topology(@lat, @lon, @tags)
       else
-        raise
+        raise 'this type of element does not exists'
       end
       generate_sufix
       @data_file.close
