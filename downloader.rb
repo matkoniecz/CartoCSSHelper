@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'rest-client'
 require 'digest/sha1'
+require 'sys/filesystem'
 
 
 module CartoCSSHelper
@@ -128,6 +129,9 @@ module CartoCSSHelper
         file.close
         return cached
       end
+
+      check_for_free_space
+
       puts 'Running Overpass query'
       if debug
         puts query
@@ -138,6 +142,15 @@ module CartoCSSHelper
       file.write cached
       file.close
       return cached
+    end
+
+    def self.check_for_free_space
+      stat = Sys::Filesystem.stat(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache)
+      gb_available = stat.block_size * stat.blocks_available / 1024 / 1024 / 1024
+      if gb_available < 2
+        #TODO cleanup cache rather than crash
+        raise 'less than 2GB of free space on disk with cache folder'
+      end
     end
 
     def self.run_overpass_query(query, retry_count=0, retry_max=5)
