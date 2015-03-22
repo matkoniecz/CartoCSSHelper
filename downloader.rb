@@ -120,15 +120,8 @@ module CartoCSSHelper
     end
 
     def self.get_overpass_query_results(query, debug=false)
-      # noinspection RubyResolve
-      hash = Digest::SHA1.hexdigest query
-      query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
-      if File.exists?(query_cache_filename)
-        file = File.new(query_cache_filename)
-        cached = file.read
-        file.close
-        return cached
-      end
+      cached = get_overpass_query_results_from_cache(query)
+      return cached unless cached == nil
 
       check_for_free_space
 
@@ -138,10 +131,28 @@ module CartoCSSHelper
         puts
       end
       cached = Downloader.run_overpass_query query
-      file = File.new(query_cache_filename, 'w')
+      file = File.new(get_query_cache_filename(query), 'w')
       file.write cached
       file.close
       return cached
+    end
+
+    def self.get_overpass_query_results_from_cache(query)
+      query_cache_filename = get_query_cache_filename(query)
+      if File.exists?(query_cache_filename)
+        file = File.new(query_cache_filename)
+        cached = file.read
+        file.close
+        return cached
+      end
+      return nil
+    end
+
+    def self.get_query_cache_filename(query)
+      # noinspection RubyResolve
+      hash = Digest::SHA1.hexdigest query
+      query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
+      return query_cache_filename
     end
 
     def self.check_for_free_space
