@@ -43,6 +43,8 @@ module CartoCSSHelper
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude)
+      max_range_in_km_for_radius = 100 #"Radius temporarly limited to 100 km to mitigate a bug.". Previously Overpass crashed for values larger than 3660
+
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
@@ -51,7 +53,7 @@ module CartoCSSHelper
           return self.list_returned_by_overpass_to_a_single_location(list)
         end
         range=range+[range, 100000].min
-        if range >= 3660*1000
+        if range >= max_range_in_km_for_radius*1000
           list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity))
           if list.length != 0
             return self.list_returned_by_overpass_to_a_single_location(list)
