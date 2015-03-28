@@ -43,18 +43,18 @@ module CartoCSSHelper
   end
 
   def self.add_common_secondary_tags(tags)
-    return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000'})
+    return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'operator ÉÉ ÉÉ ÉÉ', 'brand' => 'brand ÉÉ ÉÉ ÉÉ ÉÉ'})
   end
 
   def self.test(tags, type, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     syn_tags = add_common_secondary_tags(tags)
-    VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
     test_tag_on_real_data(tags, zlevels, old_brach, new_branch, type)
   end
 
   def self.probe(tags, type, new_branch, old_brach='master',test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
     syn_tags = add_common_secondary_tags(tags)
-    VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
   end
 end
