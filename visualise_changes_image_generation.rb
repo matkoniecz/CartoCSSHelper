@@ -76,7 +76,7 @@ module CartoCSSHelper
       old = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
       Git.checkout new_branch
       new = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{latitude} #{longitude}"
+      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400
     end
 
