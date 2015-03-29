@@ -51,6 +51,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'atm', :primary),
             TagRenderingStatus.new('amenity', 'bank', :primary),
             TagRenderingStatus.new('amenity', 'bar', :primary),
+            TagRenderingStatus.new('amenity', 'bicycle_parking', :primary),
             TagRenderingStatus.new('amenity', 'bicycle_rental', :primary),
             TagRenderingStatus.new('amenity', 'biergarten', :primary),
             TagRenderingStatus.new('amenity', 'bus_station', :primary),
