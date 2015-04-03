@@ -108,6 +108,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('bridge', 'viaduct', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('bridge', 'yes', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('building', '*', :primary),
+            TagRenderingStatus.new('building', 'no', :not_displayed),
             TagRenderingStatus.new('capital', 'yes', :composite, {'place'=>'city'}),
             TagRenderingStatus.new('capital', '4', :composite, {'place'=>'city'}),
             TagRenderingStatus.new('construction', 'bridleway', :composite, {'highway'=>'construction'}),
