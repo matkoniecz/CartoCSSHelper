@@ -37,34 +37,53 @@ module CartoCSSHelper
     end
 
     def compare_expected_with_real_rendering
-      list_of_expected = CartoCSSHelper::Configuration.get_style_specific_data.list_of_expected_tags
+      list_of_documented = CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags
       info = Info.new
       list_of_rendered = info.get_render_state_of_tags
-      list_of_rendered.each { |state|
-        compare_expected_with_state list_of_expected, state
-        if !is_tag_listed(list_of_expected, state.key, state.value)
-          puts 'expected'
-          puts 'missing'
-          puts 'real'
-          state.print
-          puts
+
+      ensure_that_tags_documented_and_rendered_have_the_same_state(list_of_documented, list_of_rendered)
+      ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
+      ensure_that_all_documented_are_really_rendered(list_of_documented, list_of_rendered)
+    end
+
+    def ensure_that_tags_documented_and_rendered_have_the_same_state(list_of_documented, list_of_rendered)
+      list_of_rendered.each { |tag_info|
+        compare_expected_with_tag_data list_of_documented, tag_info
+      }
+    end
+
+    def ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
+      list_of_rendered.each { |tag_info|
+        if tag_info.state != :ignored
+          if !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
+            puts 'documented'
+            puts "\tmissing"
+            puts 'real'
+            print "\t"
+            tag_info.print
+            puts
+          end
         end
       }
-      list_of_expected.each { |expected|
-        if !is_tag_listed(list_of_rendered, expected.key, expected.value)
-          puts 'expected'
-          expected.print
+    end
+
+    def ensure_that_all_documented_are_really_rendered(list_of_documented, list_of_rendered)
+      list_of_documented.each { |documented|
+        if !is_tag_documented(list_of_rendered, documented.key, documented.value)
+          puts 'documented'
+          print "\t"
+          documented.print
           puts 'real'
-          puts 'missing'
+          puts "\tmissing"
           puts
         end
       }
     end
 
-    def is_tag_listed(list, key, value)
-      list.each { |state|
-        if key == state.key
-          if value == state.value
+    def is_tag_documented(list, key, value)
+      list.each { |tag_info|
+        if key == tag_info.key
+          if value == tag_info.value
             return true
           end
         end
@@ -72,15 +91,17 @@ module CartoCSSHelper
       return false
     end
 
-    def compare_expected_with_state(list_of_expected, state)
+    def compare_expected_with_tag_data(list_of_expected, tag_info)
       list_of_expected.each { |expected|
-        if expected.key == state.key
-          if expected.value == state.value
-            if expected.equal? state
+        if expected.key == tag_info.key
+          if expected.value == tag_info.value
+            if expected.equal? tag_info
               puts 'expected'
+              print "\t"
               expected.print
               puts 'real'
-              state.print
+              print "\t"
+              tag_info.print
               puts
             end
             return

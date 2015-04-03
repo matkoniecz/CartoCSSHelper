@@ -31,10 +31,10 @@ module CartoCSSHelper
 
   class Info
     def get_expected_composite(key, value)
-      CartoCSSHelper::Configuration.get_style_specific_data.list_of_expected_tags.each { |expected|
-        if expected.key == key
-          if expected.value == value
-            return expected.composite
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
+        if documented.key == key
+          if documented.value == value
+            return documented.composite
           end
         end
       }
@@ -180,7 +180,7 @@ module CartoCSSHelper
         end
         return nil
       end
-      CartoCSSHelper::Configuration.get_style_specific_data.list_of_expected_compositions.each { |composite|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_compositions.each { |composite|
         if is_rendered_with_this_composite tags, type, composite, zlevel, on_water
           return composite
         end
