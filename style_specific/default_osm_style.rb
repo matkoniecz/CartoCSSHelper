@@ -83,7 +83,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'telephone', :primary),
             TagRenderingStatus.new('amenity', 'theatre', :primary),
             TagRenderingStatus.new('amenity', 'toilets', :primary),
-            TagRenderingStatus.new('amenity', 'toilets', :primary),
             TagRenderingStatus.new('amenity', 'townhall', :primary),
             TagRenderingStatus.new('amenity', 'university', :primary),
             TagRenderingStatus.new('area', 'no', :composite, {'barrier' => 'hedge'}),
