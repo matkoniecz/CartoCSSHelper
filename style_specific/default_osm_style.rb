@@ -14,8 +14,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('access', 'destination', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('access', 'no', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('access', 'private', :composite, {'highway'=>'service'}),
-            TagRenderingStatus.new('access', 'public', :composite, {'amenity'=>'parking'}),
-            TagRenderingStatus.new('access', 'yes', :composite, {'amenity'=>'parking'}),
             TagRenderingStatus.new('addr:housename', '*', :primary),
             TagRenderingStatus.new('addr:housenumber', '*', :primary),
             TagRenderingStatus.new('addr:interpolation', '*', :primary),
@@ -56,6 +54,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'biergarten', :primary),
             TagRenderingStatus.new('amenity', 'bus_station', :primary),
             TagRenderingStatus.new('amenity', 'cafe', :primary),
+            TagRenderingStatus.new('amenity', 'car_rental', :primary),
             TagRenderingStatus.new('amenity', 'car_sharing', :primary),
             TagRenderingStatus.new('amenity', 'cinema', :primary),
             TagRenderingStatus.new('amenity', 'college', :primary),
@@ -123,10 +122,13 @@ module CartoCSSHelper
             TagRenderingStatus.new('capital', 'yes', :composite, {'place'=>'city'}),
             TagRenderingStatus.new('capital', '4', :composite, {'place'=>'city'}),
             TagRenderingStatus.new('construction', '*', :ignored),
+            TagRenderingStatus.new('construction', 'bridleway', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'cycleway', :composite, {'highway'=>'construction'}),
+            TagRenderingStatus.new('construction', 'footway', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'living_street', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'motorway', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'motorway_link', :composite, {'highway'=>'construction'}),
+            TagRenderingStatus.new('construction', 'path', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'primary', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'primary_link', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'residential', :composite, {'highway'=>'construction'}),
@@ -135,6 +137,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('construction', 'service', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'tertiary', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'tertiary_link', :composite, {'highway'=>'construction'}),
+            TagRenderingStatus.new('construction', 'track', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'trunk', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'trunk_link', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'unclassified', :composite, {'highway'=>'construction'}),
@@ -260,7 +263,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('leisure', 'track', :primary),
             TagRenderingStatus.new('leisure', 'water_park', :primary),
             TagRenderingStatus.new('lock', '*', :ignored),
-            TagRenderingStatus.new('lock', 'yes', :primary),
             TagRenderingStatus.new('man_made', '*', :ignored),
             TagRenderingStatus.new('man_made', 'breakwater', :primary),
             TagRenderingStatus.new('man_made', 'cutline', :primary),
@@ -579,7 +581,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('waterway', 'ditch', :primary),
             TagRenderingStatus.new('waterway', 'dock', :primary),
             TagRenderingStatus.new('waterway', 'drain', :primary),
-            TagRenderingStatus.new('waterway', 'lock', :primary),
             TagRenderingStatus.new('waterway', 'lock_gate', :primary),
             TagRenderingStatus.new('waterway', 'river', :primary),
             TagRenderingStatus.new('waterway', 'riverbank', :primary),
@@ -609,7 +610,7 @@ module CartoCSSHelper
           {'highway' => 'path'}, #bicycle=designated
           {'highway' => 'construction'}, #construction=motorway...
           {'highway' => 'track'}, #tracktype=grade1...
-          {'amenity' => 'parking'}, #access=yes, access=public, access=*...
+          {'amenity' => 'parking'}, #access=*...
           #{'barrier' => 'hedge'}, #area=yes
       ]
     end
