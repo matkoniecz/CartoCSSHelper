@@ -1,8 +1,8 @@
 # encoding: UTF-8
-load 'heuristic.rb'
-load 'image_generator.rb'
-load 'configuration.rb'
-load 'tag_lister.rb'
+require_relative 'heuristic.rb'
+require_relative 'image_generator.rb'
+require_relative 'configuration.rb'
+require_relative 'tag_lister.rb'
 
 include CartoCSSHelper::Heuristic
 include CartoCSSHelper::Configuration

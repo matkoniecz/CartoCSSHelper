@@ -1,7 +1,7 @@
 module CartoCSSHelper
   module Heuristic
     require 'set'
-    load 'configuration.rb'
+    require_relative 'configuration.rb'
     include CartoCSSHelper::Configuration
     def get_tags
       tags = get_tags_from_mss

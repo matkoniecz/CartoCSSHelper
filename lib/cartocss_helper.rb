@@ -3,12 +3,12 @@ require 'open3'
 
 module CartoCSSHelper
 end
-load 'tag_lister.rb'
-load 'visualise_changes_image_generation.rb'
-load 'downloader.rb'
-load 'data_file_handling.rb'
-load 'validator.rb'
-load 'git.rb'
+require_relative 'cartocss_helper/tag_lister.rb'
+require_relative 'cartocss_helper/visualise_changes_image_generation.rb'
+require_relative 'cartocss_helper/downloader.rb'
+require_relative 'cartocss_helper/data_file_handling.rb'
+require_relative 'cartocss_helper/validator.rb'
+require_relative 'cartocss_helper/git.rb'
 include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 

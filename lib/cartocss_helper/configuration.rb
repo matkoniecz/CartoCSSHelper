@@ -2,7 +2,7 @@
 require 'fileutils'
 require 'find'
 
-load 'style_specific/default_osm_style.rb'
+require_relative 'style_specific/default_osm_style.rb'
 
 module CartoCSSHelper::Configuration
   def set_style_specific_data(data)

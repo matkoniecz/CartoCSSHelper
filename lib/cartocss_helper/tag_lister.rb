@@ -1,5 +1,5 @@
-load 'configuration.rb'
-load 'image_generator.rb'
+require_relative 'configuration.rb'
+require_relative 'image_generator.rb'
 include CartoCSSHelper::Configuration
 include CartoCSSHelper::Heuristic
 

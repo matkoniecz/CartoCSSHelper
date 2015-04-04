@@ -1,7 +1,7 @@
 # encoding: UTF-8
-load 'configuration.rb'
-load 'heuristic.rb'
-load 'data_file_handling.rb'
+require_relative 'configuration.rb'
+require_relative 'heuristic.rb'
+require_relative 'data_file_handling.rb'
 require 'fileutils'
 include CartoCSSHelper::Configuration
 include CartoCSSHelper::Heuristic
