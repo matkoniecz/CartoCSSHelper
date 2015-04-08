@@ -13,7 +13,13 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def self.test_tag_on_real_data(tags, zlevels, old_branch, new_branch, type)
+  def  self.test_tag_on_real_data(tags, zlevels, old_branch, new_branch)
+    ['node', 'closed_way', 'way'].each {|type|
+      test_tag_on_real_data_for_this_type(tags, zlevels, old_branch, new_branch, type)
+    }
+  end
+
+  def self.test_tag_on_real_data_for_this_type(tags, zlevels, old_branch, new_branch, type)
     #special support for following tag values:  :any_value
     krakow_latitude = 50.1
     krakow_longitude = 19.9
@@ -46,15 +52,19 @@ module CartoCSSHelper
     return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'operator ÉÉ ÉÉ ÉÉ', 'brand' => 'brand ÉÉ ÉÉ ÉÉ ÉÉ'})
   end
 
-  def self.test(tags, type, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
+  def self.test(tags, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     syn_tags = add_common_secondary_tags(tags)
-    CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
-    test_tag_on_real_data(tags, zlevels, old_brach, new_branch, type)
+    ['node', 'closed_way', 'way'].each {|type|
+      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+    }
+    test_tag_on_real_data(tags, zlevels, old_brach, new_branch)
   end
 
-  def self.probe(tags, type, new_branch, old_brach='master',test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
+  def self.probe(tags, new_branch, old_brach='master',test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
     syn_tags = add_common_secondary_tags(tags)
-    CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+    ['node', 'closed_way', 'way'].each {|type|
+      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+    }
   end
 end
