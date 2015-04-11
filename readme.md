@@ -14,13 +14,17 @@ It is work in progress, major problems that should be solved include:
 
 ###Installation
 
-This tool is available as cartocss_helper Ruby gem. Unfortunately, standard `gem install cartocss_helper` may not be enough as it relies on RMagick gem.
-
 Assumes that osm2pgsql and TileMill are installed.
+
+This tool is available as cartocss_helper Ruby gem.
 
 Install ruby - see https://www.ruby-lang.org/en/documentation/installation/ for details.
 
-Install RMagick gem. Unfortunately `gem install rmagick` may not be enough - in my case, on Ubuntu 14.04 it was necessary to install additional packages (`apt-get install ruby-dev imagemagick libmagickcore-dev libmagickwand-dev` solved the problem).
+Unfortunately, standard `gem install cartocss_helper` may not be enough as CartoCSS Helper depends on RMagick gem that requires special installation.
+
+Install RMagick gem. `gem install rmagick` may not be enough - in my case, on Ubuntu 14.04 it was necessary to start from installing additional packages (`apt-get install ruby-dev imagemagick libmagickcore-dev libmagickwand-dev` solved the problem), followed by `gem install rmagick`.
+
+Finally, run `gem install cartocss_helper`.
 
 ###Example
 
