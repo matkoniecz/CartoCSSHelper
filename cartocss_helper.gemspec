@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.email       = ['matkoniecz@gmail.com']
   s.homepage    = 'https://github.com/matkoniecz/CartoCSSHelper'
   s.summary     = 'Tool to make development of CartoCSS styles more efficient.'
-  s.description = 'Tool to make development of CartoCSS styles more efficient.' #TODO
+  s.description = 'Tool to make development of CartoCSS styles more efficient. Automates actions necessary to produce test images and validates style. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.'
   s.license     = 'CC0'
 
   s.required_rubygems_version = '>= 1.8.23'
