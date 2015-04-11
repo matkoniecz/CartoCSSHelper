@@ -1,6 +1,6 @@
 ##CartoCSS Helper
 
-It is a tool making development of CartoCSS styles more efficient. Automates actions necessary to produce test images and validates style. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.
+It is a tool making development of CartoCSS styles more efficient. Automates actions necessary to produce test images and validates style. Allows to write simple Ruby scripts that generate comparison images and validation reports. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.
 
 Proper testing of map rendering requires testing covering mutiple situations. Doing it manually means preparing test data and locating places with applicable real data, loading map data into database, then moving viewport of TileMill to check every data location across multiple zoom levels. It is painfully slow.
 
@@ -28,7 +28,7 @@ Finally, run `gem install cartocss_helper`.
 
 ###Example
 
-It assumes that TileMill project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
+It is assumed that TileMill project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
 
     require cartocss_helper
     CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
@@ -39,7 +39,7 @@ It assumes that TileMill project with Default OSM Style (https://github.com/grav
     tags = {'landuse' => 'village_green', 'tourism' => 'attraction'}
     CartoCSSHelper.test tags, 'master', 'v2.28.1'
 
-First part is responsible for loading gem and configuration, including location of cache folder and folder where produced comparison images will be saved.
+First part of this Ruby script is responsible for loading gem and configuration, including location of cache folder and folder where produced comparison images will be saved.
 
 Second part runs quick test for specified tag combination rendering only this element as node, way and a closed way. It is followed by locating multiple places across globe where such tag combination is used.
 
