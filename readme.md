@@ -1,6 +1,6 @@
 ##CartoCSS Helper
 
-It is a tool making development of CartoCSS styles more efficient. Automates actions necessary to produce test images and validates style. Allows to write simple Ruby scripts that generate comparison images and validation reports. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.
+It is a tool making development of CartoCSS styles more efficient. Allows to write simple Ruby scripts that generate comparison images of how rendering changed between two versions of map style. It is also possible to generate validation reports detecting for example too low values of text-dy. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.
 
 Proper testing of map rendering requires testing covering mutiple situations. Doing it manually means preparing test data and locating places with applicable real data, loading map data into database, then moving viewport of TileMill to check every data location across multiple zoom levels. It is painfully slow.
 
