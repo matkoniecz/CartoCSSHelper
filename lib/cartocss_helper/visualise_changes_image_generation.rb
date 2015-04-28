@@ -60,8 +60,11 @@ module CartoCSSHelper
       end
 
       def get_timestamp
-        f = File.new(@data_filename)
-        return f.mtime.to_i
+        return Downloader.get_timestamp_of_downloaded_osm_data_for_location(@latitude, @longitude, @download_bbox_size)
+      end
+
+      def dispose
+        File.delete(@data_filename)
       end
     end
 
@@ -78,6 +81,7 @@ module CartoCSSHelper
       new = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400
+      source.dispose
     end
 
     def self.scale_inverse(zlevel, reference_value, reference_zlevel)
@@ -112,7 +116,8 @@ module CartoCSSHelper
           puts ratio
           raise "#{image_size} mismatches #{wanted_image_size}"
         end
-        filename = "#{CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache+"#{tags.to_a.to_s} #{type} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
+        cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
+        filename = "#{cache_folder+"#{tags.to_a.to_s} #{type} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
         if !File.exists?(filename)
           source.load
           Scene.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)

@@ -22,6 +22,11 @@ module CartoCSSHelper
       return filename
     end
 
+    def self.get_timestamp_of_downloaded_osm_data_for_location(latitude, longitude, size, accept_cache=true)
+      query = get_query_to_download_data_around_location(latitude, longitude, size)
+      return Downloader.get_overpass_query_cache_timestamp(query)
+    end
+
     def self.get_query_to_download_data_around_location(latitude, longitude, size)
       min_latitude = latitude - size/2
       max_latitude = latitude + size/2
@@ -135,6 +140,17 @@ module CartoCSSHelper
       file.write cached
       file.close
       return cached
+    end
+
+    def self.get_overpass_query_cache_timestamp(query)
+      query_cache_filename = get_query_cache_filename(query)
+      if !File.exists?(query_cache_filename)
+        return nil
+      end
+      f = File.new(query_cache_filename)
+      timestamp = f.mtime.to_i
+      f.close
+      return timestamp
     end
 
     def self.get_overpass_query_results_from_cache(query)
