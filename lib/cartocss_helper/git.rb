@@ -10,7 +10,7 @@ module CartoCSSHelper
       Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
         require 'open3'
         if !system("git checkout #{branch} #{silence}")
-          raise 'failed checkout'
+          raise 'failed checkout to ' + branch
         end
       }
     end
