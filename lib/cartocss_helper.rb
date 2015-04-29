@@ -39,7 +39,7 @@ module CartoCSSHelper
     london_latitude = 51.5
     london_longitude = -0.1
     CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, london_latitude, london_longitude, zlevels, old_branch, new_branch)
-    #TODO: solve problems with respons to big to store in memory
+    #TODO: solve problems with response too big to store in memory
     #utrecht_latitude =  52.09
     #utrecht_longitude = 5.11
     #CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, utrecht_latitude, utrecht_longitude, zlevels, old_branch, new_branch)
@@ -49,7 +49,8 @@ module CartoCSSHelper
   end
 
   def self.add_common_secondary_tags(tags)
-    return tags.merge({'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'operator ÉÉ ÉÉ ÉÉ', 'brand' => 'brand ÉÉ ÉÉ ÉÉ ÉÉ'})
+    added_tags = {'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'ÉÉ ÉÉ ÉÉ operator ÉÉ ÉÉ ÉÉ', 'brand' => 'ÉÉ ÉÉ ÉÉ brand ÉÉ ÉÉ ÉÉ ÉÉ'}
+    return tags.merge(added_tags)
   end
 
   def self.test(tags, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
