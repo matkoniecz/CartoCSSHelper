@@ -33,7 +33,7 @@ module CartoCSSHelper
       min_longitude = longitude - size/2
       max_longitude = longitude + size/2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
-      query = '[timeout:3600];'
+      query = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}];"
       query += "\n"
       query += "(node(#{bb});<;);"
       query += "\n"
@@ -79,7 +79,7 @@ module CartoCSSHelper
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
       #special support for following tag values:  :any_value
-      locator = '[timeout:3600][out:csv(::lat,::lon;false)];'
+      locator = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
       locator += "\n"
       if type == 'closed_way'
         type = 'way'
@@ -126,20 +126,32 @@ module CartoCSSHelper
 
     def self.get_overpass_query_results(query, debug=false)
       cached = get_overpass_query_results_from_cache(query)
+      if cached == ''
+        raise OverpassRefusedResponse
+      end
       return cached unless cached == nil
 
       check_for_free_space
 
-      puts 'Running Overpass query'
+      puts 'Running Overpass query (connection initiated on ' + Time.now.to_s + ')'
       if debug
         puts query
         puts
       end
-      cached = Downloader.run_overpass_query query
-      file = File.new(get_query_cache_filename(query), 'w')
-      file.write cached
-      file.close
+      begin
+        cached = Downloader.run_overpass_query query
+      rescue OverpassRefusedResponse
+        write_to_cache(query, '')
+        raise OverpassRefusedResponse
+      end
+      write_to_cache(query, cached)
       return cached
+    end
+
+    def self.write_to_cache(query, response)
+      file = File.new(get_query_cache_filename(query), 'w')
+      file.write response
+      file.close
     end
 
     def self.get_overpass_query_cache_timestamp(query)
@@ -172,20 +184,58 @@ module CartoCSSHelper
     end
 
     def self.check_for_free_space
-      stat = Sys::Filesystem.stat(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache)
-      gb_available = stat.block_size * stat.blocks_available / 1024 / 1024 / 1024
-      if gb_available < 2
-        #TODO cleanup cache rather than crash
-        raise 'less than 2GB of free space on disk with cache folder'
+      if not_enough_free_space
+        attempt_cleanup
+        if not_enough_free_space
+          raise 'less than 2GB of free space on disk with cache folder'
+        end
       end
     end
 
+    def self.not_enough_free_space
+      minimum_gb = 2
+      return get_available_space_for_cache_in_gb < minimum_gb
+    end
+
+    def self.get_available_space_for_cache_in_gb
+      stat = Sys::Filesystem.stat(CartoCSSHelper::Configuration.get_path_to_folder_for_cache)
+      return stat.block_size * stat.blocks_available / 1024 / 1024 / 1024
+    end
+
+    def self.attempt_cleanup
+      delete_files_left_after_terminated_programs
+      if not_enough_free_space
+        delete_large_overpass_caches
+      end
+    end
+
+    def self.delete_files_left_after_terminated_programs
+      #todo - find library that deals with caches like this, bug here may be unfunny
+      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_cache+'*.osm') {|file|
+        File.delete(file)
+      }
+    end
+
+    def self.delete_large_overpass_caches
+      #todo - find library that deals with caches like this, bug here may be unfunny
+      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache+'*') {|file|
+        if File.size(file) > (1024 * 1024 * 50)
+          File.delete(file)
+        end
+      }
+    end
+
+    class OverpassRefusedResponse < IOError; end
+
     def self.run_overpass_query(query, retry_count=0, retry_max=5)
-      #default timeout is set to 180: http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#timeout
-      #[timeout:3600]; should be used in all queries executed here
       start = Time.now.to_s
       begin
-        return RestClient::Request.execute(:method => :get, :url => Downloader.format_query_into_url(query), :timeout => 3600)
+        url = Downloader.format_query_into_url(query)
+        timeout = Downloader.get_allowed_timeout_in_seconds+10
+        return RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
+      rescue RestClient::RequestTimeout
+        puts 'Overpass API refused to process this request. It will be not attemped again, most likely query is too complex.'
+        raise OverpassRefusedResponse
       rescue RestClient::RequestFailed => e
         puts query
         puts e.response
@@ -203,6 +253,10 @@ module CartoCSSHelper
         puts 'try overpass query that will return smaller amount of data'
         e.raise
       end
+    end
+
+    def self.get_allowed_timeout_in_seconds
+      return 10 * 60
     end
 
     def self.format_query_into_url(query)

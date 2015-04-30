@@ -72,7 +72,12 @@ module CartoCSSHelper
       #special support for following tag values:  :any_value
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       puts "visualise_changes_on_real_data <#{header}> #{old_branch} -> #{new_branch}"
-      latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
+      begin
+        latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
+      rescue Downloader::OverpassRefusedResponse
+        puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
+        return
+      end
       download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
       Git.checkout old_branch
