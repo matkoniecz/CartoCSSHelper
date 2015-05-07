@@ -176,6 +176,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('historic', 'castle_walls', :primary),
             TagRenderingStatus.new('historic', 'citywalls', :primary),
             TagRenderingStatus.new('historic', 'memorial', :primary),
+            TagRenderingStatus.new('historic', 'monument', :primary),
             TagRenderingStatus.new('horse', 'designated', :composite, {'highway'=>'path'}),
             TagRenderingStatus.new('intermittent', 'yes', :composite, {'waterway'=>'river'}),
             TagRenderingStatus.new('junction', 'yes', :composite, {'name'=>'a'}),
@@ -528,6 +529,13 @@ module CartoCSSHelper
             TagRenderingStatus.new('waterway', 'stream', :primary),
             TagRenderingStatus.new('waterway', 'wadi', :primary),
             TagRenderingStatus.new('waterway', 'weir', :primary),
+            TagRenderingStatus.new('weyland', 'bog', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'marsh', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'mud', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'string_bog', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'swamp', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'tidalflat', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('weyland', 'wet_meadow', :composite, {'natural' => 'wetland'}),
         ]
     end
 
@@ -550,6 +558,7 @@ module CartoCSSHelper
           {'highway' => 'track'}, #tracktype=grade1...
           {'amenity' => 'parking'}, #access=*...
           #{'barrier' => 'hedge'}, #area=yes
+          {'natural' => 'wetland'}, #wetland=bog...
       ]
     end
   end
