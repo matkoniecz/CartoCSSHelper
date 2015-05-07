@@ -49,7 +49,7 @@ module CartoCSSHelper
   end
 
   def self.add_common_secondary_tags(tags)
-    added_tags = {'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'ÉÉ ÉÉ ÉÉ operator ÉÉ ÉÉ ÉÉ', 'brand' => 'ÉÉ ÉÉ ÉÉ brand ÉÉ ÉÉ ÉÉ ÉÉ'}
+    added_tags = {'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'ÉÉ ÉÉ ÉÉ operator', 'brand' => 'ÉÉ ÉÉ ÉÉ brand'}
     return tags.merge(added_tags)
   end
 
