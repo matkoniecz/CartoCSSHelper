@@ -529,13 +529,13 @@ module CartoCSSHelper
             TagRenderingStatus.new('waterway', 'stream', :primary),
             TagRenderingStatus.new('waterway', 'wadi', :primary),
             TagRenderingStatus.new('waterway', 'weir', :primary),
-            TagRenderingStatus.new('weyland', 'bog', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'marsh', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'mud', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'string_bog', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'swamp', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'tidalflat', :composite, {'natural' => 'wetland'}),
-            TagRenderingStatus.new('weyland', 'wet_meadow', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'bog', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'marsh', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'mud', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'string_bog', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'swamp', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'tidalflat', :composite, {'natural' => 'wetland'}),
+            TagRenderingStatus.new('wetland', 'wet_meadow', :composite, {'natural' => 'wetland'}),
         ]
     end
 
