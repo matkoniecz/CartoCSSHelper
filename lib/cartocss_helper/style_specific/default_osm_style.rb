@@ -173,7 +173,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('highway', 'turning_loop', :primary), #note: special topology is required
             TagRenderingStatus.new('highway', 'unclassified', :primary),
             TagRenderingStatus.new('historic', 'archaeological_site', :primary),
-            TagRenderingStatus.new('historic', 'castle_walls', :primary),
             TagRenderingStatus.new('historic', 'citywalls', :primary),
             TagRenderingStatus.new('historic', 'memorial', :primary),
             TagRenderingStatus.new('historic', 'monument', :primary),
