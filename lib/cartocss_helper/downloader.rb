@@ -170,6 +170,10 @@ module CartoCSSHelper
       #Therefore it avoids pointless redownloading and regenerating
       #images of real location after cache cleanup.
       timestamp_filename = get_query_cache_timestamp_filename(query)
+      return get_timestamp_of_file(timestamp_filename)
+    end
+
+    def self.get_timestamp_of_file(timestamp_filename)
       if !File.exists?(timestamp_filename)
         return nil
       end
