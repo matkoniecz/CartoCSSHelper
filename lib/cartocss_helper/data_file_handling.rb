@@ -13,7 +13,15 @@ module CartoCSSHelper
       if debug
         puts command
       end
-      system command
+      if !system(command)
+        puts 'loading data into database failed'
+        if !debug
+          puts 'retry with enabled debug'
+          load_data_into_database(data_filename, true)
+        else
+          raise 'osm2pgsql failed'
+        end
+      end
     end
   end
 
