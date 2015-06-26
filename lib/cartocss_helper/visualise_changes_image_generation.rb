@@ -40,10 +40,9 @@ module CartoCSSHelper
     end
 
     class RealDataSource
-      def initialize(latitude, longitude, wanted_download_bbox_size)
-        wanted_download_bbox_size = [wanted_download_bbox_size, 0.001].max
-        wanted_download_bbox_size = [wanted_download_bbox_size, 0.400].min #0.5 is too big for Utrecht
-        @download_bbox_size = wanted_download_bbox_size
+      attr_reader :download_bbox_size
+      def initialize(latitude, longitude, download_bbox_size)
+        @download_bbox_size = download_bbox_size
         @latitude = latitude
         @longitude = longitude
         @data_filename = Downloader.download_osm_data_for_location(@latitude, @longitude, @download_bbox_size)
@@ -78,14 +77,20 @@ module CartoCSSHelper
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return
       end
-      download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
+      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
+      wanted_download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.03, 14
+      download_bbox_size = [wanted_download_bbox_size, 0.001].max
+      download_bbox_size = [download_bbox_size, 0.400].min #0.5 is too big for Utrecht
+      visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size)
+    end
+
+    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
       Git.checkout old_branch
-      old = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
+      old = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
       Git.checkout new_branch
-      new = VisualDiff.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
-      VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 400
+      new = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
+      VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, image_size
       source.dispose
     end
 
@@ -99,7 +104,7 @@ module CartoCSSHelper
       return reference_value*rescaler
     end
 
-    def self.collect_images_for_real_data_test(tags, type, latitude, longitude, zlevels, source)
+    def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, wanted_image_size=400)
       collection = []
       zlevels.each { |zlevel|
         image_size_for_16_zoom_level = 1000
@@ -107,7 +112,6 @@ module CartoCSSHelper
         mutiplier = 1000
         image_size = (image_size*mutiplier).to_int
         render_bbox_size = 0.015
-        wanted_image_size = 400
         ratio = 1.0*image_size/(wanted_image_size*mutiplier)
         image_size /= ratio
         render_bbox_size /= ratio
@@ -122,7 +126,7 @@ module CartoCSSHelper
           raise "#{image_size} mismatches #{wanted_image_size}"
         end
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
-        filename = "#{cache_folder+"#{tags.to_a.to_s} #{type} #{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp}.png"}"
+        filename = "#{cache_folder+"#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
         if !File.exists?(filename)
           source.load
           Scene.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
@@ -132,14 +136,20 @@ module CartoCSSHelper
       return collection
     end
 
+    def self.make_string_usable_as_filename(string)
+      return string.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
+    end
+
     def self.pack_image_sets(old, new, header, old_branch, new_branch, image_size)
-      old_branch = old_branch.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
-      new_branch = new_branch.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
+      old_branch = make_string_usable_as_filename(old_branch)
+      new_branch = make_string_usable_as_filename(new_branch)
+      header_for_filename = make_string_usable_as_filename(header)
       filename_sufix = "#{ old_branch } -> #{ new_branch }"
-      filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header} #{filename_sufix}.png"
+      filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header_for_filename} #{filename_sufix}.png"
       diff = FullSetOfComparedImages.new(old, new, header, filename, image_size)
       diff.save
     end
+
     def self.dict_to_pretty_tag_list(dict)
       result = ''
       dict.to_a.each { |tag|
