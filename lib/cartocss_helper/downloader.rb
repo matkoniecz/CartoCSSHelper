@@ -152,14 +152,28 @@ module CartoCSSHelper
       file = File.new(get_query_cache_filename(query), 'w')
       file.write response
       file.close
+      file = File.new(get_query_cache_timestamp_filename(query), 'w')
+      file.write ''
+      file.close
     end
 
+    def self.get_query_cache_timestamp_filename(query)
+      query_cache_timestamp_filename = get_query_cache_filename(query) + '.timestamp'
+      return query_cache_timestamp_filename
+    end
+
+
     def self.get_overpass_query_cache_timestamp(query)
-      query_cache_filename = get_query_cache_filename(query)
-      if !File.exists?(query_cache_filename)
+      #may return timestamp of a deleted file
+      #This way, cleanup of overpass cache (big .osm files)
+      #will not invalidate cache of generated images of real locations.
+      #Therefore it avoids pointless redownloading and regenerating
+      #images of real location after cache cleanup.
+      timestamp_filename = get_query_cache_timestamp_filename(query)
+      if !File.exists?(timestamp_filename)
         return nil
       end
-      f = File.new(query_cache_filename)
+      f = File.new(timestamp_filename)
       timestamp = f.mtime.to_i
       f.close
       return timestamp
