@@ -67,6 +67,34 @@ module CartoCSSHelper
       end
     end
 
+    class FileDataSource
+      attr_reader :download_bbox_size
+      def initialize(latitude, longitude, download_bbox_size, filename)
+        @download_bbox_size = download_bbox_size
+        @latitude = latitude
+        @longitude = longitude
+        @data_filename = filename
+        @loaded = false
+      end
+
+      def load
+        if !@loaded
+          puts "\tloading data into database"
+          DataFileLoader.load_data_into_database(@data_filename)
+          puts "\tgenerating images"
+          @loaded = true
+        end
+      end
+
+      def get_timestamp
+        return Downloader.get_timestamp_of_file(@data_filename)
+      end
+
+      def dispose
+        #do nothing, file generated outside
+      end
+    end
+
     def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, old_branch, new_branch)
       #special support for following tag values:  :any_value
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
@@ -86,6 +114,15 @@ module CartoCSSHelper
 
     def self.visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
       source = RealDataSource.new(latitude, longitude, download_bbox_size)
+      visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
+    end
+
+    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
+      source = FileDataSource.new(latitude, longitude, download_bbox_size, filename)
+      visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
+    end
+
+    def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
       Git.checkout old_branch
       old = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
       Git.checkout new_branch
