@@ -62,7 +62,7 @@ module CartoCSSHelper
     test_tag_on_real_data(tags, zlevels, old_brach, new_branch)
   end
 
-  def self.probe(tags, new_branch, old_brach='master',test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
+  def self.probe(tags, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
     syn_tags = add_common_secondary_tags(tags)
     ['node', 'closed_way', 'way'].each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
