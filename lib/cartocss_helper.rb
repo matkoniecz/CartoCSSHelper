@@ -53,18 +53,18 @@ module CartoCSSHelper
     return tags.merge(added_tags)
   end
 
-  def self.test(tags, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
+  def self.test(tags, new_branch, old_brach='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     syn_tags = add_common_secondary_tags(tags)
-    ['node', 'closed_way', 'way'].each {|type|
+    types.each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
     }
     test_tag_on_real_data(tags, zlevels, old_brach, new_branch)
   end
 
-  def self.probe(tags, new_branch, old_brach='master', test_on_water=false, zlevels=Configuration.get_min_z..Configuration.get_max_z)
+  def self.probe(tags, new_branch, old_brach='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
     syn_tags = add_common_secondary_tags(tags)
-    ['node', 'closed_way', 'way'].each {|type|
+    types.each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
     }
   end
