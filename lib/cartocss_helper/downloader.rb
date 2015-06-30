@@ -49,7 +49,7 @@ module CartoCSSHelper
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude)
-      max_range_in_km_for_radius = 100 #"Radius temporarly limited to 100 km to mitigate a bug.". Previously Overpass crashed for values larger than 3660
+      max_range_in_km_for_radius = 3600
 
       #special support for following tag values:  :any_value
       range = 10*1000
