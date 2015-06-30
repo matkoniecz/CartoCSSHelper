@@ -34,9 +34,26 @@ module CartoCSSHelper
       @size = size
     end
 
-    def generate
+    def open_file
       @data_file = open(Configuration.get_data_filename, 'w')
+    end
+
+    def close_file
+      @data_file.close
+    end
+
+    def prepare_file
+      open_file
       generate_prefix
+    end
+
+    def finish_file
+      generate_sufix
+      close_file
+    end
+
+    def generate
+      prepare_file
       if @type == 'node'
         generate_node_topology(@lat, @lon, @tags)
       elsif @type == 'way'
@@ -46,8 +63,7 @@ module CartoCSSHelper
       else
         raise 'this type of element does not exists'
       end
-      generate_sufix
-      @data_file.close
+      finish_file
     end
 
     def generate_node_topology(lat, lon, tags)
