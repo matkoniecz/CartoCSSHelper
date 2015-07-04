@@ -28,10 +28,10 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_download_data_around_location(latitude, longitude, size)
-      min_latitude = latitude - size/2
-      max_latitude = latitude + size/2
-      min_longitude = longitude - size/2
-      max_longitude = longitude + size/2
+      min_latitude = latitude - size.to_f/2
+      max_latitude = latitude + size.to_f/2
+      min_longitude = longitude - size.to_f/2
+      max_longitude = longitude + size.to_f/2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
       query = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}];"
       query += "\n"
