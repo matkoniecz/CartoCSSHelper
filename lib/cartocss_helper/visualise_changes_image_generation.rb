@@ -106,7 +106,7 @@ module CartoCSSHelper
         return
       end
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
-      wanted_download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.04, 14
+      wanted_download_bbox_size = VisualDiff.scale_inverse zlevels.min, 0.07, 14
       download_bbox_size = [wanted_download_bbox_size, 0.001].max
       download_bbox_size = [download_bbox_size, 0.400].min #0.5 is too big for Utrecht
       visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size)
