@@ -271,6 +271,13 @@ module CartoCSSHelper
         puts 'try overpass query that will return smaller amount of data'
         puts e
         e.raise
+      rescue => e
+        puts 'query failed'
+        puts query
+        puts
+        puts url
+        puts e
+        e.raise
       end
     end
 
