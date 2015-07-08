@@ -1,6 +1,7 @@
 require_relative 'visualise_changes_diff_from_images'
 require_relative 'git'
 require_relative 'downloader'
+require_relative 'util/filehelper'
 
 module CartoCSSHelper
   class VisualDiff
@@ -171,14 +172,10 @@ module CartoCSSHelper
       return collection
     end
 
-    def self.make_string_usable_as_filename(string)
-      return string.gsub(/[\x00\/\\:\*\?\"<>\|]/, '_')
-    end
-
     def self.pack_image_sets(old, new, header, old_branch, new_branch, image_size)
-      old_branch = make_string_usable_as_filename(old_branch)
-      new_branch = make_string_usable_as_filename(new_branch)
-      header_for_filename = make_string_usable_as_filename(header)
+      old_branch = FileHelper::make_string_usable_as_filename(old_branch)
+      new_branch = FileHelper::make_string_usable_as_filename(new_branch)
+      header_for_filename = FileHelper::make_string_usable_as_filename(header)
       filename_sufix = "#{ old_branch } -> #{ new_branch }"
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header_for_filename} #{filename_sufix}.png"
       diff = FullSetOfComparedImages.new(old, new, header, filename, image_size)
