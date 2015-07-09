@@ -5,6 +5,66 @@ require_relative 'util/filehelper'
 
 module CartoCSSHelper
   class VisualDiff
+    @@job_pooling = false
+    @@jobs = []
+
+    def enable_job_pooling
+      #it results in avoiding loading the same database mutiple times
+      #useful if the same database will be used multiple times (for example the same place in multiple comparisons)
+      #use run_jobs function to run jobs
+      @@job_pooling = true
+    end
+
+    def disable_job_pooling
+      @@job_pooling = false
+    end
+
+    class MapGenerationJob
+      attr_reader :filename, :active
+      def initialize(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+        @filename = filename
+        @latitude = latitude
+        @longitude = longitude
+        @zlevels = zlevels
+        @header = header
+        @old_branch = old_branch
+        @new_branch = new_branch
+        @download_bbox_size = download_bbox_size
+        @image_size = image_size
+        @active = true
+      end
+      def run_job
+        if !@active
+          return
+        end
+        print
+        source = CartoCSSHelper::VisualDiff::FileDataSource.new(@latitude, @longitude, @download_bbox_size, @filename)
+        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @old_branch, @new_branch, @image_size, source)
+        @active = false
+      end
+      def print
+        puts "#{@filename.gsub(Configuration.get_path_to_folder_for_cache, '#')} #{@latitude}, #{@longitude}, #{@zlevels}, #{@header}, #{@old_branch}, #{@new_branch}, #{@download_bbox_size}, #{@image_size}"
+      end
+    end
+
+    def self.add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      @@jobs.push(MapGenerationJob.new(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size))
+    end
+
+    def self.run_jobs
+      for i in 0..@@jobs.length-1
+        if @@jobs[i].active
+          @@jobs[i].run_job
+          for x in 0..@@jobs.length-1
+            if @@jobs[i].filename == @@jobs[x].filename
+              @@jobs[x].run_job
+            end
+          end
+        end
+      end
+      @@jobs = []
+    end
+
     def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, old_branch, new_branch)
       tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
@@ -69,7 +129,7 @@ module CartoCSSHelper
     end
 
     class FileDataSource
-      attr_reader :download_bbox_size
+      attr_reader :download_bbox_size, :data_filename
       def initialize(latitude, longitude, download_bbox_size, filename)
         @download_bbox_size = download_bbox_size
         @latitude = latitude
@@ -80,7 +140,6 @@ module CartoCSSHelper
 
       def load
         if !@loaded
-          puts "\tloading data into database"
           DataFileLoader.load_data_into_database(@data_filename)
           puts "\tgenerating images"
           @loaded = true
@@ -89,10 +148,6 @@ module CartoCSSHelper
 
       def get_timestamp
         return Downloader.get_timestamp_of_file(@data_filename)
-      end
-
-      def dispose
-        #do nothing, file generated outside
       end
     end
 
@@ -117,8 +172,15 @@ module CartoCSSHelper
     end
 
     def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
-      source = FileDataSource.new(latitude, longitude, download_bbox_size, filename)
-      visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
+      prefix = ''
+      if @@job_pooling
+        prefix = 'pool <- '
+      end
+      puts "#{prefix} #{filename} #{latitude} #{longitude} #{zlevels} #{header} #{old_branch} #{new_branch} #{download_bbox_size} #{image_size}"
+      add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      if !@@job_pooling
+        run_jobs
+      end
     end
 
     def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
