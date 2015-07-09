@@ -127,11 +127,6 @@ module CartoCSSHelper
       Git.checkout new_branch
       new = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
       VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, image_size
-      source.dispose
-    end
-
-    def self.scale_inverse(zlevel, reference_value, reference_zlevel)
-      return VisualDiff.scale reference_zlevel, reference_value, zlevel
     end
 
     def self.scale(zlevel, reference_value, reference_zlevel)
