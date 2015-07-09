@@ -6,6 +6,12 @@ require 'sys/filesystem'
 
 module CartoCSSHelper
   class Downloader
+    def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
+      query = get_query_to_download_data_around_location(latitude, longitude, size)
+      return get_overpass_query_results_file_location(query)
+    end
+
+
     def self.download_osm_data_for_location(latitude, longitude, size, accept_cache=true)
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exists?(filename)
@@ -122,6 +128,12 @@ module CartoCSSHelper
       element+=');'
       element += "\n"
       return element
+    end
+
+    def self.get_overpass_query_results_file_location(query, debug=false)
+      filename = get_query_cache_filename(query)
+      get_overpass_query_results(query, debug)
+      return filename
     end
 
     def self.get_overpass_query_results(query, debug=false)
