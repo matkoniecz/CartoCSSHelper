@@ -3,7 +3,20 @@ require_relative 'configuration'
 
 module CartoCSSHelper
   class DataFileLoader
+    @@loaded_filename = nil
+    def self.get_filename_of_recently_loaded_file
+      if @@loaded_filename == Configuration.get_data_filename
+        return nil
+      end
+      return @@loaded_filename
+    end
     def self.load_data_into_database(data_filename, debug=false)
+      if get_filename_of_recently_loaded_file == data_filename
+        puts "\tavoided reloading the same file! <#{data_filename}>"
+        return
+      end
+      puts "\tloading data into database <#{data_filename}>"
+      @@loaded_filename = nil
       silence = '> /dev/null 2>&1'
       if debug
         silence = ''
@@ -22,6 +35,7 @@ module CartoCSSHelper
           raise 'osm2pgsql failed'
         end
       end
+      @@loaded_filename = data_filename
     end
   end
 
