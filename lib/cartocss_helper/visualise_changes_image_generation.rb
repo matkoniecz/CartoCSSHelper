@@ -112,8 +112,8 @@ module CartoCSSHelper
     end
 
     def self.visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
-      source = RealDataSource.new(latitude, longitude, download_bbox_size)
-      visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
+      filename = Downloader.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
+      visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
     end
 
     def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
