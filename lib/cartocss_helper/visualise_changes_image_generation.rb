@@ -100,34 +100,6 @@ module CartoCSSHelper
       return collection
     end
 
-    class RealDataSource
-      attr_reader :download_bbox_size
-      def initialize(latitude, longitude, download_bbox_size)
-        @download_bbox_size = download_bbox_size
-        @latitude = latitude
-        @longitude = longitude
-        @data_filename = Downloader.download_osm_data_for_location(@latitude, @longitude, @download_bbox_size)
-        @loaded = false
-      end
-
-      def load
-        if !@loaded
-          puts "\tloading data into database"
-          DataFileLoader.load_data_into_database(@data_filename)
-          puts "\tgenerating images"
-          @loaded = true
-        end
-      end
-
-      def get_timestamp
-        return Downloader.get_timestamp_of_downloaded_osm_data_for_location(@latitude, @longitude, @download_bbox_size)
-      end
-
-      def dispose
-        File.delete(@data_filename)
-      end
-    end
-
     class FileDataSource
       attr_reader :download_bbox_size, :data_filename
       def initialize(latitude, longitude, download_bbox_size, filename)
