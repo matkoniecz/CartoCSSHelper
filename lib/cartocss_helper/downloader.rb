@@ -8,7 +8,7 @@ module CartoCSSHelper
   class Downloader
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
       query = get_query_to_download_data_around_location(latitude, longitude, size)
-      return get_overpass_query_results_file_location(query)
+      return get_overpass_query_results_file_location(query, "download data for #{latitude} #{longitude} (#{size})")
     end
 
 
@@ -21,7 +21,7 @@ module CartoCSSHelper
         File.delete(filename)
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
-      text = get_overpass_query_results(query)
+      text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})")
       file = File.new(filename, 'w')
       file.write text
       file.close
@@ -60,13 +60,13 @@ module CartoCSSHelper
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
-        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range))
+        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range), "find #{tags} within #{range/1000}km from #{latitude}, #{longitude}")
         if list.length != 0
           return self.list_returned_by_overpass_to_a_single_location(list)
         end
         range=range+[2*range, 200000].min
         if range >= max_range_in_km_for_radius*1000
-          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity))
+          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} across the world")
           if list.length != 0
             return self.list_returned_by_overpass_to_a_single_location(list)
           else
@@ -130,13 +130,13 @@ module CartoCSSHelper
       return element
     end
 
-    def self.get_overpass_query_results_file_location(query, debug=false)
+    def self.get_overpass_query_results_file_location(query, description, debug=false)
       filename = get_query_cache_filename(query)
-      get_overpass_query_results(query, debug)
+      get_overpass_query_results(query, description, debug)
       return filename
     end
 
-    def self.get_overpass_query_results(query, debug=false)
+    def self.get_overpass_query_results(query, description, debug=false)
       cached = get_overpass_query_results_from_cache(query)
       if cached == ''
         raise OverpassRefusedResponse
@@ -145,7 +145,7 @@ module CartoCSSHelper
 
       check_for_free_space
 
-      puts 'Running Overpass query (connection initiated on ' + Time.now.to_s + ')'
+      puts 'Running Overpass query (connection initiated on ' + Time.now.to_s + ') ' + description
       if debug
         puts query
         puts
