@@ -8,14 +8,14 @@ module CartoCSSHelper
     @@job_pooling = false
     @@jobs = []
 
-    def enable_job_pooling
+    def self.enable_job_pooling
       #it results in avoiding loading the same database mutiple times
       #useful if the same database will be used multiple times (for example the same place in multiple comparisons)
       #use run_jobs function to run jobs
       @@job_pooling = true
     end
 
-    def disable_job_pooling
+    def self.disable_job_pooling
       @@job_pooling = false
     end
 
