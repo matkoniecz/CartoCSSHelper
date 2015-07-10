@@ -86,7 +86,7 @@ module CartoCSSHelper::Configuration
   end
 
 	def get_path_to_folder_for_branch_specific_cache
-		location = File.join(get_path_to_folder_for_cache, CartoCSSHelper::Git.get_commit_hash, '')
+		location = File.join(get_path_to_folder_for_cache, 'generated_images', CartoCSSHelper::Git.get_commit_hash, '')
 		FileUtils::mkdir_p location
 		return location
 	end
