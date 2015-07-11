@@ -13,13 +13,13 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def  self.test_tag_on_real_data(tags, zlevels, old_branch, new_branch, types=['node', 'closed_way', 'way'])
+  def  self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types=['node', 'closed_way', 'way'])
     types.each {|type|
-      test_tag_on_real_data_for_this_type(tags, zlevels, old_branch, new_branch, type)
+      test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type)
     }
   end
 
-  def self.test_tag_on_real_data_for_this_type(tags, zlevels, old_branch, new_branch, type)
+  def self.test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type)
     #special support for following tag values:  :any_value
     krakow_latitude = 50.1
     krakow_longitude = 19.9
@@ -59,7 +59,7 @@ module CartoCSSHelper
     types.each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
     }
-    test_tag_on_real_data(tags, zlevels, old_brach, new_branch, types)
+    test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types)
   end
 
   def self.probe(tags, new_branch, old_brach='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
