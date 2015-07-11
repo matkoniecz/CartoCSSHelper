@@ -28,11 +28,6 @@ module CartoCSSHelper
       return filename
     end
 
-    def self.get_timestamp_of_downloaded_osm_data_for_location(latitude, longitude, size, accept_cache=true)
-      query = get_query_to_download_data_around_location(latitude, longitude, size)
-      return Downloader.get_overpass_query_cache_timestamp(query)
-    end
-
     def self.get_query_to_download_data_around_location(latitude, longitude, size)
       min_latitude = latitude - size.to_f/2
       max_latitude = latitude + size.to_f/2
@@ -164,25 +159,6 @@ module CartoCSSHelper
       file = File.new(get_query_cache_filename(query), 'w')
       file.write response
       file.close
-      file = File.new(get_query_cache_timestamp_filename(query), 'w')
-      file.write ''
-      file.close
-    end
-
-    def self.get_query_cache_timestamp_filename(query)
-      query_cache_timestamp_filename = get_query_cache_filename(query) + '.timestamp'
-      return query_cache_timestamp_filename
-    end
-
-
-    def self.get_overpass_query_cache_timestamp(query)
-      #may return timestamp of a deleted file
-      #This way, cleanup of overpass cache (big .osm files)
-      #will not invalidate cache of generated images of real locations.
-      #Therefore it avoids pointless redownloading and regenerating
-      #images of real location after cache cleanup.
-      timestamp_filename = get_query_cache_timestamp_filename(query)
-      return get_timestamp_of_file(timestamp_filename)
     end
 
     def self.get_timestamp_of_file(timestamp_filename)
