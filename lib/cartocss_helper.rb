@@ -115,6 +115,16 @@ module CartoCSSHelper
   end
 
   def visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 700)
+    raise "#{filename} does not exists" unless File.exists?(filename)
+    raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
+    raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
+    raise "#{zlevels} is not a range" unless zlevels.class == Range
+    raise "#{new_branch} is not a string" unless new_branch.class == String
+    raise "#{old_branch} is not a string" unless old_branch.class == String
+    raise "#{header} is not a string" unless header.class == String
+    raise "#{bb} is not a number" unless bb.kind_of? Numeric
+    raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+
     if header == nil
       header = filename
     end
