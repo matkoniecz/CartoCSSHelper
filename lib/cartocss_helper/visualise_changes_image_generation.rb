@@ -43,12 +43,26 @@ module CartoCSSHelper
         @active = false
       end
       def print
-        puts "#{@filename.gsub(Configuration.get_path_to_folder_for_cache, '#')} #{@latitude}, #{@longitude}, #{@zlevels}, #{@header}, #{@old_branch}, #{@new_branch}, #{@download_bbox_size}, #{@image_size}"
+        puts "#{@filename.gsub(Configuration.get_path_to_folder_for_cache, '#')} [#{@latitude};#{@longitude}], z: #{@zlevels}, text: #{@header}, '#{@old_branch}'->'#{@new_branch}', bbox:#{@download_bbox_size}, #{@image_size}px"
       end
     end
 
     def self.add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
-      @@jobs.push(MapGenerationJob.new(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size))
+      print 'pool <- '
+      new_job = MapGenerationJob.new(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      new_job.print
+
+      raise "#{filename} does not exists" unless File.exists?(filename)
+      raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
+      raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
+      raise "#{zlevels} is not a range" unless zlevels.class == Range
+      raise "#{header} is not a string" unless header.class == String
+      raise "#{old_branch} is not a string" unless old_branch.class == String
+      raise "#{new_branch} is not a string" unless new_branch.class == String
+      raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
+      raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+
+      @@jobs.push(new_job)
     end
 
     def self.run_jobs
@@ -148,7 +162,6 @@ module CartoCSSHelper
       if @@job_pooling
         prefix = 'pool <- '
       end
-      puts "#{prefix} #{filename} #{latitude} #{longitude} #{zlevels} #{header} #{old_branch} #{new_branch} #{download_bbox_size} #{image_size}"
       add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
       if !@@job_pooling
         run_jobs
