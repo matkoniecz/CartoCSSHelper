@@ -21,7 +21,7 @@ module CartoCSSHelper
 
     class MapGenerationJob
       attr_reader :filename, :active
-      def initialize(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      def initialize(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
         @filename = filename
         @latitude = latitude
         @longitude = longitude
@@ -39,7 +39,7 @@ module CartoCSSHelper
         end
         print
         source = CartoCSSHelper::VisualDiff::FileDataSource.new(@latitude, @longitude, @download_bbox_size, @filename)
-        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @old_branch, @new_branch, @image_size, source)
+        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, source)
         @active = false
       end
       def print
@@ -47,9 +47,9 @@ module CartoCSSHelper
       end
     end
 
-    def self.add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+    def self.add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
       print 'pool <- '
-      new_job = MapGenerationJob.new(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      new_job = MapGenerationJob.new(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
       new_job.print
 
       raise "#{filename} does not exists" unless File.exists?(filename)
@@ -57,8 +57,8 @@ module CartoCSSHelper
       raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
       raise "#{zlevels} is not a range" unless zlevels.class == Range
       raise "#{header} is not a string" unless header.class == String
-      raise "#{old_branch} is not a string" unless old_branch.class == String
       raise "#{new_branch} is not a string" unless new_branch.class == String
+      raise "#{old_branch} is not a string" unless old_branch.class == String
       raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
       raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
 
@@ -79,7 +79,7 @@ module CartoCSSHelper
       @@jobs = []
     end
 
-    def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, old_branch, new_branch)
+    def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, new_branch, old_branch)
       tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
       if on_water
@@ -91,7 +91,7 @@ module CartoCSSHelper
       old = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
       Git.checkout(new_branch)
       new = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
-      VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, 200
+      VisualDiff.pack_image_sets old, new, header, new_branch, old_branch, 200
     end
 
     def self.remove_magic_from_tags(tags)
@@ -137,7 +137,7 @@ module CartoCSSHelper
       end
     end
 
-    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, old_branch, new_branch)
+    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch='master')
       #special support for following tag values:  :any_value
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       puts "visualise_changes_on_real_data <#{header}> #{old_branch} -> #{new_branch}"
@@ -149,31 +149,31 @@ module CartoCSSHelper
       end
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
       download_bbox_size = 0.4
-      visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size)
+      visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size)
     end
 
-    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
+    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size=400)
       filename = Downloader.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
-      visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
     end
 
-    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size=400)
+    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size=400)
       prefix = ''
       if @@job_pooling
         prefix = 'pool <- '
       end
-      add_job(filename, latitude, longitude, zlevels, header, old_branch, new_branch, download_bbox_size, image_size)
+      add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
       if !@@job_pooling
         run_jobs
       end
     end
 
-    def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, old_branch, new_branch, image_size, source)
+    def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, new_branch, old_branch, image_size, source)
       Git.checkout old_branch
       old = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
       Git.checkout new_branch
       new = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
-      VisualDiff.pack_image_sets old, new, header, old_branch, new_branch, image_size
+      VisualDiff.pack_image_sets old, new, header, new_branch, old_branch, image_size
     end
 
     def self.scale(zlevel, reference_value, reference_zlevel)
@@ -214,7 +214,7 @@ module CartoCSSHelper
       return collection
     end
 
-    def self.pack_image_sets(old, new, header, old_branch, new_branch, image_size)
+    def self.pack_image_sets(old, new, header, new_branch, old_branch, image_size)
       old_branch = FileHelper::make_string_usable_as_filename(old_branch)
       new_branch = FileHelper::make_string_usable_as_filename(new_branch)
       header_for_filename = FileHelper::make_string_usable_as_filename(header)

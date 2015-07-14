@@ -23,29 +23,29 @@ module CartoCSSHelper
     #special support for following tag values:  :any_value
     krakow_latitude = 50.1
     krakow_longitude = 19.9
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, krakow_latitude, krakow_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, krakow_latitude, krakow_longitude, zlevels, new_branch, old_branch)
     japan_latitude = 36.1
     japan_longitude = 140.7
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, japan_latitude, japan_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, japan_latitude, japan_longitude, zlevels, new_branch, old_branch)
     russia_latitude = 54.8
     russia_longitude = 31.7
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, russia_latitude, russia_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, russia_latitude, russia_longitude, zlevels, new_branch, old_branch)
     mecca_latitude = 21.3
     mecca_longitude = 39.5
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, mecca_latitude, mecca_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, mecca_latitude, mecca_longitude, zlevels, new_branch, old_branch)
     georgia_latitude = 41.4
     georgia_longitude = 44.5
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, georgia_latitude, georgia_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, georgia_latitude, georgia_longitude, zlevels, new_branch, old_branch)
     london_latitude = 51.5
     london_longitude = -0.1
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, london_latitude, london_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, london_latitude, london_longitude, zlevels, new_branch, old_branch)
     #TODO: solve problems with response too big to store in memory
     #utrecht_latitude =  52.09
     #utrecht_longitude = 5.11
-    #CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, utrecht_latitude, utrecht_longitude, zlevels, old_branch, new_branch)
+    #CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, utrecht_latitude, utrecht_longitude, zlevels, new_branch, old_branch)
     rural_uk_latitude =  53.2
     rural_uk_longitude = -1.8
-    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, rural_uk_latitude, rural_uk_longitude, zlevels, old_branch, new_branch)
+    CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, rural_uk_latitude, rural_uk_longitude, zlevels, new_branch, old_branch)
   end
 
   def self.add_common_secondary_tags(tags)
@@ -53,30 +53,38 @@ module CartoCSSHelper
     return tags.merge(added_tags)
   end
 
-  def self.test(tags, new_branch, old_brach='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
+  def self.test(tags, new_branch, old_branch='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     syn_tags = add_common_secondary_tags(tags)
     types.each {|type|
-      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
     }
     test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types)
   end
 
-  def self.probe(tags, new_branch, old_brach='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
+  def self.probe(tags, new_branch, old_branch='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
     syn_tags = add_common_secondary_tags(tags)
     types.each {|type|
-      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, old_brach, new_branch)
+      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
     }
   end
 
-  def visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 450)
+  def visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 450)
+    raise "#{url} is not a string" unless old_branch.class == String
+    raise "#{zlevels} is not a range" unless zlevels.class == Range
+    raise "#{new_branch} is not a string" unless new_branch.class == String
+    raise "#{old_branch} is not a string" unless old_branch.class == String
+    raise "#{header} is not a string" unless header.class == String
+    raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
+    raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+
     latitude = url.scan(/\/((-|)\d+(\.\d+))/)[0][0].to_f
     longitude = url.scan(/\/((-|)\d+(\.\d+))/)[1][0].to_f
     if header == nil
       header = url
     end
     header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' '+ image_size.to_s + 'px'
-    CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, old_branch, new_branch, bb, image_size)
+    CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
 
   def get_place_of_storage_of_resource_under_url(url)
@@ -111,6 +119,6 @@ module CartoCSSHelper
       header = filename
     end
     header += ' ' + old_branch + '->' + new_branch + '[' + latitude.to_s + ',' + longitude.to_s + ']' + ' ' + image_size.to_s + 'px'
-    CartoCSSHelper::VisualDiff.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, old_branch, new_branch, bb, image_size)
+    CartoCSSHelper::VisualDiff.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, bb, image_size)
   end
 end
