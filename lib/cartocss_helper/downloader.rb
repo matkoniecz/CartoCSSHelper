@@ -209,24 +209,23 @@ module CartoCSSHelper
     end
 
     def self.attempt_cleanup
-      delete_files_left_after_terminated_programs
       if not_enough_free_space
         delete_large_overpass_caches
       end
     end
 
-    def self.delete_files_left_after_terminated_programs
-      #todo - find library that deals with caches like this, bug here may be unfunny
-      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_cache+'*.osm') {|file|
-        File.delete(file)
+    def self.delete_file(file)
+      open(CartoCSSHelper::Configuration.get_path_to_folder_for_cache+'log.txt', 'a') { |file|
+        file.puts("deleting #{file}, #{File.size(file)/1024/1024}MB")
       }
+      File.delete(file)
     end
 
     def self.delete_large_overpass_caches
       #todo - find library that deals with caches like this, bug here may be unfunny
       Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache+'*') {|file|
         if File.size(file) > (1024 * 1024 * 50)
-          File.delete(file)
+          delete_file(file)
         end
       }
     end
