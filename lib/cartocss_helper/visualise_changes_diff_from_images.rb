@@ -34,7 +34,7 @@ module CartoCSSHelper
       @compared = compress(before, after)
 
       @image_size = image_size
-      @margin = 20
+      @margin = 10
       @standard_pointsize = 10
       @header_space = @standard_pointsize*1.5
       @diff_note_space = @standard_pointsize

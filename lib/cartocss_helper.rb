@@ -69,7 +69,7 @@ module CartoCSSHelper
     }
   end
 
-  def visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 450)
+  def visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
     raise "#{url} is not a string" unless old_branch.class == String
     raise "#{zlevels} is not a range" unless zlevels.class == Range
     raise "#{new_branch} is not a string" unless new_branch.class == String
