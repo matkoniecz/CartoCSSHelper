@@ -146,7 +146,7 @@ module CartoCSSHelper
         puts
       end
       begin
-        cached = Downloader.run_overpass_query query
+        cached = Downloader.run_overpass_query query, description
       rescue OverpassRefusedResponse
         write_to_cache(query, '')
         raise OverpassRefusedResponse
@@ -232,7 +232,7 @@ module CartoCSSHelper
 
     class OverpassRefusedResponse < IOError; end
 
-    def self.run_overpass_query(query, retry_count=0, retry_max=5)
+    def self.run_overpass_query(query, description, retry_count=0, retry_max=5)
       start = Time.now.to_s
       begin
         url = Downloader.format_query_into_url(query)
@@ -241,15 +241,15 @@ module CartoCSSHelper
       rescue RestClient::RequestTimeout
         puts 'Overpass API refused to process this request. It will be not attemped again, most likely query is too complex.'
         raise OverpassRefusedResponse
-      rescue RestClient::RequestFailed => e
+      rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
         puts query
         puts e.response
         puts e.http_code
         puts start
-        puts Time.now.to_s
+        puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{e}"
         if retry_count < retry_max
           sleep 60*5
-          Downloader.run_overpass_query(query, retry_count+1, retry_max)
+          Downloader.run_overpass_query(query, description, retry_count+1, retry_max)
         else
           e.raise
         end
