@@ -19,7 +19,7 @@ def get_list_of_testing_locations
       [28.6138967, 77.2159562],
       [33.6945756, 73.0643744],
       [48.2083537, 16.3725042],
-      [48.8565056, 2.3521334],
+      #[48.8565056, 2.3521334], TODO: solve problems with rest-client crashing and blabbing about negative integers
       [46.9482713, 7.4514512],
       [45.4210328, -75.6900219],
       [59.9132694, 10.7391112],
