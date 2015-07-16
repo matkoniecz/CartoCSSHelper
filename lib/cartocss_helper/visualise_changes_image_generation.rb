@@ -208,7 +208,7 @@ module CartoCSSHelper
         filename = "#{cache_folder+"#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
         if !File.exists?(filename)
           source.load
-          Scene.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
+          TilemillHandler.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
         end
         collection.push(ImageForComparison.new(filename, "z#{zlevel}"))
       }
