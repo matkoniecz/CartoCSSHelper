@@ -220,7 +220,7 @@ module CartoCSSHelper
       new_branch = FileHelper::make_string_usable_as_filename(new_branch)
       header_for_filename = FileHelper::make_string_usable_as_filename(header)
       filename_sufix = "#{ old_branch } -> #{ new_branch }"
-      filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header_for_filename} #{filename_sufix}.png"
+      filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header_for_filename} #{filename_sufix} #{image_size}px.png"
       diff = FullSetOfComparedImages.new(old, new, header, filename, image_size)
       diff.save
     end
