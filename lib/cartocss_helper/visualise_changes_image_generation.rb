@@ -147,7 +147,7 @@ module CartoCSSHelper
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
+      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude } #{ wanted_longitude }] -> [#{latitude} #{longitude}] #{zlevels}"
       download_bbox_size = 0.4
       visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size)
       return true
