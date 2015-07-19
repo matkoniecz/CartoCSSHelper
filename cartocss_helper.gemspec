@@ -15,12 +15,12 @@ Gem::Specification.new do |s|
   #open3 is from stdlib
   #fileutils is from stdlib
   #find is from stdlib
-  s.add_dependency 'rest-client', '~> 1.7.3'
+  s.add_dependency 'rest-client', '~> 1.8.0'
   #digest/sha1 is from stdlib
   s.add_dependency 'sys-filesystem', '~> 1.1.4'
   #open3 is from stdlib
   #set is from stdlib
-  s.add_dependency 'rmagick', '~> 2.13.4'
+  s.add_dependency 'rmagick', '~> 2.15.2'
 
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
