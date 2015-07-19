@@ -18,7 +18,7 @@ module CartoCSSHelper
         if accept_cache
           return filename
         end
-        File.delete(filename)
+        delete_file(filename, 'query refusing to accept cache was used')
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
       text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})")
@@ -199,7 +199,7 @@ module CartoCSSHelper
     end
 
     def self.not_enough_free_space
-      minimum_gb = 2
+      minimum_gb = 1
       return get_available_space_for_cache_in_gb < minimum_gb
     end
 
@@ -210,22 +210,30 @@ module CartoCSSHelper
 
     def self.attempt_cleanup
       if not_enough_free_space
-        delete_large_overpass_caches
+        delete_large_overpass_caches 500
+      end
+      if not_enough_free_space
+        delete_large_overpass_caches 100
+      end
+      if not_enough_free_space
+        delete_large_overpass_caches 50
       end
     end
 
-    def self.delete_file(file)
-      open(CartoCSSHelper::Configuration.get_path_to_folder_for_cache+'log.txt', 'a') { |file|
-        file.puts("deleting #{file}, #{File.size(file)/1024/1024}MB")
+    def self.delete_file(filename, reason)
+      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output+'log.txt', 'a') { |file|
+        message = "deleting #{filename}, #{File.size(filename)/1024/1024}MB - #{reason}"
+        puts message
+        file.puts(message)
+        File.delete(filename)
       }
-      File.delete(file)
     end
 
-    def self.delete_large_overpass_caches
+    def self.delete_large_overpass_caches(threshold_in_MB)
       #todo - find library that deals with caches like this, bug here may be unfunny
       Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache+'*') {|file|
-        if File.size(file) > (1024 * 1024 * 50)
-          delete_file(file)
+        if File.size(file) > (1024 * 1024 * threshold_in_MB)
+          delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
         end
       }
     end
