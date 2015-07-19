@@ -33,6 +33,7 @@ module CartoCSSHelper
       if n > max_n
         return
       end
+      puts "#{n}/#{max_n} locations checked. #{generated}/#{min} testing location found"
     end
   end
 
