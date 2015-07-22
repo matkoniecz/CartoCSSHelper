@@ -79,6 +79,10 @@ module CartoCSSHelper
       @@jobs = []
     end
 
+    def self.shuffle_jobs(seed)
+      @@jobs.shuffle!(random: Random.new(seed))
+    end
+
     def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, new_branch, old_branch)
       tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
