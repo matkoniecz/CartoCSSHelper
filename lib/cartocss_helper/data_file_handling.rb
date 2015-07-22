@@ -10,11 +10,13 @@ module CartoCSSHelper
       end
       return @@loaded_filename
     end
+
     def self.load_data_into_database(data_filename, debug=false)
       if get_filename_of_recently_loaded_file == data_filename
         puts "\tavoided reloading the same file! <#{data_filename}>"
         return
       end
+      start_time = Time.now
       puts "\tloading data into database <#{data_filename}>"
       @@loaded_filename = nil
       silence = '> /dev/null 2>&1'
@@ -36,6 +38,8 @@ module CartoCSSHelper
         end
       end
       @@loaded_filename = data_filename
+      time_in_seconds = Time.now - start_time
+      puts "\tloading lasted #{time_in_seconds.to_i}s"
     end
   end
 
