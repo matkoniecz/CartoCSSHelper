@@ -36,11 +36,11 @@ module CartoCSSHelper
     end
   end
 
-  def get_maxn_for_nth_location
+  def self.get_maxn_for_nth_location
     return get_list_of_testing_locations.length-1
   end
 
-  def get_nth_location(n)
+  def self.get_nth_location(n)
     return get_list_of_testing_locations[n]
   end
 
@@ -70,7 +70,7 @@ module CartoCSSHelper
     }
   end
 
-  def visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
+  def self.visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
     raise "#{url} is not a string, it is #{url.class}" unless url.class == String
     raise "#{zlevels} is not a range, it is #{zlevels.class}" unless zlevels.class == Range
     raise "#{new_branch} is not a string, it is #{new_branch.class}" unless new_branch.class == String
@@ -88,11 +88,11 @@ module CartoCSSHelper
     CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
 
-  def get_place_of_storage_of_resource_under_url(url)
+  def self.get_place_of_storage_of_resource_under_url(url)
     return CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '.manual.cache' + FileHelper::make_string_usable_as_filename(url)
   end
 
-  def download_remote_file(url)
+  def self.download_remote_file(url)
     filename = get_place_of_storage_of_resource_under_url(url)
     if !File.exists?(filename)
       begin
@@ -109,13 +109,13 @@ module CartoCSSHelper
     end
   end
 
-  def visualise_place_by_remote_file(url, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
+  def self.visualise_place_by_remote_file(url, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
     download_remote_file(url)
     filename = get_place_of_storage_of_resource_under_url(url)
     visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch, header, bb, image_size)
   end
 
-  def visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
+  def self.visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
     raise "#{filename} does not exists" unless File.exists?(filename)
     raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
     raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
