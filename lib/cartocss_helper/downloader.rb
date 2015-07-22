@@ -11,7 +11,6 @@ module CartoCSSHelper
       return get_overpass_query_results_file_location(query, "download data for #{latitude} #{longitude} (#{size})")
     end
 
-
     def self.download_osm_data_for_location(latitude, longitude, size, accept_cache=true)
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exists?(filename)
@@ -134,7 +133,9 @@ module CartoCSSHelper
     def self.get_overpass_query_results(query, description, debug=false)
       cached = get_overpass_query_results_from_cache(query)
       if cached == ''
-        raise OverpassRefusedResponse
+        if File.exists?(get_query_cache_refused_response_filename(query))
+          raise OverpassRefusedResponse
+        end
       end
       return cached unless cached == nil
 
@@ -148,11 +149,22 @@ module CartoCSSHelper
       begin
         cached = Downloader.run_overpass_query query, description
       rescue OverpassRefusedResponse
+        mark_query_as_refused(query)
         write_to_cache(query, '')
         raise OverpassRefusedResponse
       end
       write_to_cache(query, cached)
       return cached
+    end
+
+    def self.get_query_cache_refused_response_filename(query)
+      return get_query_cache_filename(query)+'_response_refused'
+    end
+
+    def self.mark_query_as_refused(query)
+      file = File.new(get_query_cache_refused_response_filename(query), 'w')
+      file.write ''
+      file.close
     end
 
     def self.write_to_cache(query, response)
