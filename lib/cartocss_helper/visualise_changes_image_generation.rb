@@ -143,17 +143,19 @@ module CartoCSSHelper
 
     def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch='master')
       #special support for following tag values:  :any_value
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} #{ wanted_latitude } #{ wanted_longitude } #{zlevels}"
-      puts "visualise_changes_on_real_data <#{header}> #{old_branch} -> #{new_branch}"
+      header_prefix = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude }, #{ wanted_longitude }] -> "
+      target_location = '[?, ?]'
+      header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
+      puts "visualise_changes_on_real_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
       begin
         latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
+        target_location = "[#{latitude}, #{longitude}]"
       rescue Downloader::OverpassRefusedResponse
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude } #{ wanted_longitude }] -> [#{latitude} #{longitude}] #{zlevels}"
       download_bbox_size = 0.4
-      visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size)
+      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix+target_location+header_sufix, new_branch, old_branch, download_bbox_size)
       return true
     end
 
