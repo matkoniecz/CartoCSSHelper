@@ -38,7 +38,7 @@ module CartoCSSHelper
       query += "\n"
       query += "(node(#{bb});<;);"
       query += "\n"
-      query += 'out meta;'
+      query += 'out;'
       query += "\n"
       query += '/*'
       query += "\nbbox size: #{size}"
