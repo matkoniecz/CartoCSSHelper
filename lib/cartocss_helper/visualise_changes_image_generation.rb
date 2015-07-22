@@ -47,8 +47,8 @@ module CartoCSSHelper
       end
     end
 
-    def self.add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
-      print 'pool <- '
+    def self.add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size, prefix)
+      print prefix
       new_job = MapGenerationJob.new(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
       new_job.print
 
@@ -163,7 +163,7 @@ module CartoCSSHelper
       if @@job_pooling
         prefix = 'pool <- '
       end
-      add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
+      add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size, prefix)
       if !@@job_pooling
         run_jobs
       end
