@@ -14,9 +14,9 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types=['node', 'closed_way', 'way'])
+  def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types=['node', 'closed_way', 'way'], min = 4, skip = 0)
     types.each {|type|
-      test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type)
+      test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min, skip)
     }
   end
 
