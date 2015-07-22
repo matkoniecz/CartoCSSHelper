@@ -79,8 +79,8 @@ module CartoCSSHelper
     raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
     raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
 
-    latitude = url.scan(/\/((-|)\d+(\.\d+))/)[0][0].to_f
-    longitude = url.scan(/\/((-|)\d+(\.\d+))/)[1][0].to_f
+    latitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[0][0].to_f
+    longitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[1][0].to_f
     if header == nil
       header = url
     end
