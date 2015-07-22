@@ -154,7 +154,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('highway', 'platform', :primary),
             TagRenderingStatus.new('highway', 'primary', :primary),
             TagRenderingStatus.new('highway', 'primary_link', :primary),
-            TagRenderingStatus.new('highway', 'proposed', :primary),
             TagRenderingStatus.new('highway', 'raceway', :primary),
             TagRenderingStatus.new('highway', 'residential', :primary),
             TagRenderingStatus.new('highway', 'rest_area', :primary),
