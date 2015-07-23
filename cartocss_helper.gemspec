@@ -25,5 +25,10 @@ Gem::Specification.new do |s|
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
   s.require_path = 'lib'
-
 end
+
+#how to release new gem version:
+#
+#gem build cartocss_helper.gemspec
+#gem install cartocss_helper-*.*.*.gem
+#gem push cartocss_helper-*.*.*.gem
