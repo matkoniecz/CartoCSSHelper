@@ -189,27 +189,32 @@ module CartoCSSHelper
       return reference_value*rescaler
     end
 
-    def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, wanted_image_size=400)
+    def self.get_render_bbox_size(zlevel, wanted_image_size)
+      image_size_for_z16 = 1000
+      render_bbox_size_for_z16 = 0.015
+
+      image_size_for_given_zlevel = VisualDiff.scale(zlevel, image_size_for_z16, 16)
+      multiplier = 1000
+      multiplied_image_size_for_given_zlevel = (image_size_for_given_zlevel*multiplier).to_int
+      ratio = 1.0*multiplied_image_size_for_given_zlevel/(wanted_image_size*multiplier)
+      multiplied_image_size_for_given_zlevel /= ratio
+      render_bbox_size = render_bbox_size_for_z16/ratio
+      image_size = (multiplied_image_size_for_given_zlevel/multiplier).to_i
+      if image_size!=wanted_image_size
+        puts VisualDiff.scale zlevel, image_size_for_z16, 16
+        puts zlevel
+        puts image_size
+        puts wanted_image_size
+        puts ratio
+        raise "#{image_size} mismatches #{wanted_image_size}"
+      end
+      return render_bbox_size
+    end
+
+    def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size=400)
       collection = []
       zlevels.each { |zlevel|
-        image_size_for_16_zoom_level = 1000
-        image_size = (VisualDiff.scale zlevel, image_size_for_16_zoom_level, 16)
-        mutiplier = 1000
-        image_size = (image_size*mutiplier).to_int
-        render_bbox_size = 0.015
-        ratio = 1.0*image_size/(wanted_image_size*mutiplier)
-        image_size /= ratio
-        render_bbox_size /= ratio
-        image_size /= mutiplier
-        image_size = image_size.to_i
-        if image_size!=wanted_image_size
-          puts VisualDiff.scale zlevel, image_size_for_16_zoom_level, 16
-          puts zlevel
-          puts image_size
-          puts wanted_image_size
-          puts ratio
-          raise "#{image_size} mismatches #{wanted_image_size}"
-        end
+        render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size)
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
         filename = "#{cache_folder+"#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
         if !File.exists?(filename)
