@@ -76,6 +76,10 @@ module CartoCSSHelper
   end
 
   def self.visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
+    if header == nil
+      header = url
+    end
+
     raise "#{url} is not a string, it is #{url.class}" unless url.class == String
     raise "#{zlevels} is not a range, it is #{zlevels.class}" unless zlevels.class == Range
     raise "#{new_branch} is not a string, it is #{new_branch.class}" unless new_branch.class == String
@@ -86,9 +90,6 @@ module CartoCSSHelper
 
     latitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[0][0].to_f
     longitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[1][0].to_f
-    if header == nil
-      header = url
-    end
     header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' '+ image_size.to_s + 'px'
     CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
