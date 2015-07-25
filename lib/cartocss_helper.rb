@@ -75,6 +75,17 @@ module CartoCSSHelper
     }
   end
 
+  def get_latitude_longitude_from_url(url)
+    if(url.scan(/[\/]((-|)\d+(\.\d+))/)).length >= 2
+      latitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[0][0].to_f
+      longitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[1][0].to_f
+      return latitude, longitude
+    end
+    latitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[0][0].to_f
+    longitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[1][0].to_f
+    return latitude, longitude
+  end
+
   def self.visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
     if header == nil
       header = url
@@ -88,8 +99,7 @@ module CartoCSSHelper
     raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
     raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
 
-    latitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[0][0].to_f
-    longitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[1][0].to_f
+    latitude, longitude = get_latitude_longitude_from_url(url)
     header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' '+ image_size.to_s + 'px'
     CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
