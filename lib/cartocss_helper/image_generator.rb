@@ -87,7 +87,7 @@ module CartoCSSHelper
     def generate_image(lat, lon, debug)
       export_filename = self.get_filename
       bbox_size = self.get_bbox_size
-      TilemillHandler.run_tilemill_export_image(lat, lon,  @zlevel, bbox_size, 200, export_filename, debug)
+      TilemillHandler.run_tilemill_export_image(lat, lon,  @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
     end
   end
 end
