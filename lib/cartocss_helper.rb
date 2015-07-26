@@ -21,6 +21,9 @@ module CartoCSSHelper
   end
 
   def self.test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min = 4, skip = 0)
+    if type.kind_of?(Array)
+      type = type[0]
+    end
     generated = 0
 
     n = 0
