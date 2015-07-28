@@ -104,7 +104,7 @@ module CartoCSSHelper
       [false, true].each { |on_water|
         [Configuration.get_max_z].each { |zlevel|
           ['area', 'closed_way', 'way', 'node'].each{ |type|
-            if rendered_on_zlevel({key => value}, type, zlevel, on_water)
+            if CartoCSSHelper::Info.rendered_on_zlevel({key => value}, type, zlevel, on_water)
               if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
                 return false
               end
@@ -123,9 +123,9 @@ module CartoCSSHelper
 
     def is_rendered(key, value)
       [false, true].each { |on_water|
-        [Configuration.get_max_z].each { |zlevel|
+        [Configuration.get_max_z].each { |zlevel| #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
           ['area', 'closed_way', 'way', 'node'].each{ |type|
-            if rendered_on_zlevel({key => value}, type, zlevel, on_water)
+            if CartoCSSHelper::Info.rendered_on_zlevel({key => value}, type, zlevel, on_water)
               return true
             end
           }
@@ -141,8 +141,6 @@ module CartoCSSHelper
       end
       return true
     end
-
-    protected
 
     def how_rendered_as_composite(key, value, suggested_composite)
       [false, true].each { |on_water|
@@ -167,11 +165,13 @@ module CartoCSSHelper
       return nil
     end
 
-    def rendered_on_zlevel(tags, type, zlevel, on_water)
+    def self.rendered_on_zlevel(tags, type, zlevel, on_water)
       empty = Scene.new({}, zlevel, on_water, type)
       tested = Scene.new(tags, zlevel, on_water, type)
       return tested.is_output_different(empty)
     end
+
+    protected
 
     def how_rendered_on_zlevel_as_composite(tags, type, zlevel, on_water, suggested_composite)
       if suggested_composite != nil
