@@ -78,7 +78,7 @@ module CartoCSSHelper
     }
   end
 
-  def get_latitude_longitude_from_url(url)
+  def self.get_latitude_longitude_from_url(url)
     if(url.scan(/[\/]((-|)\d+(\.\d+))/)).length >= 2
       latitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[0][0].to_f
       longitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[1][0].to_f

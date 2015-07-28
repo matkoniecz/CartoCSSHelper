@@ -98,7 +98,7 @@ module CartoCSSHelper
       return tags
     end
 
-    def get_generic_tag_value
+    def self.get_generic_tag_value
       return '*'
     end
 
