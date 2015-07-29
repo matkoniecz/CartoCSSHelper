@@ -70,6 +70,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'ice_cream', :primary),
             TagRenderingStatus.new('amenity', 'kindergarten', :primary),
             TagRenderingStatus.new('amenity', 'library', :primary),
+            TagRenderingStatus.new('amenity', 'motorcycle_parking', :primary),
             TagRenderingStatus.new('amenity', 'parking', :primary),
             TagRenderingStatus.new('amenity', 'pharmacy', :primary),
             TagRenderingStatus.new('amenity', 'place_of_worship', :primary),
