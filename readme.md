@@ -32,7 +32,7 @@ It is assumed that TileMill project with Default OSM Style (https://github.com/g
 
     require 'cartocss_helper'
 
-    g CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
+    CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
     tilemill_project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
     CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(tilemill_project_location)
     output_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', '')
