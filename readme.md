@@ -26,18 +26,42 @@ Install RMagick gem. `gem install rmagick` may not be enough - in my case, on Ub
 
 Finally, run `gem install cartocss_helper`.
 
-###Example
+###Examples
 
 It is assumed that TileMill project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
 
-    require cartocss_helper
-    CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
-    CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', ''))
-    CartoCSSHelper::Configuration.set_path_to_folder_for_output(File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', ''))
-    CartoCSSHelper::Configuration.set_path_to_folder_for_cache(File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-tmp', ''))
+    require 'cartocss_helper'
+
+    g CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
+    tilemill_project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
+    CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(tilemill_project_location)
+    output_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', '')
+    CartoCSSHelper::Configuration.set_path_to_folder_for_output(output_folder)
+    cache_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-tmp', '')
+    CartoCSSHelper::Configuration.set_path_to_folder_for_cache(cache_folder)
 
     tags = {'landuse' => 'village_green', 'tourism' => 'attraction'}
     CartoCSSHelper.test tags, 'master', 'v2.28.1'
+
+or, to just test on real examples of landuse=quarry tagged on ways (most will form areas)
+
+    require 'cartocss_helper'
+
+    CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
+    tilemill_project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
+    CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(tilemill_project_location)
+    output_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', '')
+    CartoCSSHelper::Configuration.set_path_to_folder_for_output(output_folder)
+    cache_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-tmp', '')
+    CartoCSSHelper::Configuration.set_path_to_folder_for_cache(cache_folder)
+
+    tags = {'landuse' => 'quarry'}
+    branch_name = 'quarry-icon'
+    base_branch_name = 'master'
+    zlevels = 10..22
+    type = 'way' #or 'node'
+    test_locations_count = 10
+    CartoCSSHelper.test_tag_on_real_data_for_this_type(tags, branch_name, base_branch_name, zlevels, type, test_locations_count)
 
 First part of this Ruby script is responsible for loading gem and configuration, including location of cache folder and folder where produced comparison images will be saved.
 
