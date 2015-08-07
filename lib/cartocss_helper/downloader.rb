@@ -102,11 +102,8 @@ module CartoCSSHelper
       return locator
     end
 
-    def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
-      #special support for following tag values:  :any_value
-      #TODO - escape value with quotation signs in them
-      element="(#{type}"
-      element += "\n"
+    def self.turn_list_of_tags_in_overpass_filter(tags)
+      element = ''
       tags.each {|tag|
         if tag[1] == :any_value
           element+="\t['#{tag[0]}']"
@@ -115,6 +112,15 @@ module CartoCSSHelper
         end
         element += "\n"
       }
+      return element
+    end
+
+    def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
+      #special support for following tag values:  :any_value
+      #TODO - escape value with quotation signs in them
+      element="(#{type}"
+      element += Downloader.turn_list_of_tags_in_overpass_filter(tags)
+      element += "\n"
       if range != :infinity
         element+="\t(around:#{range},#{latitude},#{longitude});"
         element += "\n"
