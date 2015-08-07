@@ -154,17 +154,16 @@ module CartoCSSHelper
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
-      download_bbox_size = 0.4
-      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix+target_location+header_sufix, new_branch, old_branch, download_bbox_size)
+      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix+target_location+header_sufix, new_branch, old_branch)
       return true
     end
 
-    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size=400)
+    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size=0.4, image_size=400)
       filename = Downloader.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
       visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
     end
 
-    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size=400)
+    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size=0.4, image_size=400)
       prefix = ''
       if @@job_pooling
         prefix = 'pool <- '

@@ -27,14 +27,14 @@ module CartoCSSHelper
     generated = 0
 
     n = 0
-    max_n = get_maxn_for_nth_location
+    max_n = CartoCSSHelper.get_maxn_for_nth_location
     max_n -= skip
     skip_string = ''
     if skip > 0
       skip_string = " (#{skip} locations skipped)"
     end
     while generated < min
-      location = get_nth_location(n + skip)
+      location = CartoCSSHelper.get_nth_location(n + skip)
       generated +=1 if CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
       n+=1
       if n > max_n
