@@ -6,6 +6,8 @@ require 'sys/filesystem'
 
 module CartoCSSHelper
   class Downloader
+    #TODO - split into cache handling and Overpass handling
+
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
       query = get_query_to_download_data_around_location(latitude, longitude, size)
       return get_overpass_query_results_file_location(query, "download data for #{latitude} #{longitude} (#{size})")
