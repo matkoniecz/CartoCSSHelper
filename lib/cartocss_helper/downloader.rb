@@ -213,7 +213,7 @@ module CartoCSSHelper
       if not_enough_free_space
         attempt_cleanup
         if not_enough_free_space
-          raise 'less than 2GB of free space on disk with cache folder'
+          raise 'not enough free space on disk with cache folder'
         end
       end
     end
