@@ -7,6 +7,38 @@ require 'sys/filesystem'
 module CartoCSSHelper
   class Downloader
     #TODO - split into cache handling and Overpass handling
+    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters=20)
+      filter_a = Downloader.turn_list_of_tags_in_overpass_filter(tags_a)
+      filter_b = Downloader.turn_list_of_tags_in_overpass_filter(tags_b)
+
+      query = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
+      way(#{bb})#{filter_a};
+      node(around:#{distance_in_meters})->.anodes;
+      way(#{bb})#{filter_b};
+      node(around:#{distance_in_meters}).anodes;
+      out;"
+
+      return query
+    end
+
+    def self.find_data_pair(tags_a, tags_b, latitude, longitude, size=0.1)
+      if size > 0.5
+        return nil, nil
+      end
+      min_latitude = latitude - size.to_f/2
+      max_latitude = latitude + size.to_f/2
+      min_longitude = longitude - size.to_f/2
+      max_longitude = longitude + size.to_f/2
+      bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
+
+      query = Downloader.get_query_to_find_data_pair(bb, tags_a, tags_b)
+
+      list = Downloader.get_overpass_query_results(query, "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{size}")
+      if list.length != 0
+        return Downloader.list_returned_by_overpass_to_a_single_location(list)
+      end
+      return Downloader.find_data_pair(tags_a, tags_b, latitude, longitude, size*2)
+    end
 
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
       query = get_query_to_download_data_around_location(latitude, longitude, size)
@@ -268,6 +300,11 @@ module CartoCSSHelper
         return RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
       rescue RestClient::RequestTimeout
         puts 'Overpass API refused to process this request. It will be not attemped again, most likely query is too complex.'
+        puts
+        puts query
+        puts
+        puts url
+        puts
         raise OverpassRefusedResponse
       rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
         puts query
