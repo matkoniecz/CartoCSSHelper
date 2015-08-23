@@ -238,6 +238,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('leisure', 'track', :primary),
             TagRenderingStatus.new('leisure', 'water_park', :primary),
             TagRenderingStatus.new('man_made', 'breakwater', :primary),
+            TagRenderingStatus.new('man_made', 'bridge', :primary),
             TagRenderingStatus.new('man_made', 'cutline', :primary),
             TagRenderingStatus.new('man_made', 'embankment', :primary),
             TagRenderingStatus.new('man_made', 'groyne', :primary),
