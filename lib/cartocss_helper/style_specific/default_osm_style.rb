@@ -497,6 +497,20 @@ module CartoCSSHelper
             TagRenderingStatus.new('shop', 'wine', :primary),
             TagRenderingStatus.new('shop', 'winery', :primary),
             TagRenderingStatus.new('shop', 'yes', :primary),
+            TagRenderingStatus.new('surface', 'unpaved', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'compacted', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'dirt', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'earth', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'fine_gravel', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'grass', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'grass_paver', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'ground', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'mud', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'pebblestone', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'salt', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'sand', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'woodchips', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'clay', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('tourism', 'alpine_hut', :primary),
             TagRenderingStatus.new('tourism', 'attraction', :primary),
             TagRenderingStatus.new('tourism', 'camp_site', :primary),
@@ -546,6 +560,7 @@ module CartoCSSHelper
       return [
           {'name' => 'a'}, #place=city...
           {'highway' => 'service'}, #access, ref, bridge, tunnel, service=parking_aisle...
+          {'highway' => 'footway'}, #surface=*
           {'railway' => 'rail'}, #service=siding
           {'boundary' => 'administrative'}, #admin_level
           {'admin_level' => '2'}, #boundary=administrative
