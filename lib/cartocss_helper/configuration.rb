@@ -100,4 +100,17 @@ module CartoCSSHelper::Configuration
 	def get_data_filename
 		return get_path_to_folder_for_branch_specific_cache+'data.osm'
 	end
+
+  @overpass_instance_url = 'http://overpass-api.de/api'
+  def set_overpass_instance_url(path)
+    @overpass_instance_url = path
+  end
+
+  def set_known_alternative_overpass_url
+    set_overpass_instance_url('http://overpass.osm.rambler.ru/cgi')
+  end
+
+  def get_overpass_instance_url
+    return @overpass_instance_url
+  end
 end

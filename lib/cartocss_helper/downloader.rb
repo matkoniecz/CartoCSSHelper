@@ -303,7 +303,9 @@ module CartoCSSHelper
     def self.format_query_into_url(query)
       query = query.gsub(/\n/, '')
       query = query.gsub(/\t/, '')
-      return 'http://overpass-api.de/api/interpreter?data=' + URI.escape(query)
+      base_overpass_url = CartoCSSHelper::Configuration.get_overpass_instance_url
+      return base_overpass_url + '/interpreter?data=' + URI.escape(query)
     end
   end
 end
+
