@@ -114,7 +114,9 @@ module CartoCSSHelper
   def self.download_remote_file(url, clear_cache=False)
     filename = get_place_of_storage_of_resource_under_url(url)
     if clear_cache
-      File.delete(filename)
+      if File.exists?(filename)
+        File.delete(filename)
+      end
     end
     if !File.exists?(filename)
       begin
