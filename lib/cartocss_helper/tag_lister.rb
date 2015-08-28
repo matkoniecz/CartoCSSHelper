@@ -48,26 +48,44 @@ module CartoCSSHelper
       }
     end
 
-    def get_render_state_of_tags
+    def get_render_state_of_tags(quick_and_more_prone_to_errors)
       states = []
       @last_composite = nil
       Heuristic.get_tags.each { |tag|
         key = tag[0]
         value = tag[1]
         #print_render_state_of_tag key, value
-        state = get_render_state_of_tag(key, value)
+        state = get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
         states.push(TagRenderingStatus.new(key, value, state, @last_composite))
       }
       return states
     end
 
-    def get_render_state_of_tag(key, value)
+    def get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
+      expected_composite = get_expected_composite(key, value)
+      if quick_and_more_prone_to_errors
+        if expected_composite != nil
+          if is_rendered_as_composite key, value, expected_composite
+            @last_composite = how_rendered_as_composite key, value, expected_composite
+            return :composite
+          else
+            return :ignored
+          end
+        else
+          if is_rendered key, value
+            @last_composite = nil
+            return :primary
+          else
+            return :ignored
+          end
+        end
+      end
       if is_rendered key, value
         @last_composite = nil
         return :primary
       else
-        if is_rendered_as_composite key, value, get_expected_composite(key, value)
-          @last_composite = how_rendered_as_composite key, value, get_expected_composite(key, value)
+        if is_rendered_as_composite key, value, expected_composite
+          @last_composite = how_rendered_as_composite key, value, expected_composite
           return :composite
         else
           @last_composite = nil
@@ -116,8 +134,8 @@ module CartoCSSHelper
     end
 
     def is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
-      with_tested_value = Scene.new({key => value}, zlevel, on_water, type)
-      with_generic_value = Scene.new({key => get_generic_tag_value}, zlevel, on_water, type)
+      with_tested_value = Scene.new({key => value}, zlevel, on_water, type, true)
+      with_generic_value = Scene.new({key => get_generic_tag_value}, zlevel, on_water, type, true)
       return !with_tested_value.is_output_different(with_generic_value)
     end
 
@@ -166,8 +184,8 @@ module CartoCSSHelper
     end
 
     def self.rendered_on_zlevel(tags, type, zlevel, on_water)
-      empty = Scene.new({}, zlevel, on_water, type)
-      tested = Scene.new(tags, zlevel, on_water, type)
+      empty = Scene.new({}, zlevel, on_water, type, true)
+      tested = Scene.new(tags, zlevel, on_water, type, true)
       return tested.is_output_different(empty)
     end
 
@@ -202,16 +220,16 @@ module CartoCSSHelper
         end
         tags_with_composite[key] = value
       }
-      with_composite = Scene.new(tags_with_composite, zlevel, on_water, type)
-      only_composite = Scene.new(composite, zlevel, on_water, type)
-      empty = Scene.new({}, zlevel, on_water, type)
+      with_composite = Scene.new(tags_with_composite, zlevel, on_water, type, true)
+      only_composite = Scene.new(composite, zlevel, on_water, type, true)
+      empty = Scene.new({}, zlevel, on_water, type, true)
       if with_composite.is_output_different(empty)
         if with_composite.is_output_different(only_composite)
           if composite['area'] != nil
             return true
           end
           composite['area'] = 'yes'
-          composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type)
+          composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type, true)
           if with_composite.is_output_different(composite_interpreted_as_area)
             return true
           end

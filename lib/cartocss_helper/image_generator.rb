@@ -10,7 +10,8 @@ include CartoCSSHelper::Heuristic
 module CartoCSSHelper
   class Scene
     attr_reader :tags, :zlevel, :on_water, :type
-    def initialize(tags, zlevel, on_water, type)
+    def initialize(tags, zlevel, on_water, type, show_what_is_generated=false)
+      @show_what_is_generated = show_what_is_generated
       raise 'tags not in hash' unless tags.respond_to?(:has_key?)
       @tags = tags
       @zlevel = zlevel
@@ -34,7 +35,7 @@ module CartoCSSHelper
       File.delete(self.get_filename)
     end
 
-    def get_image_filename(silent=true, debug=false)
+    def get_image_filename(debug=false)
       lat = 0
       lon = 20
       on_water_string = ''
@@ -47,7 +48,7 @@ module CartoCSSHelper
         return export_filename
       end
       description = "tags: #{@tags.to_s}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
-      if !silent
+      if @show_what_is_generated
         puts "generating: #{description}"
       end
       generate_map(lat, lon,  debug)
@@ -57,7 +58,7 @@ module CartoCSSHelper
           raise description
         else
           puts description
-          return get_image_filename(false, true)
+          return get_image_filename(true)
         end
       end
       return export_filename

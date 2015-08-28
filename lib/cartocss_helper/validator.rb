@@ -10,15 +10,16 @@ include CartoCSSHelper::Configuration
 module CartoCSSHelper
   module Validator
     def run_tests(git_branch)
-      run_expected_rendering_test(git_branch)
       run_dy_test(git_branch)
+      run_expected_rendering_test(git_branch, true)
       run_closed_way_test(git_branch)
+      run_expected_rendering_test(git_branch)
     end
 
-    def run_expected_rendering_test(git_branch)
+    def run_expected_rendering_test(git_branch, quick_and_more_prone_to_errors=false)
       Git.checkout git_branch
       puts 'unexpectedly rendered/unrendered keys:'
-      compare_expected_with_real_rendering
+      compare_expected_with_real_rendering(quick_and_more_prone_to_errors)
       puts
     end
 
@@ -36,10 +37,10 @@ module CartoCSSHelper
       puts
     end
 
-    def compare_expected_with_real_rendering
+    def compare_expected_with_real_rendering(quick_and_more_prone_to_errors=false)
       list_of_documented = CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags
       info = Info.new
-      list_of_rendered = info.get_render_state_of_tags
+      list_of_rendered = info.get_render_state_of_tags(quick_and_more_prone_to_errors)
 
       ensure_that_tags_documented_and_rendered_have_the_same_state(list_of_documented, list_of_rendered)
       ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
