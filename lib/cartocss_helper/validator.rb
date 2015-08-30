@@ -121,9 +121,9 @@ module CartoCSSHelper
 
     #TODO - what about composite tags?
     def check_problems_with_closed_line(key, value, zlevel, on_water = false)
-      way = Scene.new({key => value}, zlevel, on_water, 'way')
-      closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way')
-      empty = Scene.new({}, zlevel, on_water, 'node')
+      way = Scene.new({key => value}, zlevel, on_water, 'way', true)
+      closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way', true)
+      empty = Scene.new({}, zlevel, on_water, 'node', true)
       if way.is_output_different(empty)
         if !closed_way.is_output_different(empty)
           puts key+'='+value
@@ -149,7 +149,7 @@ module CartoCSSHelper
         else
           return
         end
-        with_name = Scene.new({key => value, 'name' => test_name}, zlevel, on_water, 'node')
+        with_name = Scene.new({key => value, 'name' => test_name}, zlevel, on_water, 'node', true)
         with_name.flush_cache
         puts 'calculating'
       end
@@ -158,15 +158,15 @@ module CartoCSSHelper
 
     def is_object_displaying_name(key, value, name, zlevel, on_water)
       name_tags = {key => value, 'name' => name}
-      with_name = Scene.new(name_tags, zlevel, on_water, 'node')
+      with_name = Scene.new(name_tags, zlevel, on_water, 'node', true)
       nameless_tags = {key => value}
-      nameless = Scene.new(nameless_tags, zlevel, on_water, 'node')
+      nameless = Scene.new(nameless_tags, zlevel, on_water, 'node', true)
       return with_name.is_output_different(nameless)
     end
 
     def is_object_displaying_anything(key, value, zlevel, on_water)
-      object = Scene.new({key => value}, zlevel, on_water, 'node')
-      empty = Scene.new({}, zlevel, on_water, 'node')
+      object = Scene.new({key => value}, zlevel, on_water, 'node', true)
+      empty = Scene.new({}, zlevel, on_water, 'node', true)
       return object.is_output_different(empty)
     end
   end
