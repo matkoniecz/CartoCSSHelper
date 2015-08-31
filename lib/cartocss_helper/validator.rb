@@ -42,8 +42,13 @@ module CartoCSSHelper
       info = Info.new
       list_of_rendered = info.get_render_state_of_tags(quick_and_more_prone_to_errors)
 
+      puts 'ensure_that_tags_documented_and_rendered_have_the_same_state'
       ensure_that_tags_documented_and_rendered_have_the_same_state(list_of_documented, list_of_rendered)
+
+      puts 'ensure_that_all_rendered_tags_are_documented'
       ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
+
+      puts 'ensure_that_all_documented_are_really_rendered'
       ensure_that_all_documented_are_really_rendered(list_of_documented, list_of_rendered)
     end
 
