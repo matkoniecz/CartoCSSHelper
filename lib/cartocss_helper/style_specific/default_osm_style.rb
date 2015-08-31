@@ -495,7 +495,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('shop', 'watches', :primary),
             TagRenderingStatus.new('shop', 'wholesale', :primary),
             TagRenderingStatus.new('shop', 'wine', :primary),
-            TagRenderingStatus.new('shop', 'winery', :primary),
             TagRenderingStatus.new('shop', 'yes', :primary),
             TagRenderingStatus.new('surface', 'unpaved', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'compacted', :composite, {'highway' => 'footway'}),
