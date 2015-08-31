@@ -62,17 +62,18 @@ module CartoCSSHelper
     end
 
     def get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
+      zlevels = [22, 13] #TODO - this is pecially tuned for Default
       expected_composite = get_expected_composite(key, value)
       if quick_and_more_prone_to_errors
         if expected_composite != nil
-          if is_rendered_as_composite key, value, expected_composite
-            @last_composite = how_rendered_as_composite key, value, expected_composite
+          if is_rendered_as_composite key, value, expected_composite, zlevels
+            @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
             return :composite
           else
             return :ignored
           end
         else
-          if is_rendered key, value
+          if is_rendered key, value, zlevels
             @last_composite = nil
             return :primary
           else
@@ -80,7 +81,7 @@ module CartoCSSHelper
           end
         end
       end
-      if is_rendered key, value
+      if is_rendered key, value, zlevels
         @last_composite = nil
         return :primary
       else
@@ -139,9 +140,9 @@ module CartoCSSHelper
       return !with_tested_value.is_output_different(with_generic_value)
     end
 
-    def is_rendered(key, value)
+    def is_rendered(key, value, zlevels = [Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       [false, true].each { |on_water|
-        [Configuration.get_max_z].each { |zlevel| #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
+        zlevels.each { |zlevel| #
           ['area', 'closed_way', 'way', 'node'].each{ |type|
             if CartoCSSHelper::Info.rendered_on_zlevel({key => value}, type, zlevel, on_water)
               return true
@@ -152,17 +153,17 @@ module CartoCSSHelper
       return false
     end
 
-    def is_rendered_as_composite(key, value, suggested_composite=nil)
-      reason = how_rendered_as_composite key, value, suggested_composite
+    def is_rendered_as_composite(key, value, suggested_composite=nil, zlevels=[Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
+      reason = how_rendered_as_composite key, value, suggested_composite, zlevels
       if reason == nil
         return false
       end
       return true
     end
 
-    def how_rendered_as_composite(key, value, suggested_composite)
+    def how_rendered_as_composite(key, value, suggested_composite, zlevels=[Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       [false, true].each { |on_water|
-        [Configuration.get_max_z].each { |zlevel|
+        zlevels.each { |zlevel|
           result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)
           if result != nil
             return result
