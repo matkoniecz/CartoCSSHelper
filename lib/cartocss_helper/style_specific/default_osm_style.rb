@@ -138,7 +138,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('covered', 'yes', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('denomination', 'jehovahs_witness', :composite, {'amenity'=>'place_of_worship', 'religion'=>'christian'}),
             TagRenderingStatus.new('ele', '*', :composite, {'natural'=>'peak'}),
-            TagRenderingStatus.new('foot', 'designated', :composite, {'highway'=>'path'}),
             TagRenderingStatus.new('generator:source', 'wind', :composite, {'power'=>'generator'}),
             TagRenderingStatus.new('highway', 'bridleway', :primary),
             TagRenderingStatus.new('highway', 'bus_guideway', :primary),
