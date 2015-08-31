@@ -144,6 +144,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('highway', 'bus_stop', :primary),
             TagRenderingStatus.new('highway', 'construction', :primary),
             TagRenderingStatus.new('highway', 'cycleway', :primary),
+            TagRenderingStatus.new('highway', 'elevator', :primary),
             TagRenderingStatus.new('highway', 'footway', :primary),
             TagRenderingStatus.new('highway', 'ford', :primary),
             TagRenderingStatus.new('highway', 'living_street', :primary),
