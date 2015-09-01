@@ -315,7 +315,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('railway', 'tram', :primary),
             TagRenderingStatus.new('railway', 'tram_stop', :primary),
             TagRenderingStatus.new('railway', 'turntable', :primary),
-            TagRenderingStatus.new('ref', '*', :composite, {'aeroway'=>'gate'}),
+            TagRenderingStatus.new('ref', '*', :composite, {'highway'=>'motorway'}),
             TagRenderingStatus.new('religion', 'buddhist', :composite, {'amenity'=>'place_of_worship'}),
             TagRenderingStatus.new('religion', 'christian', :composite, {'amenity'=>'place_of_worship'}),
             TagRenderingStatus.new('religion', 'hindu', :composite, {'amenity'=>'place_of_worship'}),
@@ -580,7 +580,7 @@ module CartoCSSHelper
           {'admin_level' => '2'}, #boundary=administrative
           {'natural' => 'peak'}, #ele=*
           {'ref' => '3'}, #aeroway=gate
-          {'aeroway' => 'gate'}, #ref=*
+          {'highway' => 'motorway'}, #ref=*
           {'amenity' => 'place_of_worship'}, #religion=christian
           {'amenity' => 'place_of_worship', 'religion' => 'christian'}, #denomination=jehovahs_witness
           {'waterway' => 'river'}, #bridge=aqueduct, tunnel=culvert, intermittent=yes
