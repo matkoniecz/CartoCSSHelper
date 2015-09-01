@@ -5,7 +5,7 @@ module CartoCSSHelper
     def self.get_style_data
       min_z = 4
       max_z = 22
-      return CartoCSSHelper::StyleSpecificData.new(min_z, max_z, get_expected_tag_status, get_composite_sets)
+      return CartoCSSHelper::StyleSpecificData.new(min_z, max_z, get_expected_tag_status, get_composite_sets, name_label_is_not_required)
     end
 
     def self.get_expected_tag_status
@@ -591,6 +591,17 @@ module CartoCSSHelper
           {'amenity' => 'parking'}, #access=*...
           #{'barrier' => 'hedge'}, #area=yes
           {'natural' => 'wetland'}, #wetland=bog...
+      ]
+    end
+
+    def self.name_label_is_not_required
+      return [
+          {'addr:housename' => CartoCSSHelper::Heuristic.get_generic_tag_value },
+          {'addr:housenumber' => CartoCSSHelper::Heuristic.get_generic_tag_value },
+          {'amenity' => 'atm' }, #operator tag is rendered
+          {'amenity' => 'bench' }, #many are memorials but in that case historic=memorial tag should be present
+          {'amenity' => 'bicycle_parking' },
+          {'amenity' => 'toilets' },
       ]
     end
   end

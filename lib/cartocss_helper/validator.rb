@@ -12,6 +12,7 @@ module CartoCSSHelper
     def run_tests(git_branch)
       run_dy_test(git_branch)
       run_expected_rendering_test(git_branch, true)
+      run_name_test(git_branch)
       run_closed_way_test(git_branch)
       run_expected_rendering_test(git_branch)
     end
@@ -20,6 +21,13 @@ module CartoCSSHelper
       Git.checkout git_branch
       puts 'unexpectedly rendered/unrendered keys:'
       compare_expected_with_real_rendering(quick_and_more_prone_to_errors)
+      puts
+    end
+
+    def run_name_test(git_branch)
+      Git.checkout git_branch
+      puts 'Check whatever names are displayed:'
+      run_global_check(:check_names)
       puts
     end
 
@@ -136,17 +144,34 @@ module CartoCSSHelper
       end
     end
 
+    def check_names(key, value, zlevel, interactive=false, on_water=false)
+      ['node', 'closed_way', 'way'].each{|type|
+        if !is_object_displaying_anything_as_this_object_type key, value, zlevel, on_water, type
+          #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+          return
+        end
+        if !is_object_displaying_name_as_this_object_type key, value, 'a', zlevel, on_water, type
+          not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
+          if not_required.include?({key=>value})
+            return
+          end
+          puts "#{key}=#{value} - label is missing on z#{zlevel} nodes"
+          return
+        end
+      }
+    end
+
     def check_dy(key, value, zlevel, interactive=false, on_water=false)
-      if !is_object_displaying_anything key, value, zlevel, on_water
+      if !is_object_displaying_anything_as_node key, value, zlevel, on_water
         #puts key+"="+value+" - not displayed as node on z#{zlevel}"
         return
       end
-      if !is_object_displaying_name key, value, 'a', zlevel, on_water
+      if !is_object_displaying_name_as_node key, value, 'a', zlevel, on_water
         #puts key+"="+value+" - label is missing on z#{zlevel} nodes"
         return
       end
       test_name = 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ'
-      while !is_object_displaying_name key, value, test_name, zlevel, on_water
+      while !is_object_displaying_name_as_node key, value, test_name, zlevel, on_water
         puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
         if interactive
           puts 'press enter'
@@ -161,18 +186,26 @@ module CartoCSSHelper
       #puts key+"="+value+" - name is OK for name '#{name}'"
     end
 
-    def is_object_displaying_name(key, value, name, zlevel, on_water)
+    def is_object_displaying_name_as_this_object_type(key, value, name, zlevel, on_water, type)
       name_tags = {key => value, 'name' => name}
-      with_name = Scene.new(name_tags, zlevel, on_water, 'node', true)
+      with_name = Scene.new(name_tags, zlevel, on_water, type, true)
       nameless_tags = {key => value}
-      nameless = Scene.new(nameless_tags, zlevel, on_water, 'node', true)
+      nameless = Scene.new(nameless_tags, zlevel, on_water, type, true)
       return with_name.is_output_different(nameless)
     end
 
-    def is_object_displaying_anything(key, value, zlevel, on_water)
-      object = Scene.new({key => value}, zlevel, on_water, 'node', true)
-      empty = Scene.new({}, zlevel, on_water, 'node', true)
+    def is_object_displaying_name_as_node(key, value, name, zlevel, on_water)
+      is_object_displaying_name_as_this_object_type(key, value, name, zlevel, on_water, 'node')
+    end
+
+    def is_object_displaying_anything_as_this_object_type(key, value, zlevel, on_water, type)
+      object = Scene.new({key => value}, zlevel, on_water, type, true)
+      empty = Scene.new({}, zlevel, on_water, type, true)
       return object.is_output_different(empty)
+    end
+
+    def is_object_displaying_anything_as_node(key, value, zlevel, on_water)
+      return is_object_displaying_anything_as_this_object_type(key, value, zlevel, on_water, 'node')
     end
   end
 end
