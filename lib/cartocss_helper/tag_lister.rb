@@ -30,6 +30,17 @@ module CartoCSSHelper
   end
 
   class Info
+    def get_expected_state(key, value)
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
+        if documented.key == key
+          if documented.value == value
+            return documented.state
+          end
+        end
+      }
+      return nil
+    end
+
     def get_expected_composite(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
         if documented.key == key
@@ -62,6 +73,9 @@ module CartoCSSHelper
     end
 
     def get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
+      if get_expected_state(key, value) == :ignored
+        return :ignored
+      end
       zlevels = [22, 13] #TODO - this is pecially tuned for Default
       expected_composite = get_expected_composite(key, value)
       if quick_and_more_prone_to_errors

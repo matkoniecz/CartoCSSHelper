@@ -68,16 +68,14 @@ module CartoCSSHelper
 
     def ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
       list_of_rendered.each { |tag_info|
-        if tag_info.state != :ignored
-          if !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
-            puts 'documented'
-            puts "\tmissing"
-            puts 'real'
-            print "\t"
-            tag_info.print
-            puts
-          end
-        end
+        if !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
+          puts 'documented'
+          puts "\tmissing"
+          puts 'real'
+          print "\t"
+          tag_info.print
+          puts
+      end
       }
     end
 
