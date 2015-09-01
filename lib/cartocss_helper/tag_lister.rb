@@ -30,7 +30,7 @@ module CartoCSSHelper
   end
 
   class Info
-    def get_expected_state(key, value)
+    def self.get_expected_state(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
         if documented.key == key
           if documented.value == value
@@ -41,7 +41,7 @@ module CartoCSSHelper
       return nil
     end
 
-    def get_expected_composite(key, value)
+    def self.get_expected_composite(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
         if documented.key == key
           if documented.value == value
@@ -73,17 +73,19 @@ module CartoCSSHelper
     end
 
     def get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
-      if get_expected_state(key, value) == :ignored
+      if Info.get_expected_state(key, value) == :ignored
+        @last_composite = nil
         return :ignored
       end
       zlevels = [22, 13] #TODO - this is pecially tuned for Default
-      expected_composite = get_expected_composite(key, value)
+      expected_composite = Info.get_expected_composite(key, value)
       if quick_and_more_prone_to_errors
         if expected_composite != nil
           if is_rendered_as_composite key, value, expected_composite, zlevels
             @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
             return :composite
           else
+            @last_composite = nil
             return :ignored
           end
         else
@@ -91,6 +93,7 @@ module CartoCSSHelper
             @last_composite = nil
             return :primary
           else
+            @last_composite = nil
             return :ignored
           end
         end

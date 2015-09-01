@@ -124,53 +124,62 @@ module CartoCSSHelper
 
     def run_global_check(function)
       Heuristic.get_tags.each { |element|
+        key = element[0]
+        value = element[1]
+        state = Info.get_expected_state(key, value)
+        tags = {key => value}
+        if state == :ignore
+          next
+        end
+        if state == :composite
+          tags.merge!(Info.get_expected_composite(key, value))
+        end
         (Configuration.get_max_z..Configuration.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
-          send(function, element[0], element[1], zlevel)
+          send(function, tags, zlevel)
         }
       }
     end
 
-    #TODO - what about composite tags?
-    def check_problems_with_closed_line(key, value, zlevel, on_water = false)
-      way = Scene.new({key => value}, zlevel, on_water, 'way', true)
-      closed_way = Scene.new({key => value}, zlevel, on_water, 'closed_way', true)
+    def check_problems_with_closed_line(tags, zlevel, on_water = false)
+      way = Scene.new(tags, zlevel, on_water, 'way', true)
+      closed_way = Scene.new(tags, zlevel, on_water, 'closed_way', true)
       empty = Scene.new({}, zlevel, on_water, 'node', true)
       if way.is_output_different(empty)
         if !closed_way.is_output_different(empty)
-          puts key+'='+value
+          puts tags
         end
       end
     end
 
-    def check_names(key, value, zlevel, interactive=false, on_water=false)
+    def check_names(tags, zlevel, interactive=false, on_water=false)
       ['node', 'closed_way', 'way'].each{|type|
-        if !is_object_displaying_anything_as_this_object_type key, value, zlevel, on_water, type
+        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
           #puts key+"="+value+" - not displayed as node on z#{zlevel}"
           return
         end
-        if !is_object_displaying_name_as_this_object_type key, value, 'a', zlevel, on_water, type
+        if !is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
           not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-          if not_required.include?({key=>value})
+          if not_required.include?(tags)
             return
           end
-          puts "#{key}=#{value} - label is missing on z#{zlevel} nodes"
+          puts "#{tags} - label is missing on z#{zlevel} nodes"
           return
         end
       }
     end
 
-    def check_dy(key, value, zlevel, interactive=false, on_water=false)
-      if !is_object_displaying_anything_as_node key, value, zlevel, on_water
+    def check_dy(tags, zlevel, interactive=false, on_water=false)
+      if !is_object_displaying_anything_as_node tags, zlevel, on_water
         #puts key+"="+value+" - not displayed as node on z#{zlevel}"
         return
       end
-      if !is_object_displaying_name_as_node key, value, 'a', zlevel, on_water
+      if !is_object_displaying_name_as_node tags, 'a', zlevel, on_water
         #puts key+"="+value+" - label is missing on z#{zlevel} nodes"
         return
       end
       test_name = 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ'
-      while !is_object_displaying_name_as_node key, value, test_name, zlevel, on_water
-        puts key+'='+value+" - name is missing for name '#{test_name}' on z#{zlevel}"
+      while !is_object_displaying_name_as_node tags, test_name, zlevel, on_water
+        puts "#{tags} - name is missing for name '#{test_name}' on z#{zlevel}"
         if interactive
           puts 'press enter'
           gets
@@ -184,26 +193,26 @@ module CartoCSSHelper
       #puts key+"="+value+" - name is OK for name '#{name}'"
     end
 
-    def is_object_displaying_name_as_this_object_type(key, value, name, zlevel, on_water, type)
-      name_tags = {key => value, 'name' => name}
+    def is_object_displaying_name_as_this_object_type(tags, name, zlevel, on_water, type)
+      name_tags = tags.merge({'name' => name})
       with_name = Scene.new(name_tags, zlevel, on_water, type, true)
-      nameless_tags = {key => value}
+      nameless_tags = tags
       nameless = Scene.new(nameless_tags, zlevel, on_water, type, true)
       return with_name.is_output_different(nameless)
     end
 
-    def is_object_displaying_name_as_node(key, value, name, zlevel, on_water)
-      is_object_displaying_name_as_this_object_type(key, value, name, zlevel, on_water, 'node')
+    def is_object_displaying_name_as_node(tags, name, zlevel, on_water)
+      is_object_displaying_name_as_this_object_type(tags, name, zlevel, on_water, 'node')
     end
 
-    def is_object_displaying_anything_as_this_object_type(key, value, zlevel, on_water, type)
-      object = Scene.new({key => value}, zlevel, on_water, type, true)
+    def is_object_displaying_anything_as_this_object_type(tags, zlevel, on_water, type)
+      object = Scene.new(tags, zlevel, on_water, type, true)
       empty = Scene.new({}, zlevel, on_water, type, true)
       return object.is_output_different(empty)
     end
 
-    def is_object_displaying_anything_as_node(key, value, zlevel, on_water)
-      return is_object_displaying_anything_as_this_object_type(key, value, zlevel, on_water, 'node')
+    def is_object_displaying_anything_as_node(tags, zlevel, on_water)
+      return is_object_displaying_anything_as_this_object_type(tags, zlevel, on_water, 'node')
     end
   end
 end
