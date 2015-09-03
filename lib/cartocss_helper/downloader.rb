@@ -86,13 +86,13 @@ module CartoCSSHelper
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
-        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range), "find #{tags} within #{range/1000}km from #{latitude}, #{longitude}")
+        list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range), "find #{tags} #{type} within #{range/1000}km from #{latitude}, #{longitude}")
         if list.length != 0
           return Downloader.list_returned_by_overpass_to_a_single_location(list)
         end
         range=range+[2*range, 200000].min
         if range >= max_range_in_km_for_radius*1000
-          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} across the world")
+          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
           if list.length != 0
             return Downloader.list_returned_by_overpass_to_a_single_location(list)
           else
