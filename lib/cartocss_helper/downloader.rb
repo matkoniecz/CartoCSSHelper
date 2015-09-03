@@ -83,8 +83,6 @@ module CartoCSSHelper
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
-
-
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
