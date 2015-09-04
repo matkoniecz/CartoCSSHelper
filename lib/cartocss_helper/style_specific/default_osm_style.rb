@@ -117,8 +117,8 @@ module CartoCSSHelper
             TagRenderingStatus.new('bridge', 'yes', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('building', '*', :primary),
             TagRenderingStatus.new('building', 'no', :not_displayed),
-            TagRenderingStatus.new('capital', 'yes', :composite, {'place'=>'city'}),
-            TagRenderingStatus.new('capital', '4', :composite, {'place'=>'city'}),
+            TagRenderingStatus.new('capital', 'yes', :composite, {'place'=>'city', 'name' => 'a'}),
+            TagRenderingStatus.new('capital', '4', :composite, {'place'=>'city', 'name' => 'a'}),
             TagRenderingStatus.new('construction', 'bridleway', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'cycleway', :composite, {'highway'=>'construction'}),
             TagRenderingStatus.new('construction', 'footway', :composite, {'highway'=>'construction'}),
@@ -277,6 +277,8 @@ module CartoCSSHelper
             TagRenderingStatus.new('natural', 'wood', :primary),
             TagRenderingStatus.new('oneway', '-1', :composite, {'highway'=>'service'}),
             TagRenderingStatus.new('oneway', 'yes', :composite, {'highway'=>'service'}),
+            TagRenderingStatus.new('oneway', 'no', :composite, {'highway'=>'service', 'junction' => 'roundabout'}),
+            TagRenderingStatus.new('oneway', 'reversible', :composite, {'highway'=>'service', 'junction' => 'roundabout'}),
             TagRenderingStatus.new('place', 'city', :composite, {'name'=>'a'}),
             TagRenderingStatus.new('place', 'farm', :composite, {'name'=>'a'}),
             TagRenderingStatus.new('place', 'hamlet', :composite, {'name'=>'a'}),
@@ -504,6 +506,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('surface', 'dirt', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'earth', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'fine_gravel', :composite, {'highway' => 'footway'}),
+            TagRenderingStatus.new('surface', 'gravel', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'grass', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'grass_paver', :composite, {'highway' => 'footway'}),
             TagRenderingStatus.new('surface', 'ground', :composite, {'highway' => 'footway'}),
@@ -567,13 +570,80 @@ module CartoCSSHelper
             TagRenderingStatus.new('wetland', 'swamp', :composite, {'natural' => 'wetland'}),
             TagRenderingStatus.new('wetland', 'tidalflat', :composite, {'natural' => 'wetland'}),
             TagRenderingStatus.new('wetland', 'wet_meadow', :composite, {'natural' => 'wetland'}),
+
+            TagRenderingStatus.new('admin_level', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('aerialway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('aeroway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('amenity', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('bicycle', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('boundary', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('brand', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('bridge', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('capital', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('construction', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('covered', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('culvert', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('cutting', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('denomination', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('disused', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('embankment', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('foot', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('generator:source', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('harbour', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('highway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('historic', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('horse', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('intermittent', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('junction', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('landuse', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('layer', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('leisure', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('lock', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('man_made', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('military', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('motorcar', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('natural', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('office', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('oneway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('operator', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('place', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('poi', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('power', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('power_source', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('public_transport', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('railway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('religion', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('route', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('service', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('shop', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('sport', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('surface', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('toll', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('tourism', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('tunnel', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('tower:type', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('tracktype', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('water', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('waterway', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('wetland', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('width', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+            TagRenderingStatus.new('wood', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
+
+            #heuristic detecting tags that do not exist - result of transformations in SQL unless noted otherwise
+            TagRenderingStatus.new('shop', 'other', :ignored),
+            TagRenderingStatus.new('highway', 'runway', :ignored),
+            TagRenderingStatus.new('highway', 'taxiway', :ignored),
+            TagRenderingStatus.new('access', 'yes', :ignored), #as access is assumed to be yes constructions "access=null or access=yes" are typical
+            TagRenderingStatus.new('tunnel', 'no', :ignored), #tunnel=no is assumed as default and has no chance to override anything
         ]
     end
 
     def self.get_composite_sets
       return [
           {'name' => 'a'}, #place=city...
+          {'name' => 'a', 'place' => 'city'}, #capital=yes, 4
           {'highway' => 'service'}, #access, ref, bridge, tunnel, service=parking_aisle...
+          {'highway' => 'service', 'junction' => 'roundabout'}, #oneway=no, reversible
           {'highway' => 'footway'}, #surface=*
           {'railway' => 'rail'}, #service=siding
           {'boundary' => 'administrative'}, #admin_level
@@ -598,10 +668,47 @@ module CartoCSSHelper
       return [
           {'addr:housename' => CartoCSSHelper::Heuristic.get_generic_tag_value },
           {'addr:housenumber' => CartoCSSHelper::Heuristic.get_generic_tag_value },
+          {'addr:interpolation' => CartoCSSHelper::Heuristic.get_generic_tag_value },
+          {'aeroway' => 'runway' },
+          {'aeroway' => 'taxiway' },
           {'amenity' => 'atm' }, #operator tag is rendered
           {'amenity' => 'bench' }, #many are memorials but in that case historic=memorial tag should be present
           {'amenity' => 'bicycle_parking' },
+          {'amenity' => 'emergency_phone' },
           {'amenity' => 'toilets' },
+          {'amenity' => 'car_sharing' },
+          {'amenity' => 'post_box' },
+          {'access' => '*', 'amenity' => 'parking', :type => 'node'},
+          {'amenity' => 'parking', :type => 'node'},
+          {'amenity' => 'motorcycle_parking', :type => 'node'},
+          {'amenity' => 'bicycle_parking', :type => 'node'},
+          {'amenity' => 'telephone' },
+          {'amenity' => 'waste_basket' },
+          {'barrier' => 'block' },
+          {'barrier' => 'bollard' },
+          {'barrier' => 'hedge' },
+          {'barrier' => 'embankment' },
+          {'generator:source' => 'wind', 'power' => 'generator'},
+          {'power_source' => 'wind', 'power' => 'generator'},
+          {'highway' => 'bus_guideway' },
+          {'highway' => 'ford'},
+          {'highway' => 'mini_roundabout'},
+          {'highway' => 'platform'},
+          {'power' => 'tower'},
+          {'power' => 'pole'},
+          {'power' => 'line'},
+          {'power' => 'minor_line'},
+          {'railway' => 'level_crossing'},
+          {'railway' => 'subway_entrance'}, #correct tagging is rare, usually it is name of station
+
+          #intentional, see https://github.com/gravitystorm/openstreetmap-carto/pull/1183
+          {'tunnel' => 'culvert', 'waterway' => 'river'},
+          {'tunnel' => 'culvert', 'waterway' => 'stream'},
+          {'tunnel' => 'culvert', 'waterway' => 'ditch'},
+          {'tunnel' => 'culvert', 'waterway' => 'drain'},
+
+          {'waterway' => 'wadi'}, #tag itself will be soon gone, no point in bugfixing it now
+          {'waterway' => 'riverbank'},
       ]
     end
   end

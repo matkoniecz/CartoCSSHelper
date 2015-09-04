@@ -11,10 +11,11 @@ module CartoCSSHelper
   module Validator
     def run_tests(git_branch)
       run_dy_test(git_branch)
+      run_missing_name_test(git_branch)
       run_expected_rendering_test(git_branch, true)
-      run_name_test(git_branch)
       run_closed_way_test(git_branch)
       run_expected_rendering_test(git_branch)
+      run_unwanted_name_test(git_branch)
     end
 
     def run_expected_rendering_test(git_branch, quick_and_more_prone_to_errors=false)
@@ -24,10 +25,17 @@ module CartoCSSHelper
       puts
     end
 
-    def run_name_test(git_branch)
+    def run_missing_name_test(git_branch)
       Git.checkout git_branch
       puts 'Check whatever names are displayed:'
-      run_global_check(:check_names)
+      run_global_check(:check_missing_names)
+      puts
+    end
+
+    def run_unwanted_name_test(git_branch)
+      Git.checkout git_branch
+      puts 'Check whatever names are displayed:'
+      run_global_check(:check_unwanted_names)
       puts
     end
 
@@ -81,6 +89,9 @@ module CartoCSSHelper
 
     def ensure_that_all_documented_are_really_rendered(list_of_documented, list_of_rendered)
       list_of_documented.each { |documented|
+        if Info.get_expected_state(documented.key, documented.value) == :ignored
+          next
+        end
         if !is_tag_documented(list_of_rendered, documented.key, documented.value)
           puts 'documented'
           print "\t"
@@ -151,19 +162,43 @@ module CartoCSSHelper
       end
     end
 
-    def check_names(tags, zlevel, interactive=false, on_water=false)
+    def check_missing_names(tags, zlevel, interactive=false, on_water=false)
       ['node', 'closed_way', 'way'].each{|type|
-        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
-          #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+        not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
+        if not_required.include?(tags)
           return
         end
+        if not_required.include?(tags.merge({:type => type}))
+          next
+        end
+        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
+          #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+          next
+        end
+        if tags['name'] != nil
+          tags.delete('name')
+        end
         if !is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
-          not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-          if not_required.include?(tags)
-            return
+          puts "#{tags} - label is missing on z#{zlevel} #{type}"
+          next
+        end
+      }
+    end
+
+    def check_unwanted_names(tags, zlevel, interactive=false, on_water=false)
+      ['node', 'closed_way', 'way'].each{|type|
+        not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
+        if not_required.include?(tags) or not_required.include?(tags.merge({:type => type}))
+          if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
+            #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+            next
           end
-          puts "#{tags} - label is missing on z#{zlevel} nodes"
-          return
+          if tags['name'] != nil
+            tags.delete('name')
+          end
+          if is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
+            puts "#{tags} - label is unxpectedly displayed on z#{zlevel} #{type}"
+          end
         end
       }
     end

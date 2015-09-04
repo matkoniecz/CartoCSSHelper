@@ -77,7 +77,7 @@ module CartoCSSHelper
         @last_composite = nil
         return :ignored
       end
-      zlevels = [22, 13] #TODO - this is pecially tuned for Default
+      zlevels = [22, 13] #TODO - this is specially tuned for Default
       expected_composite = Info.get_expected_composite(key, value)
       if quick_and_more_prone_to_errors
         if expected_composite != nil
