@@ -292,6 +292,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('power', 'generator', :primary),
             TagRenderingStatus.new('power', 'line', :primary),
             TagRenderingStatus.new('power', 'minor_line', :primary),
+            TagRenderingStatus.new('power', 'plant', :primary),
             TagRenderingStatus.new('power', 'pole', :primary),
             TagRenderingStatus.new('power', 'station', :primary),
             TagRenderingStatus.new('power', 'sub_station', :primary),
