@@ -52,6 +52,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'cafe', :primary),
             TagRenderingStatus.new('amenity', 'car_rental', :primary),
             TagRenderingStatus.new('amenity', 'car_sharing', :primary),
+            TagRenderingStatus.new('amenity', 'car_wash', :primary),
             TagRenderingStatus.new('amenity', 'cinema', :primary),
             TagRenderingStatus.new('amenity', 'clinic', :primary),
             TagRenderingStatus.new('amenity', 'college', :primary),
@@ -341,7 +342,6 @@ module CartoCSSHelper
             TagRenderingStatus.new('shop', 'art', :primary),
             TagRenderingStatus.new('shop', 'baby_goods', :primary),
             TagRenderingStatus.new('shop', 'bag', :primary),
-            TagRenderingStatus.new('shop', 'bags', :primary),
             TagRenderingStatus.new('shop', 'bakery', :primary),
             TagRenderingStatus.new('shop', 'bathroom_furnishing', :primary),
             TagRenderingStatus.new('shop', 'beauty', :primary),
@@ -637,6 +637,8 @@ module CartoCSSHelper
             TagRenderingStatus.new('highway', 'taxiway', :ignored),
             TagRenderingStatus.new('access', 'yes', :ignored), #as access is assumed to be yes constructions "access=null or access=yes" are typical
             TagRenderingStatus.new('tunnel', 'no', :ignored), #tunnel=no is assumed as default and has no chance to override anything
+
+            #TODO - population is used only with numeric values. Currently there is no way to express this
         ]
     end
 
