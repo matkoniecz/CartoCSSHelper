@@ -82,8 +82,8 @@ module CartoCSSHelper
       return query
     end
 
-    def self.get_elements_near_given_location(tags, type, latitude, longitude, range)
-        return Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range), "find #{tags} #{type} within #{range/1000}km from #{latitude}, #{longitude}")
+    def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
+        return Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters/1000}km from #{latitude}, #{longitude}")
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
