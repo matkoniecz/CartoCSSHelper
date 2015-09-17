@@ -59,8 +59,6 @@ module CartoCSSHelper::Configuration
 
   def set_path_to_folder_for_output(path)
     @path_to_folder_for_output = path
-    puts @path_to_folder_for_output
-    puts @path_to_folder_for_cache
   end
 
   def get_path_to_folder_for_output
@@ -73,8 +71,6 @@ module CartoCSSHelper::Configuration
 
   def set_path_to_folder_for_cache(path)
     @path_to_folder_for_cache = path
-    puts @path_to_folder_for_output
-    puts @path_to_folder_for_cache
   end
 
   def get_path_to_folder_for_cache
