@@ -100,7 +100,7 @@ module CartoCSSHelper
           if list.length != 0
             return Downloader.list_returned_by_overpass_to_a_single_location(list)
           else
-            raise 'failed to find such location'
+            puts 'failed to find such location'
           end
         end
       end
