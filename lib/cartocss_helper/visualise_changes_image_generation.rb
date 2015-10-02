@@ -150,7 +150,7 @@ module CartoCSSHelper
       begin
         latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
         target_location = "[#{latitude}, #{longitude}]"
-      rescue Downloader::OverpassRefusedResponse
+      rescue Downloader::NoLocationFound, Downloader::OverpassRefusedResponse
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end

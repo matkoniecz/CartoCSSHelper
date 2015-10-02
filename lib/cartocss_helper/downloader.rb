@@ -6,6 +6,8 @@ require 'sys/filesystem'
 
 module CartoCSSHelper
   class Downloader
+    class NoLocationFound < StandardError
+    end
     #TODO - split into cache handling and Overpass handling
     def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters=20)
       filter_a = Downloader.turn_list_of_tags_in_overpass_filter(tags_a)
@@ -101,6 +103,7 @@ module CartoCSSHelper
             return Downloader.list_returned_by_overpass_to_a_single_location(list)
           else
             puts 'failed to find such location'
+            raise NoLocationFound
           end
         end
       end
