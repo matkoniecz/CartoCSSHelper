@@ -65,6 +65,7 @@ module CartoCSSHelper
             TagRenderingStatus.new('amenity', 'emergency_phone', :primary),
             TagRenderingStatus.new('amenity', 'food_court', :primary),
             TagRenderingStatus.new('amenity', 'fast_food', :primary),
+            TagRenderingStatus.new('amenity', 'fountain', :primary),
             TagRenderingStatus.new('amenity', 'fire_station', :primary),
             TagRenderingStatus.new('amenity', 'fuel', :primary),
             TagRenderingStatus.new('amenity', 'grave_yard', :primary),
