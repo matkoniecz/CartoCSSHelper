@@ -657,7 +657,8 @@ module CartoCSSHelper
           {'name' => 'a', 'place' => 'city'}, #capital=yes, 4
           {'highway' => 'service'}, #access, ref, bridge, tunnel, service=parking_aisle...
           {'highway' => 'service', 'junction' => 'roundabout'}, #oneway=no, reversible
-          {'highway' => 'footway'}, #surface=*
+          {'highway' => 'footway'}, #surface=unpaved...
+          {'natural' => 'beach'}, #surface=stones...
           {'railway' => 'rail'}, #service=siding
           {'boundary' => 'administrative'}, #admin_level
           {'admin_level' => '2'}, #boundary=administrative
