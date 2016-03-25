@@ -257,7 +257,12 @@ module CartoCSSHelper
 
     def self.not_enough_free_space
       minimum_gb = 2
-      return get_available_space_for_cache_in_gb < minimum_gb
+      if get_available_space_for_cache_in_gb < minimum_gb
+        puts "get_available_space_for_cache_in_gb: #{get_available_space_for_cache_in_gb}, minimum_gb: #{minimum_gb}"
+        return true
+      else
+        return false
+      end
     end
 
     def self.get_available_space_for_cache_in_gb
