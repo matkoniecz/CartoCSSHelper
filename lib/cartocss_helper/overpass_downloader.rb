@@ -31,7 +31,7 @@ module CartoCSSHelper
         puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{e}"
         if retry_count < retry_max
           sleep 60*5
-          OverpassDownloader.run_overpass_query(query, description, retry_count+1, retry_max)
+          return OverpassDownloader.run_overpass_query(query, description, retry_count+1, retry_max)
         else
           e.raise
         end
