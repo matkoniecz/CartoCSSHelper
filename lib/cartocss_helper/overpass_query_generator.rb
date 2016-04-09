@@ -2,18 +2,18 @@
 require 'rest-client'
 require 'digest/sha1'
 require 'sys/filesystem'
-
+require_relative 'overpass_downloader.rb'
 
 module CartoCSSHelper
-  class Downloader
+  class OverpassQueryGenerator
     class NoLocationFound < StandardError
     end
     #TODO - split into cache handling and Overpass handling
     def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters=20)
-      filter_a = Downloader.turn_list_of_tags_in_overpass_filter(tags_a)
-      filter_b = Downloader.turn_list_of_tags_in_overpass_filter(tags_b)
+      filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
+      filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
 
-      query = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
+      query = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
       way(#{bb})#{filter_a};
       node(around:#{distance_in_meters})->.anodes;
       way(#{bb})#{filter_b};
@@ -33,13 +33,13 @@ module CartoCSSHelper
       max_longitude = longitude + size.to_f/2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
 
-      query = Downloader.get_query_to_find_data_pair(bb, tags_a, tags_b)
+      query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b)
 
-      list = Downloader.get_overpass_query_results(query, "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{size}")
+      list = OverpassQueryGenerator.get_overpass_query_results(query, "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{size}")
       if list.length != 0
-        return Downloader.list_returned_by_overpass_to_a_single_location(list)
+        return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
       end
-      return Downloader.find_data_pair(tags_a, tags_b, latitude, longitude, size*2)
+      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, size*2)
     end
 
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
@@ -69,7 +69,7 @@ module CartoCSSHelper
       min_longitude = longitude - size.to_f/2
       max_longitude = longitude + size.to_f/2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
-      query = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}];"
+      query = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}];"
       query += "\n"
       query += "(node(#{bb});<;);"
       query += "\n"
@@ -85,22 +85,22 @@ module CartoCSSHelper
     end
 
     def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
-        return Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters/1000}km from #{latitude}, #{longitude}")
+        return OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters/1000}km from #{latitude}, #{longitude}")
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
       #special support for following tag values:  :any_value
       range = 10*1000
       loop do
-        list = Downloader.get_elements_near_given_location(tags, type, latitude, longitude, range)
+        list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
         if list.length != 0
-          return Downloader.list_returned_by_overpass_to_a_single_location(list)
+          return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         end
         range=range+[2*range, 200000].min
         if range >= max_range_in_km_for_radius*1000
-          list = Downloader.get_overpass_query_results(Downloader.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
+          list = OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
           if list.length != 0
-            return Downloader.list_returned_by_overpass_to_a_single_location(list)
+            return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
           else
             puts 'failed to find such location'
             raise NoLocationFound
@@ -118,12 +118,12 @@ module CartoCSSHelper
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
       #special support for following tag values:  :any_value
-      locator = "[timeout:#{Downloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
+      locator = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
       locator += "\n"
       if type == 'closed_way'
         type = 'way'
       end
-      locator += Downloader.get_query_element_to_get_location(tags, latitude, longitude, type, range)
+      locator += OverpassQueryGenerator.get_query_element_to_get_location(tags, latitude, longitude, type, range)
       locator +='out center;'
       locator += "\n"
       locator += '/*'
@@ -158,7 +158,7 @@ module CartoCSSHelper
       #special support for following tag values:  :any_value
       #TODO - escape value with quotation signs in them
       element="(#{type}"
-      element += Downloader.turn_list_of_tags_in_overpass_filter(tags)
+      element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags)
       element += "\n"
       if range != :infinity
         element+="\t(around:#{range},#{latitude},#{longitude});"
@@ -192,7 +192,7 @@ module CartoCSSHelper
         puts
       end
       begin
-        cached = Downloader.run_overpass_query query, description
+        cached = OverpassDownloader.run_overpass_query query, description
       rescue OverpassRefusedResponse
         mark_query_as_refused(query)
         write_to_cache(query, '')
@@ -298,60 +298,6 @@ module CartoCSSHelper
           delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
         end
       }
-    end
-
-    class OverpassRefusedResponse < IOError; end
-
-    def self.run_overpass_query(query, description, retry_count=0, retry_max=5)
-      start = Time.now.to_s
-      begin
-        url = Downloader.format_query_into_url(query)
-        timeout = Downloader.get_allowed_timeout_in_seconds+10
-        return RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
-      rescue RestClient::RequestTimeout
-        puts 'Overpass API refused to process this request. It will be not attempted again, most likely query is too complex.'
-        puts
-        puts query
-        puts
-        puts url
-        puts
-        raise OverpassRefusedResponse
-      rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
-        puts query
-        puts e.response
-        puts e.http_code
-        puts start
-        puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{e}"
-        if retry_count < retry_max
-          sleep 60*5
-          Downloader.run_overpass_query(query, description, retry_count+1, retry_max)
-        else
-          e.raise
-        end
-      rescue ArgumentError => e
-        puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
-        puts 'try overpass query that will return smaller amount of data'
-        puts e
-        e.raise
-      rescue => e
-        puts 'query failed'
-        puts query
-        puts
-        puts url
-        puts e
-        e.raise
-      end
-    end
-
-    def self.get_allowed_timeout_in_seconds
-      return 10 * 60
-    end
-
-    def self.format_query_into_url(query)
-      query = query.gsub(/\n/, '')
-      query = query.gsub(/\t/, '')
-      base_overpass_url = CartoCSSHelper::Configuration.get_overpass_instance_url
-      return base_overpass_url + '/interpreter?data=' + URI.escape(query)
     end
   end
 end

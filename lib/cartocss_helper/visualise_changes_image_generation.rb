@@ -1,6 +1,6 @@
 require_relative 'visualise_changes_diff_from_images'
 require_relative 'git'
-require_relative 'downloader'
+require_relative 'overpass_query_generator'
 require_relative 'util/filehelper'
 
 module CartoCSSHelper
@@ -137,7 +137,7 @@ module CartoCSSHelper
       end
 
       def get_timestamp
-        return Downloader.get_timestamp_of_file(@data_filename)
+        return OverpassQueryGenerator.get_timestamp_of_file(@data_filename)
       end
     end
 
@@ -148,9 +148,9 @@ module CartoCSSHelper
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
       puts "visualise_changes_on_real_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
       begin
-        latitude, longitude = Downloader.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
+        latitude, longitude = OverpassQueryGenerator.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
         target_location = "[#{latitude}, #{longitude}]"
-      rescue Downloader::NoLocationFound, Downloader::OverpassRefusedResponse
+      rescue OverpassQueryGenerator::NoLocationFound, OverpassQueryGenerator::OverpassRefusedResponse
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
@@ -159,7 +159,7 @@ module CartoCSSHelper
     end
 
     def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size=0.4, image_size=400)
-      filename = Downloader.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
+      filename = OverpassQueryGenerator.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
       visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
     end
 

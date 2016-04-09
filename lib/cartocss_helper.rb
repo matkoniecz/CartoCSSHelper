@@ -5,7 +5,7 @@ module CartoCSSHelper
 end
 require_relative 'cartocss_helper/tag_lister.rb'
 require_relative 'cartocss_helper/visualise_changes_image_generation.rb'
-require_relative 'cartocss_helper/downloader.rb'
+require_relative 'cartocss_helper/overpass_query_generator.rb'
 require_relative 'cartocss_helper/data_file_handling.rb'
 require_relative 'cartocss_helper/validator.rb'
 require_relative 'cartocss_helper/git.rb'
