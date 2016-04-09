@@ -309,7 +309,7 @@ module CartoCSSHelper
         timeout = Downloader.get_allowed_timeout_in_seconds+10
         return RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
       rescue RestClient::RequestTimeout
-        puts 'Overpass API refused to process this request. It will be not attemped again, most likely query is too complex.'
+        puts 'Overpass API refused to process this request. It will be not attempted again, most likely query is too complex.'
         puts
         puts query
         puts
