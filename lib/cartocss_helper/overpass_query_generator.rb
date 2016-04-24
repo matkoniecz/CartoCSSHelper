@@ -13,7 +13,7 @@ module CartoCSSHelper
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
 
-      query = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
+      query = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
       way(#{bb})#{filter_a};
       node(around:#{distance_in_meters})->.anodes;
       way(#{bb})#{filter_b};
@@ -69,7 +69,7 @@ module CartoCSSHelper
       min_longitude = longitude - size.to_f/2
       max_longitude = longitude + size.to_f/2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
-      query = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}];"
+      query = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}];"
       query += "\n"
       query += "(node(#{bb});<;);"
       query += "\n"
@@ -118,7 +118,7 @@ module CartoCSSHelper
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
       #special support for following tag values:  :any_value
-      locator = "[timeout:#{OverpassQueryGenerator.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
+      locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
       locator += "\n"
       if type == 'closed_way'
         type = 'way'
