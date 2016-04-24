@@ -124,7 +124,14 @@ module CartoCSSHelper
         timeout = 600
         data = RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
       rescue => e
+        fatal = nil
+        if e.class == URI::InvalidURIError
+          fatal = true
+        end
         puts "visualise_place_by_remote_file failed to fetch #{url} <#{e.class} error happened>"
+        if fatal == nil
+          puts "Unexpected error, assumed to be fatal" #TODO - check documentation for possible errors
+        end
         raise e
       end
       file = File.new(filename, 'w')
