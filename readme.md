@@ -22,9 +22,9 @@ Install ruby - see https://www.ruby-lang.org/en/documentation/installation/ for 
 
 Unfortunately, standard `gem install cartocss_helper` may not be enough as CartoCSS Helper depends on RMagick gem that requires special installation.
 
-1. install software necessary to install RMagick gem. On Lubuntu 14.04 it was enough to run `apt-get install ruby-dev imagemagick libmagickcore-dev libmagickwand-dev`.
-2. `gem install rmagick`
-3. `gem install cartocss_helper`.
+1. install software necessary to install RMagick gem. On Lubuntu 14.04 it was enough to run `sudo apt-get install ruby-dev imagemagick libmagickcore-dev libmagickwand-dev`.
+2. `gem install --user-install rmagick`
+3. `gem install --user-install cartocss_helper`.
 
 ###Examples
 
