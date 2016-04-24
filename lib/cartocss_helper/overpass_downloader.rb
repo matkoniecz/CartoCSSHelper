@@ -47,6 +47,7 @@ module CartoCSSHelper
         puts
         puts url
         puts e
+        puts "<#{e.class} error happened>"
         e.raise
       end
     end
