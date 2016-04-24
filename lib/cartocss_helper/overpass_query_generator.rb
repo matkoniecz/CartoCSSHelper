@@ -179,7 +179,7 @@ module CartoCSSHelper
       cached = get_overpass_query_results_from_cache(query)
       if cached == ''
         if File.exists?(get_query_cache_refused_response_filename(query))
-          raise OverpassRefusedResponse
+          raise OverpassDownloader::OverpassRefusedResponse
         end
       end
       return cached unless cached == nil
@@ -193,10 +193,10 @@ module CartoCSSHelper
       end
       begin
         cached = OverpassDownloader.run_overpass_query query, description
-      rescue OverpassRefusedResponse
+      rescue OverpassDownloader::OverpassRefusedResponse
         mark_query_as_refused(query)
         write_to_cache(query, '')
-        raise OverpassRefusedResponse
+        raise OverpassDownloader::OverpassRefusedResponse
       end
       write_to_cache(query, cached)
       return cached
