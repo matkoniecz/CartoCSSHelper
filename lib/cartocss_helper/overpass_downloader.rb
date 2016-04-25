@@ -4,6 +4,17 @@ module CartoCSSHelper
   class OverpassDownloader
     class OverpassRefusedResponse < IOError; end
 
+    def self.retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
+      puts "retry #{retry_count+1} of #{retry_max}"
+      puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{e}"
+      if retry_count < retry_max
+        sleep 60*5
+        return OverpassDownloader.run_overpass_query(query, description, retry_count+1, retry_max)
+      else
+        encountered_exception.raise
+      end
+    end
+
     def self.run_overpass_query(query, description, retry_count=0, retry_max=5)
       start = Time.now.to_s
       begin
@@ -20,25 +31,31 @@ module CartoCSSHelper
         puts
         puts e
         raise OverpassRefusedResponse
+      rescue SocketError => e
+        puts query
+        puts
+        puts url
+        puts
+        puts e
+        puts start
+        return retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
       rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
         puts query
         puts
         puts url
         puts
         puts e
-        puts e.response
+        puts e.response #on SocketError e.response is missing, probably also e.http_code
         puts e.http_code
         puts start
-        puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{e}"
-        if retry_count < retry_max
-          sleep 60*5
-          return OverpassDownloader.run_overpass_query(query, description, retry_count+1, retry_max)
-        else
-          e.raise
-        end
+        return retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
       rescue ArgumentError => e
         puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
         puts 'try overpass query that will return smaller amount of data'
+        puts query
+        puts
+        puts url
+        puts
         puts e
         e.raise
       rescue => e

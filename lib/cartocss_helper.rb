@@ -125,7 +125,7 @@ module CartoCSSHelper
         data = RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
       rescue => e
         fatal = nil
-        if e.class == URI::InvalidURIError
+        if [URI::InvalidURIError, RestClient::ResourceNotFound].include?(e.class)
           fatal = true
         end
         puts "visualise_place_by_remote_file failed to fetch #{url} <#{e.class} error happened>"
