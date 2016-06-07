@@ -32,7 +32,7 @@ end
 how to release new gem version:
 
 gem build cartocss_helper.gemspec
-gem install cartocss_helper-*.*.*.gem
+gem install cartocss_helper-*.*.*.gem --user-install
 gem push cartocss_helper-*.*.*.gem
 
 =end
