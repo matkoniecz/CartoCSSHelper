@@ -38,7 +38,7 @@ module CartoCSSHelper
         puts
         puts e
         puts start
-        return retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
+        return retry_run_overpass_query(query, description, retry_count, retry_max, e)
       rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
         puts query
         puts
@@ -48,7 +48,7 @@ module CartoCSSHelper
         puts e.response #on SocketError e.response is missing, probably also e.http_code
         puts e.http_code
         puts start
-        return retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
+        return retry_run_overpass_query(query, description, retry_count, retry_max, e)
       rescue ArgumentError => e
         puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
         puts 'try overpass query that will return smaller amount of data'
