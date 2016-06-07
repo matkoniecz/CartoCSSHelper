@@ -495,24 +495,6 @@ Style/Tab:
   Exclude:
     - 'lib/cartocss_helper/configuration.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Exclude:
-    - 'Gemfile'
-    - 'cartocss_helper.gemspec'
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/configuration.rb'
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/git.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-    - 'lib/cartocss_helper/style_specific/style_specific.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/util/filehelper.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.

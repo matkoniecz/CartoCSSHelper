@@ -301,4 +301,3 @@ module CartoCSSHelper
     end
   end
 end
-
