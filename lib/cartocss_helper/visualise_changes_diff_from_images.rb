@@ -7,6 +7,7 @@ module CartoCSSHelper
       @file_location = file_location
       @description = description
     end
+
     def identical(another_image)
       #Returns true if the contents of a file A and a file B are identical.
       return FileUtils.compare_file(self.file_location, another_image.file_location)
@@ -22,6 +23,7 @@ module CartoCSSHelper
       @right_file_location = right_image.file_location
       @description = left_image.description
     end
+
     def merge_description_from_next_image(image)
       @description << ', ' << image.description
     end

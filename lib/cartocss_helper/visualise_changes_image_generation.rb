@@ -33,6 +33,7 @@ module CartoCSSHelper
         @image_size = image_size
         @active = true
       end
+
       def run_job
         if !@active
           return
@@ -42,6 +43,7 @@ module CartoCSSHelper
         CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, source)
         @active = false
       end
+
       def print
         puts "#{@filename.gsub(Configuration.get_path_to_folder_for_cache, '#')} [#{@latitude};#{@longitude}], z: #{@zlevels}, text: #{@header}, '#{@old_branch}'->'#{@new_branch}', bbox:#{@download_bbox_size}, #{@image_size}px"
       end

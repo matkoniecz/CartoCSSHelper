@@ -191,15 +191,6 @@ Style/ConditionalAssignment:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs.
-Style/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/EmptyLiteral:

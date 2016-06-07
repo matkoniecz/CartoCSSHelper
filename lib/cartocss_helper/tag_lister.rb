@@ -12,6 +12,7 @@ module CartoCSSHelper
       @state = state
       @composite = composite
     end
+
     def print
       composite_string = ''
       if composite
@@ -19,6 +20,7 @@ module CartoCSSHelper
       end
       puts "#{@key}=#{@value} #{@state} #{composite_string}"
     end
+
     def code_print
       string = "Status.new('#{@key}', '#{@value}', :#{@state}"
       if @composite != nil
