@@ -11,7 +11,7 @@ module CartoCSSHelper
       return @@loaded_filename
     end
 
-    def self.load_data_into_database(data_filename, debug=false)
+    def self.load_data_into_database(data_filename, debug = false)
       if get_filename_of_recently_loaded_file == data_filename
         puts "\tavoided reloading the same file! <#{data_filename}>"
         return

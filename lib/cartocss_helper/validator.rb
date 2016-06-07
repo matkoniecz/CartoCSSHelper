@@ -18,7 +18,7 @@ module CartoCSSHelper
       run_unwanted_name_test(git_branch)
     end
 
-    def run_expected_rendering_test(git_branch, quick_and_more_prone_to_errors=false)
+    def run_expected_rendering_test(git_branch, quick_and_more_prone_to_errors = false)
       Git.checkout git_branch
       puts 'unexpectedly rendered/unrendered keys:'
       compare_expected_with_real_rendering(quick_and_more_prone_to_errors)
@@ -53,7 +53,7 @@ module CartoCSSHelper
       puts
     end
 
-    def compare_expected_with_real_rendering(quick_and_more_prone_to_errors=false)
+    def compare_expected_with_real_rendering(quick_and_more_prone_to_errors = false)
       list_of_documented = CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags
       info = Info.new
       list_of_rendered = info.get_render_state_of_tags(quick_and_more_prone_to_errors)
@@ -162,7 +162,7 @@ module CartoCSSHelper
       end
     end
 
-    def check_missing_names(tags, zlevel, interactive=false, on_water=false)
+    def check_missing_names(tags, zlevel, interactive = false, on_water = false)
       ['node', 'closed_way', 'way'].each{|type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
         if not_required.include?(tags)
@@ -185,7 +185,7 @@ module CartoCSSHelper
       }
     end
 
-    def check_unwanted_names(tags, zlevel, interactive=false, on_water=false)
+    def check_unwanted_names(tags, zlevel, interactive = false, on_water = false)
       ['node', 'closed_way', 'way'].each{|type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
         if not_required.include?(tags) or not_required.include?(tags.merge({:type => type}))
@@ -203,7 +203,7 @@ module CartoCSSHelper
       }
     end
 
-    def check_dy(tags, zlevel, interactive=false, on_water=false)
+    def check_dy(tags, zlevel, interactive = false, on_water = false)
       if !is_object_displaying_anything_as_node tags, zlevel, on_water
         #puts key+"="+value+" - not displayed as node on z#{zlevel}"
         return

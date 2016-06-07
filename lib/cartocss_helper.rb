@@ -14,7 +14,7 @@ include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
 
 module CartoCSSHelper
-  def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types=['node', 'closed_way', 'way'], min = 4, skip = 0)
+  def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types = ['node', 'closed_way', 'way'], min = 4, skip = 0)
     types.each {|type|
       test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min, skip)
     }
@@ -57,20 +57,20 @@ module CartoCSSHelper
     return tags.merge(added_tags)
   end
 
-  def self.test_tag_on_sythetic_data(tags, new_branch, old_branch='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
+  def self.test_tag_on_sythetic_data(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
     types.each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
     }
   end
 
-  def self.test(tags, new_branch, old_branch='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
+  def self.test(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
     test_tag_on_sythetic_data(tags, new_branch, old_branch, zlevels, types, test_on_water)
     test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types)
   end
 
-  def self.probe(tags, new_branch, old_branch='master', zlevels=Configuration.get_min_z..Configuration.get_max_z, types=['node', 'closed_way', 'way'], test_on_water=false)
+  def self.probe(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
     types.each {|type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
@@ -78,7 +78,7 @@ module CartoCSSHelper
   end
 
   def self.get_latitude_longitude_from_url(url)
-    if(url.scan(/[\/]((-|)\d+(\.\d+))/)).length >= 2
+    if (url.scan(/[\/]((-|)\d+(\.\d+))/)).length >= 2
       latitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[0][0].to_f
       longitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[1][0].to_f
       return latitude, longitude
@@ -88,7 +88,7 @@ module CartoCSSHelper
     return latitude, longitude
   end
 
-  def self.visualise_place_by_url(url, zlevels, new_branch, old_branch='master', header=nil, download_bbox_size=0.04, image_size = 350)
+  def self.visualise_place_by_url(url, zlevels, new_branch, old_branch = 'master', header = nil, download_bbox_size = 0.04, image_size = 350)
     if header == nil
       header = url
     end
@@ -110,7 +110,7 @@ module CartoCSSHelper
     return CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '.manual.cache' + FileHelper::make_string_usable_as_filename(url)
   end
 
-  def self.download_remote_file(url, clear_cache=False)
+  def self.download_remote_file(url, clear_cache = False)
     filename = get_place_of_storage_of_resource_under_url(url)
     if clear_cache
       if File.exist?(filename)
@@ -139,13 +139,13 @@ module CartoCSSHelper
     end
   end
 
-  def self.visualise_place_by_remote_file(url, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
+  def self.visualise_place_by_remote_file(url, latitude, longitude, zlevels, new_branch, old_branch = 'master', header = nil, bb = 0.04, image_size = 350)
     download_remote_file(url)
     filename = get_place_of_storage_of_resource_under_url(url)
     visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch, header, bb, image_size)
   end
 
-  def self.visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
+  def self.visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch = 'master', header = nil, bb = 0.04, image_size = 350)
     raise "#{filename} does not exists" unless File.exist?(filename)
     raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
     raise "#{longitude} is not a number" unless longitude.kind_of? Numeric

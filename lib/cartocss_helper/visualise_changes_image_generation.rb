@@ -143,7 +143,7 @@ module CartoCSSHelper
       end
     end
 
-    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch='master')
+    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
       #special support for following tag values:  :any_value
       header_prefix = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude }, #{ wanted_longitude }] -> "
       target_location = '[?, ?]'
@@ -160,12 +160,12 @@ module CartoCSSHelper
       return true
     end
 
-    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size=0.4, image_size=400)
+    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
       filename = OverpassQueryGenerator.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
       visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
     end
 
-    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size=0.4, image_size=400)
+    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
       prefix = ''
       if @@job_pooling
         prefix = 'pool <- '
@@ -197,7 +197,7 @@ module CartoCSSHelper
       return [latitude_size, longitude_size]
     end
 
-    def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size=400)
+    def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size = 400)
       collection = []
       zlevels.each { |zlevel|
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)

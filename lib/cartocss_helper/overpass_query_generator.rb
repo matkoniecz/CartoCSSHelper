@@ -9,7 +9,7 @@ module CartoCSSHelper
     class NoLocationFound < StandardError
     end
     #TODO - split into cache handling and Overpass handling
-    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters=20)
+    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters = 20)
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
 
@@ -23,7 +23,7 @@ module CartoCSSHelper
       return query
     end
 
-    def self.find_data_pair(tags_a, tags_b, latitude, longitude, size=0.1)
+    def self.find_data_pair(tags_a, tags_b, latitude, longitude, size = 0.1)
       if size > 0.5
         return nil, nil
       end
@@ -47,7 +47,7 @@ module CartoCSSHelper
       return get_overpass_query_results_file_location(query, "download data for #{latitude} #{longitude} (#{size})")
     end
 
-    def self.download_osm_data_for_location(latitude, longitude, size, accept_cache=true)
+    def self.download_osm_data_for_location(latitude, longitude, size, accept_cache = true)
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exist?(filename)
         if accept_cache
@@ -169,13 +169,13 @@ module CartoCSSHelper
       return element
     end
 
-    def self.get_overpass_query_results_file_location(query, description, debug=false)
+    def self.get_overpass_query_results_file_location(query, description, debug = false)
       filename = get_query_cache_filename(query)
       get_overpass_query_results(query, description, debug)
       return filename
     end
 
-    def self.get_overpass_query_results(query, description, debug=false)
+    def self.get_overpass_query_results(query, description, debug = false)
       cached = get_overpass_query_results_from_cache(query)
       if cached == ''
         if File.exist?(get_query_cache_refused_response_filename(query))

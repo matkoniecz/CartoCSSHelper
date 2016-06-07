@@ -1,6 +1,6 @@
 module CartoCSSHelper
   class TilemillHandler
-    def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug=false)
+    def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
       if File.exist?(export_filename)
         if debug
           puts 'wanted file exists'

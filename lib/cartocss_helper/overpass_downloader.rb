@@ -15,7 +15,7 @@ module CartoCSSHelper
       end
     end
 
-    def self.run_overpass_query(query, description, retry_count=0, retry_max=5)
+    def self.run_overpass_query(query, description, retry_count = 0, retry_max = 5)
       start = Time.now.to_s
       begin
         url = OverpassDownloader.format_query_into_url(query)

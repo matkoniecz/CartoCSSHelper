@@ -6,7 +6,7 @@ include CartoCSSHelper::Heuristic
 module CartoCSSHelper
   class TagRenderingStatus
     attr_accessor :key, :value, :state, :composite
-    def initialize(key, value, state, composite=nil)
+    def initialize(key, value, state, composite = nil)
       @key = key
       @value = value
       @state = state
@@ -136,7 +136,7 @@ module CartoCSSHelper
     end
 
     def is_key_rendered_and_value_ignored(key, value)
-      if not is_rendered key,get_generic_tag_value
+      if notis_rendered key, get_generic_tag_value
         return false
       end
       [false, true].each { |on_water|
@@ -172,7 +172,7 @@ module CartoCSSHelper
       return false
     end
 
-    def is_rendered_as_composite(key, value, suggested_composite=nil, zlevels=[Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
+    def is_rendered_as_composite(key, value, suggested_composite = nil, zlevels = [Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       reason = how_rendered_as_composite key, value, suggested_composite, zlevels
       if reason == nil
         return false
@@ -180,7 +180,7 @@ module CartoCSSHelper
       return true
     end
 
-    def how_rendered_as_composite(key, value, suggested_composite, zlevels=[Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
+    def how_rendered_as_composite(key, value, suggested_composite, zlevels = [Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       [false, true].each { |on_water|
         zlevels.each { |zlevel|
           result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)

@@ -376,39 +376,6 @@ Style/SelfAssignment:
   Exclude:
     - 'lib/cartocss_helper/overpass_query_generator.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Exclude:
-    - 'lib/cartocss_helper/tag_lister.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAfterNot:
-  Exclude:
-    - 'lib/cartocss_helper/tag_lister.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleInsidePipes, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceAroundBlockParameters:
-  Exclude:
-    - 'lib/cartocss_helper/git.rb'
-
-# Offense count: 53
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAroundKeyword:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-
 # Offense count: 427
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
