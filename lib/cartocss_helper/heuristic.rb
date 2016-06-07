@@ -27,7 +27,7 @@ module CartoCSSHelper
       filenames.each { |filename|
         tags.merge(get_tags_from_yaml_file filename)
       }
-      return  tags
+      return tags
     end
 
     def get_tags_from_osm2pqsql
@@ -36,7 +36,7 @@ module CartoCSSHelper
       filenames.each { |filename|
         tags.merge(get_tags_from_osm2pqsql_file filename)
       }
-      return  tags
+      return tags
     end
 
     def get_tags_from_mss_file(style_filename)

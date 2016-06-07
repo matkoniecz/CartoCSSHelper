@@ -197,14 +197,6 @@ Style/EmptyLiteral:
   Exclude:
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
-Style/ExtraSpacing:
-  Exclude:
-    - 'lib/cartocss_helper/heuristic.rb'
-    - 'lib/cartocss_helper/image_generator.rb'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: for, each

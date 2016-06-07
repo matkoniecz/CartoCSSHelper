@@ -51,7 +51,7 @@ module CartoCSSHelper
       if @show_what_is_generated
         puts "generating: #{description}"
       end
-      generate_map(lat, lon,  debug)
+      generate_map(lat, lon, debug)
       if !File.exist?(export_filename)
         description = "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
         if debug
@@ -88,7 +88,7 @@ module CartoCSSHelper
     def generate_image(lat, lon, debug)
       export_filename = self.get_filename
       bbox_size = self.get_bbox_size
-      TilemillHandler.run_tilemill_export_image(lat, lon,  @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
+      TilemillHandler.run_tilemill_export_image(lat, lon, @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
     end
   end
 end
