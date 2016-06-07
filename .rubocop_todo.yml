@@ -202,12 +202,6 @@ Style/EmptyLineBetweenDefs:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 Style/EmptyLiteral:
   Exclude:
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'

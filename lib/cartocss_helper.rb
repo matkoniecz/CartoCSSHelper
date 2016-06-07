@@ -52,7 +52,6 @@ module CartoCSSHelper
     return get_list_of_testing_locations[n]
   end
 
-
   def self.add_common_secondary_tags(tags)
     added_tags = {'name' => 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ', 'ref' => '1', 'ele' => '8000', 'operator' => 'ÉÉ ÉÉ ÉÉ operator', 'brand' => 'ÉÉ ÉÉ ÉÉ brand'}
     return tags.merge(added_tags)
