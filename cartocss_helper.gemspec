@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   #set is from stdlib
   s.add_dependency 'rmagick', '~> 2.15.2'
 
+  s.add_development_dependency 'rubocop', '~> 0.40.0'
+
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
   s.require_path = 'lib'
