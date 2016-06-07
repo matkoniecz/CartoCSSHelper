@@ -114,11 +114,11 @@ module CartoCSSHelper
   def self.download_remote_file(url, clear_cache=False)
     filename = get_place_of_storage_of_resource_under_url(url)
     if clear_cache
-      if File.exists?(filename)
+      if File.exist?(filename)
         File.delete(filename)
       end
     end
-    if !File.exists?(filename)
+    if !File.exist?(filename)
       begin
         url = url
         timeout = 600
@@ -147,7 +147,7 @@ module CartoCSSHelper
   end
 
   def self.visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch='master', header=nil, bb=0.04, image_size = 350)
-    raise "#{filename} does not exists" unless File.exists?(filename)
+    raise "#{filename} does not exists" unless File.exist?(filename)
     raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
     raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
     raise "#{zlevels} is not a range" unless zlevels.class == Range

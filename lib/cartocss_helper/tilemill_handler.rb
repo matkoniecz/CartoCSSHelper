@@ -1,7 +1,7 @@
 module CartoCSSHelper
   class TilemillHandler
     def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug=false)
-      if File.exists?(export_filename)
+      if File.exist?(export_filename)
         if debug
           puts 'wanted file exists'
         end
@@ -26,7 +26,7 @@ module CartoCSSHelper
         puts command
       end
       system command
-      unless File.exists?(export_filename)
+      unless File.exist?(export_filename)
         if !debug
           puts 'rerunning failed image generation with enabled debug'
           return self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)

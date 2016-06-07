@@ -52,7 +52,7 @@ module CartoCSSHelper
       new_job = MapGenerationJob.new(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
       new_job.print
 
-      raise "#{filename} does not exists" unless File.exists?(filename)
+      raise "#{filename} does not exists" unless File.exist?(filename)
       raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
       raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
       raise "#{zlevels} is not a range" unless zlevels.class == Range
@@ -201,7 +201,7 @@ module CartoCSSHelper
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
         filename = "#{cache_folder+"#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
-        if !File.exists?(filename)
+        if !File.exist?(filename)
           source.load
           TilemillHandler.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
         end
