@@ -252,23 +252,6 @@ Style/IfUnlessModifier:
 Style/IndentArray:
   Enabled: false
 
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: normal, rails
-Style/IndentationConsistency:
-  Exclude:
-    - 'lib/cartocss_helper/configuration.rb'
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: Width.
-Style/IndentationWidth:
-  Exclude:
-    - 'lib/cartocss_helper/configuration.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-
 # Offense count: 101
 # Cop supports --auto-correct.
 Style/LeadingCommentSpace:
@@ -448,12 +431,6 @@ Style/SpaceInsideStringInterpolation:
 Style/SymbolProc:
   Exclude:
     - 'lib/cartocss_helper/tag_lister.rb'
-
-# Offense count: 20
-# Cop supports --auto-correct.
-Style/Tab:
-  Exclude:
-    - 'lib/cartocss_helper/configuration.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

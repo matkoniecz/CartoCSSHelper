@@ -16,27 +16,27 @@ module CartoCSSHelper::Configuration
     return @style_specific_data
   end
 
-	def get_max_z
+  def get_max_z
     return get_style_specific_data.max_z
-	end
+  end
 
-	def get_min_z
+  def get_min_z
     if @style_specific_data == nil
       raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_specific_data(data)'
     end
     return get_style_specific_data.min_z
-	end
+  end
 
   def set_path_to_tilemill_project_folder(path)
     @style_path = path
   end
 
-	def get_path_to_tilemill_project_folder
+  def get_path_to_tilemill_project_folder
     if @style_path == nil
       raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_path(path)'
     end
-		return @style_path
-	end
+    return @style_path
+  end
 
   def get_tilemill_project_name
     return get_path_to_tilemill_project_folder.split(File::SEPARATOR)[-1]
@@ -81,21 +81,21 @@ module CartoCSSHelper::Configuration
     return @path_to_folder_for_cache
   end
 
-	def get_path_to_folder_for_branch_specific_cache
-		location = File.join(get_path_to_folder_for_cache, 'generated_images', CartoCSSHelper::Git.get_commit_hash, '')
-		FileUtils::mkdir_p location
-		return location
-	end
+  def get_path_to_folder_for_branch_specific_cache
+    location = File.join(get_path_to_folder_for_cache, 'generated_images', CartoCSSHelper::Git.get_commit_hash, '')
+    FileUtils::mkdir_p location
+    return location
+  end
 
-	def get_path_to_folder_for_overpass_cache
-		location = File.join(get_path_to_folder_for_cache, 'overpass', '')
-		FileUtils::mkdir_p location
-		return location
-	end
+  def get_path_to_folder_for_overpass_cache
+    location = File.join(get_path_to_folder_for_cache, 'overpass', '')
+    FileUtils::mkdir_p location
+    return location
+  end
 
-	def get_data_filename
-		return get_path_to_folder_for_branch_specific_cache + 'data.osm'
-	end
+  def get_data_filename
+    return get_path_to_folder_for_branch_specific_cache + 'data.osm'
+  end
 
   @overpass_instance_url = 'http://overpass-api.de/api'
   def set_overpass_instance_url(path)
