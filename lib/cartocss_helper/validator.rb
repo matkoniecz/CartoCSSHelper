@@ -138,7 +138,7 @@ module CartoCSSHelper
         key = element[0]
         value = element[1]
         state = Info.get_expected_state(key, value)
-        tags = {key => value}
+        tags = { key => value }
         if state == :ignore
           next
         end
@@ -168,7 +168,7 @@ module CartoCSSHelper
         if not_required.include?(tags)
           return
         end
-        if not_required.include?(tags.merge({:type => type}))
+        if not_required.include?(tags.merge({ :type => type }))
           next
         end
         if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
@@ -188,7 +188,7 @@ module CartoCSSHelper
     def check_unwanted_names(tags, zlevel, interactive = false, on_water = false)
       ['node', 'closed_way', 'way'].each{|type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-        if not_required.include?(tags) or not_required.include?(tags.merge({:type => type}))
+        if not_required.include?(tags) or not_required.include?(tags.merge({ :type => type }))
           if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
             #puts key+"="+value+" - not displayed as node on z#{zlevel}"
             next
@@ -221,7 +221,7 @@ module CartoCSSHelper
         else
           return
         end
-        with_name = Scene.new({key => value, 'name' => test_name}, zlevel, on_water, 'node', true)
+        with_name = Scene.new({ key => value, 'name' => test_name }, zlevel, on_water, 'node', true)
         with_name.flush_cache
         puts 'calculating'
       end
@@ -229,7 +229,7 @@ module CartoCSSHelper
     end
 
     def is_object_displaying_name_as_this_object_type(tags, name, zlevel, on_water, type)
-      name_tags = tags.merge({'name' => name})
+      name_tags = tags.merge({ 'name' => name })
       with_name = Scene.new(name_tags, zlevel, on_water, type, true)
       nameless_tags = tags
       nameless = Scene.new(nameless_tags, zlevel, on_water, type, true)

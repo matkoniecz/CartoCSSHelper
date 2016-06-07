@@ -376,13 +376,6 @@ Style/SelfAssignment:
   Exclude:
     - 'lib/cartocss_helper/overpass_query_generator.rb'
 
-# Offense count: 427
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

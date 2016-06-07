@@ -142,7 +142,7 @@ module CartoCSSHelper
       [false, true].each { |on_water|
         [Configuration.get_max_z].each { |zlevel|
           ['area', 'closed_way', 'way', 'node'].each{ |type|
-            if CartoCSSHelper::Info.rendered_on_zlevel({key => value}, type, zlevel, on_water)
+            if CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
               if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
                 return false
               end
@@ -154,8 +154,8 @@ module CartoCSSHelper
     end
 
     def is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
-      with_tested_value = Scene.new({key => value}, zlevel, on_water, type, true)
-      with_generic_value = Scene.new({key => get_generic_tag_value}, zlevel, on_water, type, true)
+      with_tested_value = Scene.new({ key => value }, zlevel, on_water, type, true)
+      with_generic_value = Scene.new({ key => get_generic_tag_value }, zlevel, on_water, type, true)
       return !with_tested_value.is_output_different(with_generic_value)
     end
 
@@ -163,7 +163,7 @@ module CartoCSSHelper
       [false, true].each { |on_water|
         zlevels.each { |zlevel| #
           ['area', 'closed_way', 'way', 'node'].each{ |type|
-            if CartoCSSHelper::Info.rendered_on_zlevel({key => value}, type, zlevel, on_water)
+            if CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
               return true
             end
           }
@@ -183,15 +183,15 @@ module CartoCSSHelper
     def how_rendered_as_composite(key, value, suggested_composite, zlevels = [Configuration.get_max_z]) #TODO - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       [false, true].each { |on_water|
         zlevels.each { |zlevel|
-          result = how_rendered_on_zlevel_as_composite({key => value}, 'closed_way', zlevel, on_water, suggested_composite)
+          result = how_rendered_on_zlevel_as_composite({ key => value }, 'closed_way', zlevel, on_water, suggested_composite)
           if result != nil
             return result
           end
-          result = how_rendered_on_zlevel_as_composite({key => value}, 'way', zlevel, on_water, suggested_composite)
+          result = how_rendered_on_zlevel_as_composite({ key => value }, 'way', zlevel, on_water, suggested_composite)
           if result != nil
             return result
           end
-          result = how_rendered_on_zlevel_as_composite({key => value}, 'node', zlevel, on_water, suggested_composite)
+          result = how_rendered_on_zlevel_as_composite({ key => value }, 'node', zlevel, on_water, suggested_composite)
           if result != nil
             return result
           end
