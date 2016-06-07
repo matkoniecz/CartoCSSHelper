@@ -449,23 +449,6 @@ Style/SpaceAroundKeyword:
   Exclude:
     - 'lib/cartocss_helper.rb'
 
-# Offense count: 192
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/configuration.rb'
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/heuristic.rb'
-    - 'lib/cartocss_helper/image_generator.rb'
-    - 'lib/cartocss_helper/overpass_downloader.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-    - 'lib/cartocss_helper/tilemill_handler.rb'
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 427
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.

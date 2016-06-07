@@ -94,7 +94,7 @@ module CartoCSSHelper::Configuration
 	end
 
 	def get_data_filename
-		return get_path_to_folder_for_branch_specific_cache+'data.osm'
+		return get_path_to_folder_for_branch_specific_cache + 'data.osm'
 	end
 
   @overpass_instance_url = 'http://overpass-api.de/api'

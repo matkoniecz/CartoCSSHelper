@@ -36,7 +36,7 @@ module CartoCSSHelper
       @image_size = image_size
       @margin = 10
       @standard_pointsize = 10
-      @header_space = @standard_pointsize*1.5
+      @header_space = @standard_pointsize * 1.5
       @diff_note_space = @standard_pointsize
 
       render
@@ -45,7 +45,7 @@ module CartoCSSHelper
     def compress(before, after)
       returned = [PairOfComparedImages.new(before[0], after[0])]
       (1...before.length).each { |i|
-        if before[i].identical(before[i-1]) && after[i].identical(after[i-1])
+        if before[i].identical(before[i - 1]) && after[i].identical(after[i - 1])
           returned[-1].merge_description_from_next_image(before[i])
         else
           returned.push(PairOfComparedImages.new(before[i], after[i]))
@@ -58,17 +58,17 @@ module CartoCSSHelper
       create_canvas
       offset = 0
       render_header
-      offset += @header_space + @margin*1.5
+      offset += @header_space + @margin * 1.5
       render_diff_note offset
-      offset += @diff_note_space + @margin*0.5
+      offset += @diff_note_space + @margin * 0.5
       render_images_with_labels offset
-      offset += (@compared.length)*(@margin + @image_size)
+      offset += (@compared.length) * (@margin + @image_size)
       render_footer offset
     end
 
     def create_canvas
       y = get_needed_y
-      x = @image_size*2+3*@margin
+      x = @image_size * 2 + 3 * @margin
 
       @canvas = Magick::Image.new(x, y)
     end
@@ -76,9 +76,9 @@ module CartoCSSHelper
     def get_needed_y
       y = 0
       y += @header_space
-      y += @margin*1.5
+      y += @margin * 1.5
       y += @diff_note_space
-      y += @margin*0.5
+      y += @margin * 0.5
       y += (@compared.length) * (@image_size + @margin)
       y += @diff_note_space
       return y
@@ -86,7 +86,7 @@ module CartoCSSHelper
 
     def render_header
       header_drawer = Magick::Draw.new
-      header_drawer.pointsize(@header_space*3/5)
+      header_drawer.pointsize(@header_space * 3 / 5)
       header_drawer.text(@margin, @header_space, @header)
       header_drawer.draw(@canvas)
     end
@@ -110,14 +110,14 @@ module CartoCSSHelper
       left_image = Magick::Image.read(processed.left_file_location)[0]
       right_image = Magick::Image.read(processed.right_file_location)[0]
       drawer = Magick::Draw.new
-      drawer.pointsize(@diff_note_space*4/5)
+      drawer.pointsize(@diff_note_space * 4 / 5)
       if left_image == right_image
-        drawer.text(@margin + @image_size/2, y_offset, "#{processed.description} - unchanged")
+        drawer.text(@margin + @image_size / 2, y_offset, "#{processed.description} - unchanged")
         drawer.draw(@canvas)
       else
         drawer.text(@margin, y_offset, "#{processed.description} - before")
         drawer.draw(@canvas)
-        drawer.text(@margin*2 + @image_size, y_offset, "#{processed.description} - after")
+        drawer.text(@margin * 2 + @image_size, y_offset, "#{processed.description} - after")
         drawer.draw(@canvas)
       end
       render_row_of_images(y_offset, left_image, right_image)
@@ -133,10 +133,10 @@ module CartoCSSHelper
     # noinspection RubyResolve
     def render_row_of_images(y_offset, left_image, right_image)
       if left_image == right_image
-        @canvas.composite!(left_image, @margin*1.5 + @image_size/2, y_offset, Magick::OverCompositeOp)
+        @canvas.composite!(left_image, @margin * 1.5 + @image_size / 2, y_offset, Magick::OverCompositeOp)
       else
         @canvas.composite!(left_image, @margin, y_offset, Magick::OverCompositeOp)
-        @canvas.composite!(right_image, @margin*2+@image_size, y_offset, Magick::OverCompositeOp)
+        @canvas.composite!(right_image, @margin * 2 + @image_size, y_offset, Magick::OverCompositeOp)
       end
     end
 

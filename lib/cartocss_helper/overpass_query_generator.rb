@@ -27,10 +27,10 @@ module CartoCSSHelper
       if size > 0.5
         return nil, nil
       end
-      min_latitude = latitude - size.to_f/2
-      max_latitude = latitude + size.to_f/2
-      min_longitude = longitude - size.to_f/2
-      max_longitude = longitude + size.to_f/2
+      min_latitude = latitude - size.to_f / 2
+      max_latitude = latitude + size.to_f / 2
+      min_longitude = longitude - size.to_f / 2
+      max_longitude = longitude + size.to_f / 2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
 
       query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b)
@@ -39,7 +39,7 @@ module CartoCSSHelper
       if list.length != 0
         return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
       end
-      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, size*2)
+      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, size * 2)
     end
 
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
@@ -64,10 +64,10 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_download_data_around_location(latitude, longitude, size)
-      min_latitude = latitude - size.to_f/2
-      max_latitude = latitude + size.to_f/2
-      min_longitude = longitude - size.to_f/2
-      max_longitude = longitude + size.to_f/2
+      min_latitude = latitude - size.to_f / 2
+      max_latitude = latitude + size.to_f / 2
+      min_longitude = longitude - size.to_f / 2
+      max_longitude = longitude + size.to_f / 2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
       query = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}];"
       query += "\n"
@@ -85,19 +85,19 @@ module CartoCSSHelper
     end
 
     def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
-        return OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters/1000}km from #{latitude}, #{longitude}")
+        return OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters / 1000}km from #{latitude}, #{longitude}")
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
       #special support for following tag values:  :any_value
-      range = 10*1000
+      range = 10 * 1000
       loop do
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
         if list.length != 0
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         end
-        range=range+[2*range, 200000].min
-        if range >= max_range_in_km_for_radius*1000
+        range = range + [2 * range, 200000].min
+        if range >= max_range_in_km_for_radius * 1000
           list = OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
           if list.length != 0
             return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
@@ -124,14 +124,14 @@ module CartoCSSHelper
         type = 'way'
       end
       locator += OverpassQueryGenerator.get_query_element_to_get_location(tags, latitude, longitude, type, range)
-      locator +='out center;'
+      locator += 'out center;'
       locator += "\n"
       locator += '/*'
       range_string = ''
       if range == :infinity
         range_string = 'infinity'
       else
-        range_string = "#{range/1000}km"
+        range_string = "#{range / 1000}km"
       end
       locator += "\nrange: #{range_string}"
       locator += "\nhttp://www.openstreetmap.org/#map=17/#{latitude}/#{longitude}"
@@ -145,9 +145,9 @@ module CartoCSSHelper
       element = ''
       tags.each {|tag|
         if tag[1] == :any_value
-          element+="\t['#{tag[0]}']"
+          element += "\t['#{tag[0]}']"
         else
-          element+="\t['#{tag[0]}'='#{tag[1]}']"
+          element += "\t['#{tag[0]}'='#{tag[1]}']"
         end
         element += "\n"
       }
@@ -157,14 +157,14 @@ module CartoCSSHelper
     def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
       #special support for following tag values:  :any_value
       #TODO - escape value with quotation signs in them
-      element="(#{type}"
+      element = "(#{type}"
       element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags)
       element += "\n"
       if range != :infinity
-        element+="\t(around:#{range},#{latitude},#{longitude});"
+        element += "\t(around:#{range},#{latitude},#{longitude});"
         element += "\n"
       end
-      element+=');'
+      element += ');'
       element += "\n"
       return element
     end
@@ -203,7 +203,7 @@ module CartoCSSHelper
     end
 
     def self.get_query_cache_refused_response_filename(query)
-      return get_query_cache_filename(query)+'_response_refused'
+      return get_query_cache_filename(query) + '_response_refused'
     end
 
     def self.mark_query_as_refused(query)
@@ -283,8 +283,8 @@ module CartoCSSHelper
     end
 
     def self.delete_file(filename, reason)
-      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output+'log.txt', 'a') { |file|
-        message = "deleting #{filename}, #{File.size(filename)/1024/1024}MB - #{reason}"
+      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'log.txt', 'a') { |file|
+        message = "deleting #{filename}, #{File.size(filename) / 1024 / 1024}MB - #{reason}"
         puts message
         file.puts(message)
         File.delete(filename)
@@ -293,7 +293,7 @@ module CartoCSSHelper
 
     def self.delete_large_overpass_caches(threshold_in_MB)
       #todo - find library that deals with caches like this, bug here may be unfunny
-      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache+'*') {|file|
+      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') {|file|
         if File.size(file) > (1024 * 1024 * threshold_in_MB)
           delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
         end

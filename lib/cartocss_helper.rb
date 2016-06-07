@@ -35,8 +35,8 @@ module CartoCSSHelper
     end
     while generated < min
       location = CartoCSSHelper.get_nth_location(n + skip)
-      generated +=1 if CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
-      n+=1
+      generated += 1 if CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
+      n += 1
       if n > max_n
         return
       end
@@ -45,7 +45,7 @@ module CartoCSSHelper
   end
 
   def self.get_maxn_for_nth_location
-    return get_list_of_testing_locations.length-1
+    return get_list_of_testing_locations.length - 1
   end
 
   def self.get_nth_location(n)
@@ -103,7 +103,7 @@ module CartoCSSHelper
     raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
 
     latitude, longitude = get_latitude_longitude_from_url(url)
-    header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' '+ image_size.to_s + 'px'
+    header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' ' + image_size.to_s + 'px'
     CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
 

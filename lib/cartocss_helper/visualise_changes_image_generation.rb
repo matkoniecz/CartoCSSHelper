@@ -66,10 +66,10 @@ module CartoCSSHelper
     end
 
     def self.run_jobs
-      for i in 0..@@jobs.length-1
+      for i in 0..@@jobs.length - 1
         if @@jobs[i].active
           @@jobs[i].run_job
-          for x in 0..@@jobs.length-1
+          for x in 0..@@jobs.length - 1
             if @@jobs[i].filename == @@jobs[x].filename
               @@jobs[x].run_job
             end
@@ -104,7 +104,7 @@ module CartoCSSHelper
         if value == :any
           value = 'any tag value'
         end
-        magicless_tags[key]=value
+        magicless_tags[key] = value
       }
       return magicless_tags
     end
@@ -154,7 +154,7 @@ module CartoCSSHelper
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
-      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix+target_location+header_sufix, new_branch, old_branch)
+      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix + target_location + header_sufix, new_branch, old_branch)
       return true
     end
 
@@ -185,13 +185,13 @@ module CartoCSSHelper
     def self.scale(zlevel, reference_value, reference_zlevel)
       diff = zlevel - reference_zlevel
       rescaler = 2.0**diff
-      return reference_value*rescaler
+      return reference_value * rescaler
     end
 
     def self.get_render_bbox_size(zlevel, wanted_image_size, latitude)
       longitude_equator_rendered_length_in_pixels = 256 * 2**zlevel
-      longitude_size = 360*wanted_image_size.to_f/longitude_equator_rendered_length_in_pixels
-      latitude_size = longitude_size * Math.cos(latitude*Math::PI/180)
+      longitude_size = 360 * wanted_image_size.to_f / longitude_equator_rendered_length_in_pixels
+      latitude_size = longitude_size * Math.cos(latitude * Math::PI / 180)
       return [latitude_size, longitude_size]
     end
 
@@ -200,7 +200,7 @@ module CartoCSSHelper
       zlevels.each { |zlevel|
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
-        filename = "#{cache_folder+"#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
+        filename = "#{cache_folder + "#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
         if !File.exist?(filename)
           source.load
           TilemillHandler.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)

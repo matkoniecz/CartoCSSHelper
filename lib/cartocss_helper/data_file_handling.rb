@@ -89,17 +89,17 @@ module CartoCSSHelper
     end
 
     def generate_way_topology(lat, lon, tags)
-      add_node lat, lon-@size/3, [], 1
-      add_node lat, lon+@size/3, [], 2
+      add_node lat, lon - @size / 3, [], 1
+      add_node lat, lon + @size / 3, [], 2
       add_way tags, [1, 2], 3
     end
 
     def generate_closed_way_topology(lat, lon, tags)
-      delta = @size/3
-      add_node lat-delta, lon-delta, [], 1
-      add_node lat-delta, lon+delta, [], 2
-      add_node lat+delta, lon+delta, [], 3
-      add_node lat+delta, lon-delta, [], 4
+      delta = @size / 3
+      add_node lat - delta, lon - delta, [], 1
+      add_node lat - delta, lon + delta, [], 2
+      add_node lat + delta, lon + delta, [], 3
+      add_node lat + delta, lon - delta, [], 4
       add_way tags, [1, 2, 3, 4, 1], 5
     end
 
