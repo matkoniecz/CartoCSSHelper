@@ -411,7 +411,6 @@ module CartoCSSHelper
         TagRenderingStatus.new('shop', 'fashion', :primary),
         TagRenderingStatus.new('shop', 'fish', :primary),
         TagRenderingStatus.new('shop', 'fishing', :primary),
-        TagRenderingStatus.new('shop', 'fishmonger', :primary),
         TagRenderingStatus.new('shop', 'flooring', :primary),
         TagRenderingStatus.new('shop', 'florist', :primary),
         TagRenderingStatus.new('shop', 'food', :primary),
