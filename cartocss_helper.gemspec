@@ -27,8 +27,12 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 end
 
-#how to release new gem version:
-#
-#gem build cartocss_helper.gemspec
-#gem install cartocss_helper-*.*.*.gem
-#gem push cartocss_helper-*.*.*.gem
+=begin
+
+how to release new gem version:
+
+gem build cartocss_helper.gemspec
+gem install cartocss_helper-*.*.*.gem
+gem push cartocss_helper-*.*.*.gem
+
+=end
