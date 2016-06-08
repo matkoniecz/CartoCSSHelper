@@ -9,21 +9,21 @@ module CartoCSSHelper
     class NoLocationFound < StandardError
     end
     #TODO - split into cache handling and Overpass handling
-    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, distance_in_meters = 20)
+    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters = 20)
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
 
       query = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];
-      way(#{bb})#{filter_a};
+      #{type_a}(#{bb})#{filter_a};
       node(around:#{distance_in_meters})->.anodes;
-      way(#{bb})#{filter_b};
+      #{type_b}(#{bb})#{filter_b};
       node(around:#{distance_in_meters}).anodes;
       out;"
 
       return query
     end
 
-    def self.find_data_pair(tags_a, tags_b, latitude, longitude, size = 0.1)
+    def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size = 0.1)
       if size > 0.5
         return nil, nil
       end
@@ -33,13 +33,13 @@ module CartoCSSHelper
       max_longitude = longitude + size.to_f / 2
       bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
 
-      query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b)
+      query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b)
 
       list = OverpassQueryGenerator.get_overpass_query_results(query, "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{size}")
       if list.length != 0
         return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
       end
-      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, size * 2)
+      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size * 2)
     end
 
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
