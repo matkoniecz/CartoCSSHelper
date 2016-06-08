@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'ruby-progressbar'
 
 module CartoCSSHelper
   class OverpassDownloader
@@ -6,9 +7,13 @@ module CartoCSSHelper
 
     def self.retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
       puts "retry #{retry_count + 1} of #{retry_max}"
-      puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{encountered_exception}"
+      puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{encountered_exception} (#{encountered_exception.class})"
       if retry_count < retry_max
-        sleep 60 * 5
+        progressbar = ProgressBar.create
+        100.times do
+          sleep 3
+          progressbar.increment
+        end
         return OverpassDownloader.run_overpass_query(query, description, retry_count + 1, retry_max)
       else
         encountered_exception.raise
@@ -47,6 +52,13 @@ module CartoCSSHelper
         puts e
         puts e.response #on SocketError e.response is missing, probably also e.http_code
         puts e.http_code
+        if e.http_code == 429
+          progressbar = ProgressBar.create
+          100.times do
+            sleep 1
+            progressbar.increment
+          end
+        end
         puts start
         return retry_run_overpass_query(query, description, retry_count, retry_max, e)
       rescue ArgumentError => e

@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   #open3 is from stdlib
   #set is from stdlib
   s.add_dependency 'rmagick', '~> 2.15.2'
+  s.add_dependency 'ruby-progressbar', '~> 1.8'
 
   s.add_development_dependency 'rubocop', '~> 0.40.0'
 
@@ -30,7 +31,6 @@ Gem::Specification.new do |s|
 end
 
 =begin
-
 how to release new gem version:
 
 gem build cartocss_helper.gemspec
