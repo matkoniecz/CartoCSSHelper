@@ -145,7 +145,7 @@ module CartoCSSHelper
     def render_footer(y_offset)
       label_drawer = Magick::Draw.new
       label_drawer.pointsize(@standard_pointsize)
-      label_drawer.text(@margin, y_offset, 'generated using https://github.com/mkoniecz/CartoCSSHelper')
+      label_drawer.text(@margin, y_offset, 'generated using https://github.com/matkoniecz/CartoCSSHelper')
       label_drawer.draw(@canvas)
     end
 

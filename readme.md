@@ -77,4 +77,4 @@ It is also possible to look for certain keys, with any value:
 
 ###Automated stuff
 
-[![Code Climate](https://codeclimate.com/github/mkoniecz/CartoCSSHelper/badges/gpa.svg)](https://codeclimate.com/github/mkoniecz/CartoCSSHelper)
+[![Code Climate](https://codeclimate.com/github/matkoniecz/CartoCSSHelper/badges/gpa.svg)](https://codeclimate.com/github/matkoniecz/CartoCSSHelper)
