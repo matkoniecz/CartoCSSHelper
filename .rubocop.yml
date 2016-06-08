@@ -18,6 +18,9 @@ Style/StringLiterals:
 Style/WordArray:
   Enabled: false
 
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
 #see https://github.com/bbatsov/rubocop/issues/1747
 Style/SpecialGlobalVars:
   Enabled: false
