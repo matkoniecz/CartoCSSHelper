@@ -15,6 +15,9 @@ Style/BlockComments:
 Style/StringLiterals:
   Enabled: false
 
+Style/WordArray:
+  Enabled: false
+
 #see https://github.com/bbatsov/rubocop/issues/1747
 Style/SpecialGlobalVars:
   Enabled: false
