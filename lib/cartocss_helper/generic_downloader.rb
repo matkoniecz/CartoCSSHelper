@@ -21,7 +21,7 @@ module GenericDownloader
   def get_specified_resource(url, timeout: 20, error_message: nil, retry_count: 0, retry_max: 5, additional_lethal: [])
     lethal_exceptions = [URI::InvalidURIError, RestClient::ResourceNotFound] + additional_lethal
     begin
-      data = RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
+      data = RestClient::Request.execute(method: :get, url: url, timeout: timeout)
     rescue SocketError. URI::InvalidURIError => e
       output_shared_error_part(error_message, url, e)
       wait

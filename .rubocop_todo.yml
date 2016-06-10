@@ -143,13 +143,6 @@ Style/Documentation:
 Style/For:
   Enabled: false
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues.
-# SupportedStyles: ruby19, ruby19_no_mixed_keys, hash_rockets
-Style/HashSyntax:
-  Enabled: false
-
 # Offense count: 2
 Style/IdenticalConditionalBranches:
   Exclude:
