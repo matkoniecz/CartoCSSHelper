@@ -1,84 +1,35 @@
 require 'rest-client'
 require 'ruby-progressbar'
+require_relative 'generic_downloader.rb'
+include GenericDownloader
 
 module CartoCSSHelper
   class OverpassDownloader
     class OverpassRefusedResponse < IOError; end
 
-    def self.retry_run_overpass_query(query, description, retry_count, retry_max, encountered_exception)
-      puts "retry #{retry_count + 1} of #{retry_max}"
-      puts "Rerunning #{description} started at #{Time.now.to_s} (#{retry_count}/#{retry_max}) after #{encountered_exception} (#{encountered_exception.class})"
-      if retry_count < retry_max
-        progressbar = ProgressBar.create
-        100.times do
-          sleep 3
-          progressbar.increment
-        end
-        return OverpassDownloader.run_overpass_query(query, description, retry_count + 1, retry_max)
-      else
-        encountered_exception.raise
-      end
-    end
-
-    def self.run_overpass_query(query, description, retry_count = 0, retry_max = 5)
-      start = Time.now.to_s
-      begin
-        url = OverpassDownloader.format_query_into_url(query)
-        timeout = OverpassDownloader.get_allowed_timeout_in_seconds
-        response = RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
-        return String.new(response) #see https://github.com/rest-client/rest-client/issues/370
-      rescue RestClient::RequestTimeout => e
-        puts 'Overpass API refused to process this request. It will be not attempted again, most likely query is too complex. It is also possible that Overpass servers are unavailable'
-        puts
-        puts query
-        puts
-        puts url
-        puts
-        puts e
-        raise OverpassRefusedResponse
-      rescue SocketError => e
-        puts query
-        puts
-        puts url
-        puts
-        puts e
-        puts start
-        return retry_run_overpass_query(query, description, retry_count, retry_max, e)
-      rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection => e
-        puts query
-        puts
-        puts url
-        puts
-        puts e
-        puts e.response #on SocketError e.response is missing, probably also e.http_code
-        puts e.http_code
-        if e.http_code == 429
-          progressbar = ProgressBar.create
-          100.times do
-            sleep 1
-            progressbar.increment
-          end
-        end
-        puts start
-        return retry_run_overpass_query(query, description, retry_count, retry_max, e)
-      rescue ArgumentError => e
-        puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
-        puts 'try overpass query that will return smaller amount of data'
-        puts query
-        puts
-        puts url
-        puts
-        puts e
-        e.raise
-      rescue => e
-        puts 'query failed'
-        puts query
-        puts
-        puts url
-        puts e
-        puts "<#{e.class} error happened>"
-        e.raise
-      end
+    def self.run_overpass_query(query, _description, _retry_count = 0, _retry_max = 5)
+      url = OverpassDownloader.format_query_into_url(query)
+      timeout = OverpassDownloader.get_allowed_timeout_in_seconds
+      response = get_specified_resource(url, timeout: timeout, additional_lethal: [RestClient::RequestTimeout])
+      return String.new(response) #see https://github.com/rest-client/rest-client/issues/370, will be fixed in 2.0 - see https://rubygems.org/gems/rest-client/versions/
+    rescue RestClient::RequestTimeout => e
+      puts 'Overpass API refused to process this request. It will be not attempted again, most likely query is too complex. It is also possible that Overpass servers are unavailable'
+      puts
+      puts query
+      puts
+      puts url
+      puts
+      puts e
+      raise OverpassRefusedResponse
+    rescue ArgumentError => e
+      puts 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
+      puts 'try overpass query that will return smaller amount of data'
+      puts query
+      puts
+      puts url
+      puts
+      puts e
+      e.raise
     end
 
     def self.get_allowed_timeout_in_seconds

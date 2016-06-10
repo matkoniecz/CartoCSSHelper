@@ -9,9 +9,11 @@ require_relative 'cartocss_helper/overpass_query_generator.rb'
 require_relative 'cartocss_helper/data_file_handling.rb'
 require_relative 'cartocss_helper/validator.rb'
 require_relative 'cartocss_helper/git.rb'
+require_relative 'cartocss_helper/generic_downloader.rb'
 require_relative 'data/testing_locations'
 include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
+include GenericDownloader
 
 module CartoCSSHelper
   def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types = ['node', 'closed_way', 'way'], min = 4, skip = 0)
@@ -118,21 +120,9 @@ module CartoCSSHelper
       end
     end
     if !File.exist?(filename)
-      begin
-        url = url
-        timeout = 600
-        data = RestClient::Request.execute(:method => :get, :url => url, :timeout => timeout)
-      rescue => e
-        fatal = nil
-        if [URI::InvalidURIError, RestClient::ResourceNotFound].include?(e.class)
-          fatal = true
-        end
-        puts "visualise_place_by_remote_file failed to fetch #{url} <#{e.class} error happened>"
-        if fatal == nil
-          puts "Unexpected error, assumed to be fatal" #TODO - check documentation for possible errors
-        end
-        raise e
-      end
+      url = url
+      timeout = 600
+      get_specified_resource(url, timeout: timeout)
       file = File.new(filename, 'w')
       file.write data
       file.close
