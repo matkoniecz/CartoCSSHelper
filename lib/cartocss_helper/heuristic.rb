@@ -16,7 +16,7 @@ module CartoCSSHelper
       tags = Set.new
       filenames = Dir[Configuration.get_path_to_tilemill_project_folder + '*.mss']
       filenames.each do |filename|
-        tags.merge(get_tags_from_mss_file filename)
+        tags.merge(get_tags_from_mss_file(filename))
       end
       return tags
     end
@@ -25,7 +25,7 @@ module CartoCSSHelper
       tags = Set.new
       filenames = Dir[Configuration.get_path_to_tilemill_project_folder + '*.yaml']
       filenames.each do |filename|
-        tags.merge(get_tags_from_yaml_file filename)
+        tags.merge(get_tags_from_yaml_file(filename))
       end
       return tags
     end
@@ -34,7 +34,7 @@ module CartoCSSHelper
       tags = Set.new
       filenames = Dir[Configuration.get_path_to_tilemill_project_folder + '*.style']
       filenames.each do |filename|
-        tags.merge(get_tags_from_osm2pqsql_file filename)
+        tags.merge(get_tags_from_osm2pqsql_file(filename))
       end
       return tags
     end

@@ -133,12 +133,6 @@ Style/IfUnlessModifier:
     - 'lib/cartocss_helper/validator.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/NestedParenthesizedCalls:
-  Exclude:
-    - 'lib/cartocss_helper/heuristic.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 Style/NilComparison:
