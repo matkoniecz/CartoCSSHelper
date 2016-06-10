@@ -1,3 +1,5 @@
+require_relative 'util/systemhelper.rb'
+
 module CartoCSSHelper
   class TilemillHandler
     def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
@@ -7,10 +9,7 @@ module CartoCSSHelper
         end
         return
       end
-      silence = '> /dev/null 2>&1'
-      if debug
-        silence = ''
-      end
+      silence = to_devnull_without_debug(debug)
       bbox = get_bbox_string(lat, lon, bbox_size)
       params = "--format=png --width=#{image_size} --height=#{image_size} --static_zoom=#{zlevel} --bbox=\"#{bbox}\""
       project_name = CartoCSSHelper::Configuration.get_tilemill_project_name

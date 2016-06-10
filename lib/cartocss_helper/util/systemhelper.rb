@@ -16,4 +16,10 @@ module SystemHelper
     end
     raise 'impossible happened'
   end
+
+  def to_devnull_without_debug(debug)
+    silence = '> /dev/null 2>&1'
+    silence = '' if debug
+    return silence
+  end
 end

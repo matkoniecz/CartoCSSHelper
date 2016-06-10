@@ -6,10 +6,7 @@ include SystemHelper
 module CartoCSSHelper
   module Git
     def checkout(branch, debug = false)
-      silence = '> /dev/null 2>&1'
-      if debug
-        silence = ''
-      end
+      silence = to_devnull_without_debug(debug)
       Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
         require 'open3'
         command = "git checkout #{branch} #{silence}"
