@@ -194,18 +194,6 @@ Style/NestedParenthesizedCalls:
   Exclude:
     - 'lib/cartocss_helper/heuristic.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'lib/cartocss_helper/heuristic.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/validator.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 Style/NilComparison:

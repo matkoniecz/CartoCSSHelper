@@ -69,12 +69,11 @@ module CartoCSSHelper
 
     def self.run_jobs
       for i in 0..@@jobs.length - 1
-        if @@jobs[i].active
-          @@jobs[i].run_job
-          for x in 0..@@jobs.length - 1
-            if @@jobs[i].filename == @@jobs[x].filename
-              @@jobs[x].run_job
-            end
+        next unless @@jobs[i].active
+        @@jobs[i].run_job
+        for x in 0..@@jobs.length - 1
+          if @@jobs[i].filename == @@jobs[x].filename
+            @@jobs[x].run_job
           end
         end
       end

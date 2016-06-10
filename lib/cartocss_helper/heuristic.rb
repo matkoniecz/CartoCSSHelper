@@ -55,10 +55,9 @@ module CartoCSSHelper
       matched = style.scan(/(\w+) = '(\w+)'/)
       matched.each { |element|
         key = element[0]
-        if key != 'feature'
-          if possible_key_values.include?([key, get_generic_tag_value])
-            tags.add([key, element[1]])
-          end
+        next unless key != 'feature'
+        if possible_key_values.include?([key, get_generic_tag_value])
+          tags.add([key, element[1]])
         end
       }
       return tags
@@ -89,11 +88,10 @@ module CartoCSSHelper
         key = tag.gsub(/.*\./, '')
         values = element[4]
         values_matched = values.scan(/'([^']+)'/)
-        if possible_key_values.include?([key, get_generic_tag_value])
-          values_matched.each { |value|
-            tags.add([key, value[0]])
-          }
-        end
+        next unless possible_key_values.include?([key, get_generic_tag_value])
+        values_matched.each { |value|
+          tags.add([key, value[0]])
+        }
       }
       return tags
     end

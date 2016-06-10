@@ -99,14 +99,13 @@ module CartoCSSHelper
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         end
         range = range + [2 * range, 200000].min
-        if range >= max_range_in_km_for_radius * 1000
-          list = OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
-          if list.length != 0
-            return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
-          else
-            puts 'failed to find such location'
-            raise NoLocationFound
-          end
+        next unless range >= max_range_in_km_for_radius * 1000
+        list = OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
+        if list.length != 0
+          return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
+        else
+          puts 'failed to find such location'
+          raise NoLocationFound
         end
       end
     end

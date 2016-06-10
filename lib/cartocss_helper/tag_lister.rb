@@ -34,10 +34,9 @@ module CartoCSSHelper
   class Info
     def self.get_expected_state(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
-        if documented.key == key
-          if documented.value == value
-            return documented.state
-          end
+        next unless documented.key == key
+        if documented.value == value
+          return documented.state
         end
       }
       return nil
@@ -45,10 +44,9 @@ module CartoCSSHelper
 
     def self.get_expected_composite(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
-        if documented.key == key
-          if documented.value == value
-            return documented.composite
-          end
+        next unless documented.key == key
+        if documented.value == value
+          return documented.composite
         end
       }
       return nil
@@ -142,10 +140,9 @@ module CartoCSSHelper
       [false, true].each { |on_water|
         [Configuration.get_max_z].each { |zlevel|
           ['area', 'closed_way', 'way', 'node'].each{ |type|
-            if CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
-              if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
-                return false
-              end
+            next unless CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
+            if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
+              return false
             end
           }
         }

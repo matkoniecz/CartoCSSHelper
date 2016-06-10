@@ -76,14 +76,13 @@ module CartoCSSHelper
 
     def ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
       list_of_rendered.each { |tag_info|
-        if !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
-          puts 'documented'
-          puts "\tmissing"
-          puts 'real'
-          print "\t"
-          tag_info.print
-          puts
-        end
+        next unless !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
+        puts 'documented'
+        puts "\tmissing"
+        puts 'real'
+        print "\t"
+        tag_info.print
+        puts
       }
     end
 
@@ -92,23 +91,21 @@ module CartoCSSHelper
         if Info.get_expected_state(documented.key, documented.value) == :ignored
           next
         end
-        if !is_tag_documented(list_of_rendered, documented.key, documented.value)
-          puts 'documented'
-          print "\t"
-          documented.print
-          puts 'real'
-          puts "\tmissing"
-          puts
-        end
+        next unless !is_tag_documented(list_of_rendered, documented.key, documented.value)
+        puts 'documented'
+        print "\t"
+        documented.print
+        puts 'real'
+        puts "\tmissing"
+        puts
       }
     end
 
     def is_tag_documented(list, key, value)
       list.each { |tag_info|
-        if key == tag_info.key
-          if value == tag_info.value
-            return true
-          end
+        next unless key == tag_info.key
+        if value == tag_info.value
+          return true
         end
       }
       return false
@@ -116,20 +113,18 @@ module CartoCSSHelper
 
     def compare_expected_with_tag_data(list_of_expected, tag_info)
       list_of_expected.each { |expected|
-        if expected.key == tag_info.key
-          if expected.value == tag_info.value
-            if expected.equal? tag_info
-              puts 'expected'
-              print "\t"
-              expected.print
-              puts 'real'
-              print "\t"
-              tag_info.print
-              puts
-            end
-            return
-          end
+        next unless expected.key == tag_info.key
+        next unless expected.value == tag_info.value
+        if expected.equal? tag_info
+          puts 'expected'
+          print "\t"
+          expected.print
+          puts 'real'
+          print "\t"
+          tag_info.print
+          puts
         end
+        return
       }
     end
 
@@ -188,17 +183,16 @@ module CartoCSSHelper
     def check_unwanted_names(tags, zlevel, interactive = false, on_water = false)
       ['node', 'closed_way', 'way'].each{|type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-        if not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
-          if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
-            # puts key+"="+value+" - not displayed as node on z#{zlevel}"
-            next
-          end
-          if tags['name'] != nil
-            tags.delete('name')
-          end
-          if is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
-            puts "#{tags} - label is unxpectedly displayed on z#{zlevel} #{type}"
-          end
+        next unless not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
+        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
+          # puts key+"="+value+" - not displayed as node on z#{zlevel}"
+          next
+        end
+        if tags['name'] != nil
+          tags.delete('name')
+        end
+        if is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
+          puts "#{tags} - label is unxpectedly displayed on z#{zlevel} #{type}"
         end
       }
     end
