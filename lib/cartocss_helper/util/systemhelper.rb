@@ -2,7 +2,9 @@ class FailedCommandException < StandardError
 end
 
 module SystemHelper
-  def execute_command(command, allowed_return_codes = [])
+  def execute_command(command, debug = false, allowed_return_codes = [])
+    command += to_devnull_without_debug(debug)
+    puts command if debug
     Open3.popen3(command) do |_, stdout, stderr, wait_thr|
       error = stderr.read.chomp
       stdout = stdout.read.chomp

@@ -20,13 +20,10 @@ module CartoCSSHelper
       start_time = Time.now
       puts "\tloading data into database <#{data_filename}>"
       @@loaded_filename = nil
-      silence = to_devnull_without_debug(debug)
-
-      command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}' #{silence}"
-      if debug
-        puts command
-      end
-      unless system(command)
+      command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}'"
+      begin
+        execute_command(command, debug)
+      rescue FailedCommandException => e
         puts 'loading data into database failed'
         if !debug
           puts 'retry with enabled debug'
