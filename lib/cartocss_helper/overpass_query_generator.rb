@@ -22,7 +22,7 @@ module CartoCSSHelper
       return query
     end
 
-    def bbox_string(latitude, longitude, size)
+    def self.bbox_string(latitude, longitude, size)
       min_latitude = latitude - size / 2
       max_latitude = latitude + size / 2
       min_longitude = longitude - size / 2
