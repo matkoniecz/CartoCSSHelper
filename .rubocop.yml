@@ -28,6 +28,10 @@ Style/ClassVars:
 Style/BracesAroundHashParameters:
   Enabled: false
 
+#? I am not sure...
+Style/RaiseArgs:
+  Enabled: false
+
 #syntactic sugar without gain
 Style/NonNilCheck:
   Enabled: false
@@ -57,3 +61,4 @@ Metrics/ModuleLength:
 Metrics/LineLength:
   Exclude:
     - 'cartocss_helper.gemspec'
+
