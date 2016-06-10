@@ -145,7 +145,7 @@ module CartoCSSHelper
         if state == :composite
           tags.merge!(Info.get_expected_composite(key, value))
         end
-        (Configuration.get_max_z..Configuration.get_max_z).each { |zlevel| #get_min_z should be used - but as renderer is extremely slow this hack was used TODO
+        (Configuration.get_max_z..Configuration.get_max_z).each { |zlevel| # get_min_z should be used - but as renderer is extremely slow this hack was used TODO
           send(function, tags, zlevel)
         }
       }
@@ -172,7 +172,7 @@ module CartoCSSHelper
           next
         end
         if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
-          #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+          # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
         end
         if tags['name'] != nil
@@ -190,7 +190,7 @@ module CartoCSSHelper
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
         if not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
           if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
-            #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+            # puts key+"="+value+" - not displayed as node on z#{zlevel}"
             next
           end
           if tags['name'] != nil
@@ -205,11 +205,11 @@ module CartoCSSHelper
 
     def check_dy(tags, zlevel, interactive = false, on_water = false)
       if !is_object_displaying_anything_as_node tags, zlevel, on_water
-        #puts key+"="+value+" - not displayed as node on z#{zlevel}"
+        # puts key+"="+value+" - not displayed as node on z#{zlevel}"
         return
       end
       if !is_object_displaying_name_as_node tags, 'a', zlevel, on_water
-        #puts key+"="+value+" - label is missing on z#{zlevel} nodes"
+        # puts key+"="+value+" - label is missing on z#{zlevel} nodes"
         return
       end
       test_name = 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ'
@@ -225,7 +225,7 @@ module CartoCSSHelper
         with_name.flush_cache
         puts 'calculating'
       end
-      #puts key+"="+value+" - name is OK for name '#{name}'"
+      # puts key+"="+value+" - name is OK for name '#{name}'"
     end
 
     def is_object_displaying_name_as_this_object_type(tags, name, zlevel, on_water, type)

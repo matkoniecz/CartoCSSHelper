@@ -169,22 +169,6 @@ Style/IfUnlessModifier:
     - 'lib/cartocss_helper/validator.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 99
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'cartocss_helper.gemspec'
-    - 'lib/cartocss_helper/heuristic.rb'
-    - 'lib/cartocss_helper/image_generator.rb'
-    - 'lib/cartocss_helper/overpass_downloader.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/validator.rb'
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-    - 'lib/data/testing_locations.rb'
-
 # Offense count: 18
 # Cop supports --auto-correct.
 Style/NegatedIf:

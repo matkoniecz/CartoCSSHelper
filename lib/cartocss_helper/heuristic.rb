@@ -7,8 +7,8 @@ module CartoCSSHelper
       tags = get_tags_from_mss
       tags.merge(get_tags_from_yaml)
       tags.merge(get_tags_from_osm2pqsql)
-      #unrecovable = Set.new [['area', 'yes'], ['area', 'no']] #TODO - how this should be handled?
-      #tags.merge(unrecovable)
+      # unrecovable = Set.new [['area', 'yes'], ['area', 'no']] #TODO - how this should be handled?
+      # tags.merge(unrecovable)
       return tags.to_a.sort
     end
 
@@ -42,7 +42,7 @@ module CartoCSSHelper
     def get_tags_from_mss_file(style_filename)
       possible_key_values = get_tags_from_osm2pqsql
       tags = Set.new
-      #puts style_filename
+      # puts style_filename
       style_file = open(style_filename)
       style = style_file.read
       matched = style.scan(/\[feature = '(man_made|[^_]+)_([^']+)'\]/)
@@ -69,12 +69,12 @@ module CartoCSSHelper
       tags = Set.new
       yaml_file = open(yaml_filename)
       yaml = yaml_file.read
-      #(.*\.|)     #WHERE p.highway = 'turning_circle'
-      #("|)        #natural and other SQL keywords
-      #([^"() ]+)  #tag
-      #repeat
+      # (.*\.|)     #WHERE p.highway = 'turning_circle'
+      # ("|)        #natural and other SQL keywords
+      # ([^"() ]+)  #tag
+      # repeat
       # =
-      #'([^'()]+)' #quoted value
+      # '([^'()]+)' #quoted value
       matched = yaml.scan(/(.*\.|)("|)([^"() ]+)("|) = '([^'()]+)'/)
       matched.each { |element|
         key = element[2]
@@ -104,7 +104,7 @@ module CartoCSSHelper
 
     def get_tags_from_osm2pqsql_file(style_filename)
       tags = Set.new
-      #puts style_filename
+      # puts style_filename
       style_file = open(style_filename)
       style = style_file.read
       matched = style.scan(/^(node,way|node|way)\s*([^ ]+)\s*text\s*($|linear|polygon|nocache)/)

@@ -8,7 +8,7 @@ module CartoCSSHelper
   class OverpassQueryGenerator
     class NoLocationFound < StandardError
     end
-    #TODO: - split into cache handling and Overpass handling
+    # TODO: - split into cache handling and Overpass handling
     def self.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters = 20)
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
@@ -91,7 +91,7 @@ module CartoCSSHelper
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
-      #special support for following tag values:  :any_value
+      # special support for following tag values:  :any_value
       range = 10 * 1000
       loop do
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
@@ -119,7 +119,7 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
-      #special support for following tag values:  :any_value
+      # special support for following tag values:  :any_value
       locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
       locator += "\n"
       if type == 'closed_way'
@@ -157,8 +157,8 @@ module CartoCSSHelper
     end
 
     def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
-      #special support for following tag values:  :any_value
-      #TODO - escape value with quotation signs in them
+      # special support for following tag values:  :any_value
+      # TODO - escape value with quotation signs in them
       element = "(#{type}"
       element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags)
       element += "\n"
@@ -248,7 +248,7 @@ module CartoCSSHelper
       return query_cache_filename
     end
 
-    def self.check_for_free_space #TODO: it really does not belong here...
+    def self.check_for_free_space # TODO: it really does not belong here...
       if not_enough_free_space
         attempt_cleanup
         if not_enough_free_space
@@ -294,7 +294,7 @@ module CartoCSSHelper
     end
 
     def self.delete_large_overpass_caches(threshold_in_MB)
-      #TODO: - find library that deals with caches like this, bug here may be unfunny
+      # TODO: - find library that deals with caches like this, bug here may be unfunny
       Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') {|file|
         if File.size(file) > (1024 * 1024 * threshold_in_MB)
           delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")

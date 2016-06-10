@@ -188,8 +188,8 @@ module CartoCSSHelper
         TagRenderingStatus.new('highway', 'traffic_signals', :primary),
         TagRenderingStatus.new('highway', 'trunk', :primary),
         TagRenderingStatus.new('highway', 'trunk_link', :primary),
-        TagRenderingStatus.new('highway', 'turning_circle', :primary), #note: special topology is required
-        TagRenderingStatus.new('highway', 'turning_loop', :primary), #note: special topology is required
+        TagRenderingStatus.new('highway', 'turning_circle', :primary), # note: special topology is required
+        TagRenderingStatus.new('highway', 'turning_loop', :primary), # note: special topology is required
         TagRenderingStatus.new('highway', 'unclassified', :primary),
         TagRenderingStatus.new('historic', 'archaeological_site', :primary),
         TagRenderingStatus.new('historic', 'citywalls', :primary),
@@ -226,16 +226,16 @@ module CartoCSSHelper
         TagRenderingStatus.new('landuse', 'retail', :primary),
         TagRenderingStatus.new('landuse', 'village_green', :primary),
         TagRenderingStatus.new('landuse', 'vineyard', :primary),
-        TagRenderingStatus.new('layer', '1', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '2', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '3', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '4', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '5', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '-1', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '-2', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '-3', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '-4', :composite, { 'highway' => 'service' }), #modifies ordering
-        TagRenderingStatus.new('layer', '-5', :composite, { 'highway' => 'service' }), #modifies ordering
+        TagRenderingStatus.new('layer', '1', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '2', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '3', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '4', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '5', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '-1', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '-2', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '-3', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '-4', :composite, { 'highway' => 'service' }), # modifies ordering
+        TagRenderingStatus.new('layer', '-5', :composite, { 'highway' => 'service' }), # modifies ordering
         TagRenderingStatus.new('leisure', 'common', :primary),
         TagRenderingStatus.new('leisure', 'garden', :primary),
         TagRenderingStatus.new('leisure', 'golf_course', :primary),
@@ -650,41 +650,41 @@ module CartoCSSHelper
         TagRenderingStatus.new('width', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
         TagRenderingStatus.new('wood', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
 
-        #heuristic detecting tags that do not exist - result of transformations in SQL unless noted otherwise
+        # heuristic detecting tags that do not exist - result of transformations in SQL unless noted otherwise
         TagRenderingStatus.new('shop', 'other', :ignored),
         TagRenderingStatus.new('highway', 'runway', :ignored),
         TagRenderingStatus.new('highway', 'taxiway', :ignored),
-        TagRenderingStatus.new('access', 'yes', :ignored), #as access is assumed to be yes constructions "access=null or access=yes" are typical
-        TagRenderingStatus.new('tunnel', 'no', :ignored), #tunnel=no is assumed as default and has no chance to override anything
+        TagRenderingStatus.new('access', 'yes', :ignored), # as access is assumed to be yes constructions "access=null or access=yes" are typical
+        TagRenderingStatus.new('tunnel', 'no', :ignored), # tunnel=no is assumed as default and has no chance to override anything
 
-        #TODO: - population is used only with numeric values. Currently there is no way to express this
+        # TODO: - population is used only with numeric values. Currently there is no way to express this
       ]
     end
 
     def self.get_composite_sets
       return [
-        { 'name' => 'a' }, #place=city...
-        { 'name' => 'a', 'place' => 'city' }, #capital=yes, 4
-        { 'highway' => 'service' }, #access, ref, bridge, tunnel, service=parking_aisle...
-        { 'highway' => 'service', 'junction' => 'roundabout' }, #oneway=no, reversible
-        { 'highway' => 'footway' }, #surface=unpaved...
-        { 'natural' => 'beach' }, #surface=stones...
-        { 'railway' => 'rail' }, #service=siding
-        { 'boundary' => 'administrative' }, #admin_level
-        { 'admin_level' => '2' }, #boundary=administrative
-        { 'natural' => 'peak' }, #ele=*
-        { 'ref' => '3' }, #aeroway=gate
-        { 'highway' => 'motorway' }, #ref=*
-        { 'amenity' => 'place_of_worship' }, #religion=christian
-        { 'amenity' => 'place_of_worship', 'religion' => 'christian' }, #denomination=jehovahs_witness
-        { 'waterway' => 'river' }, #bridge=aqueduct, tunnel=culvert, intermittent=yes
-        { 'power' => 'generator' }, #power_source=wind
-        { 'highway' => 'path' }, #bicycle=designated
-        { 'highway' => 'construction' }, #construction=motorway...
-        { 'highway' => 'track' }, #tracktype=grade1...
-        { 'amenity' => 'parking' }, #access=*...
-        #{'barrier' => 'hedge'}, #area=yes
-        { 'natural' => 'wetland' }, #wetland=bog...
+        { 'name' => 'a' }, # place=city...
+        { 'name' => 'a', 'place' => 'city' }, # capital=yes, 4
+        { 'highway' => 'service' }, # access, ref, bridge, tunnel, service=parking_aisle...
+        { 'highway' => 'service', 'junction' => 'roundabout' }, # oneway=no, reversible
+        { 'highway' => 'footway' }, # surface=unpaved...
+        { 'natural' => 'beach' }, # surface=stones...
+        { 'railway' => 'rail' }, # service=siding
+        { 'boundary' => 'administrative' }, # admin_level
+        { 'admin_level' => '2' }, # boundary=administrative
+        { 'natural' => 'peak' }, # ele=*
+        { 'ref' => '3' }, # aeroway=gate
+        { 'highway' => 'motorway' }, # ref=*
+        { 'amenity' => 'place_of_worship' }, # religion=christian
+        { 'amenity' => 'place_of_worship', 'religion' => 'christian' }, # denomination=jehovahs_witness
+        { 'waterway' => 'river' }, # bridge=aqueduct, tunnel=culvert, intermittent=yes
+        { 'power' => 'generator' }, # power_source=wind
+        { 'highway' => 'path' }, # bicycle=designated
+        { 'highway' => 'construction' }, # construction=motorway...
+        { 'highway' => 'track' }, # tracktype=grade1...
+        { 'amenity' => 'parking' }, # access=*...
+        # {'barrier' => 'hedge'}, #area=yes
+        { 'natural' => 'wetland' }, # wetland=bog...
       ]
     end
 
@@ -695,8 +695,8 @@ module CartoCSSHelper
         { 'addr:interpolation' => CartoCSSHelper::Heuristic.get_generic_tag_value },
         { 'aeroway' => 'runway' },
         { 'aeroway' => 'taxiway' },
-        { 'amenity' => 'atm' }, #operator tag is rendered
-        { 'amenity' => 'bench' }, #many are memorials but in that case historic=memorial tag should be present
+        { 'amenity' => 'atm' }, # operator tag is rendered
+        { 'amenity' => 'bench' }, # many are memorials but in that case historic=memorial tag should be present
         { 'amenity' => 'bicycle_parking' },
         { 'amenity' => 'emergency_phone' },
         { 'amenity' => 'toilets' },
@@ -723,15 +723,15 @@ module CartoCSSHelper
         { 'power' => 'line' },
         { 'power' => 'minor_line' },
         { 'railway' => 'level_crossing' },
-        { 'railway' => 'subway_entrance' }, #correct tagging is rare, usually it is name of station
+        { 'railway' => 'subway_entrance' }, # correct tagging is rare, usually it is name of station
 
-        #intentional, see https://github.com/gravitystorm/openstreetmap-carto/pull/1183
+        # intentional, see https://github.com/gravitystorm/openstreetmap-carto/pull/1183
         { 'tunnel' => 'culvert', 'waterway' => 'river' },
         { 'tunnel' => 'culvert', 'waterway' => 'stream' },
         { 'tunnel' => 'culvert', 'waterway' => 'ditch' },
         { 'tunnel' => 'culvert', 'waterway' => 'drain' },
 
-        { 'waterway' => 'wadi' }, #tag itself will be soon gone, no point in bugfixing it now
+        { 'waterway' => 'wadi' }, # tag itself will be soon gone, no point in bugfixing it now
         { 'waterway' => 'riverbank' },
       ]
     end

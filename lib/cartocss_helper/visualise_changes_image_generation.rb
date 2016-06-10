@@ -9,9 +9,9 @@ module CartoCSSHelper
     @@jobs = []
 
     def self.enable_job_pooling
-      #it results in avoiding loading the same database mutiple times
-      #useful if the same database will be used multiple times (for example the same place in multiple comparisons)
-      #use run_jobs function to run jobs
+      # it results in avoiding loading the same database mutiple times
+      # useful if the same database will be used multiple times (for example the same place in multiple comparisons)
+      # use run_jobs function to run jobs
       @@job_pooling = true
     end
 
@@ -144,7 +144,7 @@ module CartoCSSHelper
     end
 
     def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
-      #special support for following tag values:  :any_value
+      # special support for following tag values:  :any_value
       header_prefix = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude }, #{ wanted_longitude }] -> "
       target_location = '[?, ?]'
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"

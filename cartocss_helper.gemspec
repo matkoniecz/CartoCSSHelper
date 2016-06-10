@@ -12,14 +12,14 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.8.23'
 
   # If you have other dependencies, add them here
-  #open3 is from stdlib
-  #fileutils is from stdlib
-  #find is from stdlib
+  # open3 is from stdlib
+  # fileutils is from stdlib
+  # find is from stdlib
   s.add_dependency 'rest-client', '~> 1.8.0'
-  #digest/sha1 is from stdlib
+  # digest/sha1 is from stdlib
   s.add_dependency 'sys-filesystem', '~> 1.1.4'
-  #open3 is from stdlib
-  #set is from stdlib
+  # open3 is from stdlib
+  # set is from stdlib
   s.add_dependency 'rmagick', '~> 2.15.2'
   s.add_dependency 'ruby-progressbar', '~> 1.8'
 

@@ -27,7 +27,7 @@ module CartoCSSHelper
       if @on_water != another_scene.on_water
         raise 'on_water mismatch'
       end
-      #Returns true if the contents of a file A and a file B are identical.
+      # Returns true if the contents of a file A and a file B are identical.
       return !FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
     end
 

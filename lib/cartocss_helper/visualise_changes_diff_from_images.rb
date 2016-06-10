@@ -9,7 +9,7 @@ module CartoCSSHelper
     end
 
     def identical(another_image)
-      #Returns true if the contents of a file A and a file B are identical.
+      # Returns true if the contents of a file A and a file B are identical.
       return FileUtils.compare_file(self.file_location, another_image.file_location)
     end
   end
@@ -96,9 +96,9 @@ module CartoCSSHelper
     def render_diff_note(y_offset)
       drawer = Magick::Draw.new
       drawer.pointsize(@diff_note_space)
-      #drawer.text(@margin, y_offset, 'before')
+      # drawer.text(@margin, y_offset, 'before')
       drawer.draw(@canvas)
-      #drawer.text(@margin*2 + @image_size, y_offset, 'after')
+      # drawer.text(@margin*2 + @image_size, y_offset, 'after')
       drawer.draw(@canvas)
     end
 

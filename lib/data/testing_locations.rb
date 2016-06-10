@@ -1,17 +1,17 @@
 def get_list_of_testing_locations
   return [
-    [50.1, 19.9], #Krakow
-    [53.2, -1.8], #rural uk
-    [36.1, 140.7], #Japan
-    [54.8, 31.7], #Russia
-    [21.3, 39.5], #Mecca
-    [41.4, 44.5], #Georgia
-    [51.5, -0.1], #London
-    #TODO: solve problems with response too big to store in memory
-    #[52.09, 5.11], #Utrecht
+    [50.1, 19.9], # Krakow
+    [53.2, -1.8], # rural uk
+    [36.1, 140.7], # Japan
+    [54.8, 31.7], # Russia
+    [21.3, 39.5], # Mecca
+    [41.4, 44.5], # Georgia
+    [51.5, -0.1], # London
+    # TODO: solve problems with response too big to store in memory
+    # [52.09, 5.11], #Utrecht
 
-    #http://overpass-turbo.eu/s/ar4
-    #capital locations
+    # http://overpass-turbo.eu/s/ar4
+    # capital locations
     [-41.2887639, 174.7772239],
     [37.9841493, 23.7279843],
     [46.0498650, 14.5068921],
@@ -19,7 +19,7 @@ def get_list_of_testing_locations
     [28.6138967, 77.2159562],
     [33.6945756, 73.0643744],
     [48.2083537, 16.3725042],
-    #[48.8565056, 2.3521334], TODO: solve problems with rest-client crashing and blabbing about negative integers
+    # [48.8565056, 2.3521334], TODO: solve problems with rest-client crashing and blabbing about negative integers
     [46.9482713, 7.4514512],
     [45.4210328, -75.6900219],
     [59.9132694, 10.7391112],
