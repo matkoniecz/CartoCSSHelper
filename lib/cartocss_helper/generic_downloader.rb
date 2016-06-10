@@ -28,8 +28,8 @@ class GenericDownloader
     end
   end
 
-  def output_shared_error_part(error_message, url, e)
-    puts error_message unless error_message.nil?
+  def output_shared_error_part(url, e)
+    puts @error_message unless @error_message.nil?
     puts
     puts url
     puts
@@ -48,19 +48,19 @@ class GenericDownloader
   def get_specified_resource(url)
     return fetch_data_from_url_using_rest_client(url)
   rescue SocketError, URI::InvalidURIError => e
-    output_shared_error_part(error_message, url, e)
+    output_shared_error_part(url, e)
     get_specified_resource(url) if retry_allowed(e)
   rescue RequestTimeout, RestClient::RequestFailed, RestClient::ServerBrokeConnection, RestClient::ResourceNotFound => e
-    output_shared_error_part(error_message, url, e)
+    output_shared_error_part(url, e)
     puts e.response
     puts e.http_code
     get_specified_resource(url) if retry_allowed(e)
   rescue ArgumentError => e
-    output_shared_error_part(error_message, url, e)
+    output_shared_error_part(url, e)
     raise ResourcePernamentlyUnavailable, 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359 (requesting GBs of data)'
   rescue => e
     puts 'unhandled exception! It is a clear bug!'
-    output_shared_error_part(error_message, url, e)
+    output_shared_error_part(url, e)
     puts "<#{e.class} error happened>"
     raise e
   end
