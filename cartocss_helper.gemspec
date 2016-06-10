@@ -17,13 +17,14 @@ Gem::Specification.new do |s|
   # find is from stdlib
   s.add_dependency 'rest-client', '~> 1.8.0'
   # digest/sha1 is from stdlib
-  s.add_dependency 'sys-filesystem', '~> 1.1'
+  s.add_dependency 'sys-filesystem', '~> 1.1', '>= 1.1.0'
   # open3 is from stdlib
   # set is from stdlib
   s.add_dependency 'rmagick', '~> 2.15.2'
   s.add_dependency 'ruby-progressbar', '~> 1.8'
 
   s.add_development_dependency 'rubocop', '~> 0.40.0'
+  s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
 
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
