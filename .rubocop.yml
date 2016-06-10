@@ -25,6 +25,10 @@ Style/TrailingCommaInLiteral:
 Style/SpecialGlobalVars:
   Enabled: false
 
+#affected by rubocop bug
+Style/GuardClause:
+  Enabled: false
+
 #this folder contains functions returning arrays of data, so functions will be long
 Metrics/AbcSize:
   Exclude:
