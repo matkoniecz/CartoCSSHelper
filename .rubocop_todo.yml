@@ -111,11 +111,6 @@ Style/Documentation:
 Style/For:
   Enabled: false
 
-# Offense count: 3
-Style/IfInsideElse:
-  Exclude:
-    - 'lib/cartocss_helper/tag_lister.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/NumericLiterals:
@@ -127,15 +122,3 @@ Style/RedundantSelf:
   Exclude:
     - 'lib/cartocss_helper/image_generator.rb'
     - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/VariableName:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/ZeroLengthPredicate:
-  Exclude:
-    - 'lib/cartocss_helper/overpass_query_generator.rb'

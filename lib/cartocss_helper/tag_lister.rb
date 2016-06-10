@@ -81,21 +81,28 @@ module CartoCSSHelper
 
     def get_render_state_of_tag_quick_heurestic
       if expected_composite != nil
-        if is_rendered_as_composite key, value, expected_composite, zlevels
-          @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
-          return :composite
-        else
-          @last_composite = nil
-          return :ignored
-        end
+        return assume_that_only_this_composite_can_match(key, value, zlevels, expected_composite)
       else
-        if is_rendered key, value, zlevels
-          @last_composite = nil
-          return :primary
-        else
-          @last_composite = nil
-          return :ignored
-        end
+        return asssume_that_no_composite_will_match(key, value, zlevels)
+      end
+    end
+
+    def assume_that_only_this_composite_can_match(key, value, zlevels, expected_composite)
+      if is_rendered_as_composite key, value, expected_composite, zlevels
+        @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
+        return :composite
+      else
+        @last_composite = nil
+        return :ignored
+      end
+    end
+
+    def asssume_that_no_composite_will_match(key, value, zlevels)
+      @last_composite = nil
+      if is_rendered key, value, zlevels
+        return :primary
+      else
+        return :ignored
       end
     end
 
@@ -103,14 +110,13 @@ module CartoCSSHelper
       if is_rendered key, value, zlevels
         @last_composite = nil
         return :primary
+      end
+      if is_rendered_as_composite key, value, expected_composite
+        @last_composite = how_rendered_as_composite key, value, expected_composite
+        return :composite
       else
-        if is_rendered_as_composite key, value, expected_composite
-          @last_composite = how_rendered_as_composite key, value, expected_composite
-          return :composite
-        else
-          @last_composite = nil
-          return :ignored
-        end
+        @last_composite = nil
+        return :ignored
       end
     end
 
@@ -124,14 +130,12 @@ module CartoCSSHelper
         else
           puts "#{key}=#{value} - primary"
         end
+      elsif is_rendered_as_composite key, value, @last_composite
+        @last_composite = how_rendered_as_composite key, value, @last_composite
+        puts "#{key}=#{value} - composite with #{@last_composite} - and maybe other tags"
       else
-        if is_rendered_as_composite key, value, @last_composite
-          @last_composite = how_rendered_as_composite key, value, @last_composite
-          puts "#{key}=#{value} - composite with #{@last_composite} - and maybe other tags"
-        else
-          @last_composite = nil
-          puts "#{key}=#{value} - not displayed"
-        end
+        @last_composite = nil
+        puts "#{key}=#{value} - not displayed"
       end
     end
 

@@ -24,6 +24,10 @@ Style/TrailingCommaInLiteral:
 Style/ClassVars:
   Enabled: false
 
+#false positive
+Style/VariableName:
+  Enabled: false
+
 #? I am not sure...
 Style/BracesAroundHashParameters:
   Enabled: false
@@ -42,6 +46,10 @@ Style/NilComparison:
 
 #? I am not sure...
 Style/RegexpLiteral:
+  Enabled: false
+
+#? I am not sure...
+Style/ZeroLengthPredicate:
   Enabled: false
 
 #not impressed by proposed changes, but maybe it was a bad luck
