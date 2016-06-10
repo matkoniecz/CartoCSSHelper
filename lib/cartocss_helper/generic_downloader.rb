@@ -4,11 +4,15 @@ class GenericDownloader
   class ResourcePernamentlyUnavailable < StandardError
   end
 
-  def initialize(timeout: 20, error_message: nil, additional_lethal: [])
+  class RequestTimeout < StandardError
+  end
+
+  def initialize(timeout: 20, error_message: nil, retry_on_timeout: true)
     @timeout = timeout
     @retry_count = 0
     @error_message = error_message
-    @lethal_exceptions = [URI::InvalidURIError, RestClient::ResourceNotFound] + additional_lethal
+    @lethal_exceptions = [URI::InvalidURIError, RestClient::ResourceNotFound]
+    @lethal_exceptions += [RequestTimeout] if retry_on_timeout == false
   end
 
   def max_retry_count
@@ -45,14 +49,14 @@ class GenericDownloader
   rescue SocketError, URI::InvalidURIError => e
     output_shared_error_part(error_message, url, e)
     get_specified_resource(url) if retry_allowed(e)
-  rescue RestClient::RequestFailed, RestClient::ServerBrokeConnection, RestClient::ResourceNotFound => e
+  rescue RequestTimeout, RestClient::RequestFailed, RestClient::ServerBrokeConnection, RestClient::ResourceNotFound => e
     output_shared_error_part(error_message, url, e)
     puts e.response
     puts e.http_code
     get_specified_resource(url) if retry_allowed(e)
   rescue ArgumentError => e
     output_shared_error_part(error_message, url, e)
-    raise ResourcePernamentlyUnavailable, 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359'
+    raise ResourcePernamentlyUnavailable, 'ArgumentError from rest-client, most likely caused by https://github.com/rest-client/rest-client/issues/359 (requesting GBs of data)'
   rescue => e
     puts 'unhandled exception! It is a clear bug!'
     output_shared_error_part(error_message, url, e)
@@ -65,5 +69,7 @@ class GenericDownloader
     # see https://github.com/rest-client/rest-client/issues/370, will be fixed in 2.0
     # published versions listed on https://rubygems.org/gems/rest-client/versions/
     return String.new(data)
+  rescue RestClient::RequestTimeout => e
+    raise RequestTimeout, e
   end
 end
