@@ -98,7 +98,7 @@ module CartoCSSHelper
         if list.length != 0
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         end
-        range = range + [2 * range, 200000].min
+        range += [2 * range, 200000].min
         next unless range >= max_range_in_km_for_radius * 1000
         description = "find #{tags} #{type} across the world"
         query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity)

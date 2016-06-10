@@ -40,6 +40,10 @@ Style/PredicateName:
 Style/NilComparison:
   Enabled: false
 
+#? I am not sure...
+Style/RegexpLiteral:
+  Enabled: false
+  
 #failed to detect anything useful here
 Style/IdenticalConditionalBranches:
   Exclude:
