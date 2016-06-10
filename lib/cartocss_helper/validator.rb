@@ -69,13 +69,13 @@ module CartoCSSHelper
     end
 
     def ensure_that_tags_documented_and_rendered_have_the_same_state(list_of_documented, list_of_rendered)
-      list_of_rendered.each { |tag_info|
+      list_of_rendered.each do |tag_info|
         compare_expected_with_tag_data list_of_documented, tag_info
-      }
+      end
     end
 
     def ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
-      list_of_rendered.each { |tag_info|
+      list_of_rendered.each do |tag_info|
         next if is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
         puts 'documented'
         puts "\tmissing"
@@ -83,11 +83,11 @@ module CartoCSSHelper
         print "\t"
         tag_info.print
         puts
-      }
+      end
     end
 
     def ensure_that_all_documented_are_really_rendered(list_of_documented, list_of_rendered)
-      list_of_documented.each { |documented|
+      list_of_documented.each do |documented|
         if Info.get_expected_state(documented.key, documented.value) == :ignored
           next
         end
@@ -98,21 +98,21 @@ module CartoCSSHelper
         puts 'real'
         puts "\tmissing"
         puts
-      }
+      end
     end
 
     def is_tag_documented(list, key, value)
-      list.each { |tag_info|
+      list.each do |tag_info|
         next unless key == tag_info.key
         if value == tag_info.value
           return true
         end
-      }
+      end
       return false
     end
 
     def compare_expected_with_tag_data(list_of_expected, tag_info)
-      list_of_expected.each { |expected|
+      list_of_expected.each do |expected|
         next unless expected.key == tag_info.key
         next unless expected.value == tag_info.value
         if expected.equal? tag_info
@@ -125,11 +125,11 @@ module CartoCSSHelper
           puts
         end
         return
-      }
+      end
     end
 
     def run_global_check(function)
-      Heuristic.get_tags.each { |element|
+      Heuristic.get_tags.each do |element|
         key = element[0]
         value = element[1]
         state = Info.get_expected_state(key, value)
@@ -140,10 +140,10 @@ module CartoCSSHelper
         if state == :composite
           tags.merge!(Info.get_expected_composite(key, value))
         end
-        (Configuration.get_max_z..Configuration.get_max_z).each { |zlevel| # get_min_z should be used - but as renderer is extremely slow this hack was used TODO
+        (Configuration.get_max_z..Configuration.get_max_z).each do |zlevel| # get_min_z should be used - but as renderer is extremely slow this hack was used TODO
           send(function, tags, zlevel)
-        }
-      }
+        end
+      end
     end
 
     def check_problems_with_closed_line(tags, zlevel, on_water = false)
@@ -162,7 +162,7 @@ module CartoCSSHelper
       if not_required.include?(tags)
         return
       end
-      ['node', 'closed_way', 'way'].each{|type|
+      ['node', 'closed_way', 'way'].each do |type|
         if not_required.include?(tags.merge({ type: type }))
           next
         end
@@ -177,11 +177,11 @@ module CartoCSSHelper
           puts "#{tags} - label is missing on z#{zlevel} #{type}"
           next
         end
-      }
+      end
     end
 
     def check_unwanted_names(tags, zlevel, interactive = false, on_water = false)
-      ['node', 'closed_way', 'way'].each{|type|
+      ['node', 'closed_way', 'way'].each do |type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
         next unless not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
         unless is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
@@ -194,7 +194,7 @@ module CartoCSSHelper
         if is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
           puts "#{tags} - label is unxpectedly displayed on z#{zlevel} #{type}"
         end
-      }
+      end
     end
 
     def check_dy(tags, zlevel, interactive = false, on_water = false)

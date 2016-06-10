@@ -16,9 +16,9 @@ include CartoCSSHelper::Git
 
 module CartoCSSHelper
   def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types = ['node', 'closed_way', 'way'], min = 4, skip = 0)
-    types.each {|type|
+    types.each do |type|
       test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min, skip)
-    }
+    end
   end
 
   def self.test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min = 4, skip = 0)
@@ -60,9 +60,9 @@ module CartoCSSHelper
 
   def self.test_tag_on_sythetic_data(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
-    types.each {|type|
+    types.each do |type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
-    }
+    end
   end
 
   def self.test(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
@@ -73,9 +73,9 @@ module CartoCSSHelper
 
   def self.probe(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
-    types.each {|type|
+    types.each do |type|
       CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
-    }
+    end
   end
 
   def self.get_latitude_longitude_from_url(url)

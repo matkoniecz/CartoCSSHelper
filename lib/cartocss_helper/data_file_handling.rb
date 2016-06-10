@@ -122,19 +122,19 @@ module CartoCSSHelper
     def add_way(tags, nodes, id)
       @data_file.write "\n"
       @data_file.write "  <way id='#{id}' visible='true'>"
-      nodes.each { |node|
+      nodes.each do |node|
         @data_file.write "\n"
         @data_file.write "    <nd ref='#{node}' />"
-      }
+      end
       add_tags(tags)
       @data_file.write "\n  </way>"
     end
 
     def add_tags(tags)
-      tags.each { |tag|
+      tags.each do |tag|
         @data_file.write "\n"
         @data_file.write "    <tag k='#{tag[0]}' v='#{tag[1]}' />"
-      }
+      end
     end
   end
 end

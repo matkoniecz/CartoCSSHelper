@@ -46,13 +46,13 @@ module CartoCSSHelper
 
     def compress(before, after)
       returned = [PairOfComparedImages.new(before[0], after[0])]
-      (1...before.length).each { |i|
+      (1...before.length).each do |i|
         if before[i].identical(before[i - 1]) && after[i].identical(after[i - 1])
           returned[-1].merge_description_from_next_image(before[i])
         else
           returned.push(PairOfComparedImages.new(before[i], after[i]))
         end
-      }
+      end
       return returned
     end
 
@@ -103,9 +103,9 @@ module CartoCSSHelper
     end
 
     def render_images_with_labels(y_offset)
-      (0...@compared.length).each { |i|
+      (0...@compared.length).each do |i|
         render_row_of_labelled_images(@compared[i], y_offset + i * (@margin + @image_size))
-      }
+      end
     end
 
     def render_row_of_labelled_images(processed, y_offset)

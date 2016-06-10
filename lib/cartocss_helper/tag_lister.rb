@@ -33,42 +33,42 @@ module CartoCSSHelper
 
   class Info
     def self.get_expected_state(key, value)
-      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each do |documented|
         next unless documented.key == key
         if documented.value == value
           return documented.state
         end
-      }
+      end
       return nil
     end
 
     def self.get_expected_composite(key, value)
-      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each { |documented|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each do |documented|
         next unless documented.key == key
         if documented.value == value
           return documented.composite
         end
-      }
+      end
       return nil
     end
 
     def print_render_state_of_tags(git_branch)
       Git.checkout git_branch
-      get_render_state_of_tags.each { |state|
+      get_render_state_of_tags.each do |state|
         state.code_print
-      }
+      end
     end
 
     def get_render_state_of_tags(quick_and_more_prone_to_errors)
       states = []
       @last_composite = nil
-      Heuristic.get_tags.each { |tag|
+      Heuristic.get_tags.each do |tag|
         key = tag[0]
         value = tag[1]
         # print_render_state_of_tag key, value
         state = get_render_state_of_tag(key, value, quick_and_more_prone_to_errors)
         states.push(TagRenderingStatus.new(key, value, state, @last_composite))
-      }
+      end
       return states
     end
 
@@ -145,16 +145,16 @@ module CartoCSSHelper
       if notis_rendered key, get_generic_tag_value
         return false
       end
-      [false, true].each { |on_water|
-        [Configuration.get_max_z].each { |zlevel|
-          ['area', 'closed_way', 'way', 'node'].each{ |type|
+      [false, true].each do |on_water|
+        [Configuration.get_max_z].each do |zlevel|
+          ['area', 'closed_way', 'way', 'node'].each do |type|
             next unless CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
             unless is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
               return false
             end
-          }
-        }
-      }
+          end
+        end
+      end
       return true
     end
 
@@ -165,15 +165,15 @@ module CartoCSSHelper
     end
 
     def is_rendered(key, value, zlevels = [Configuration.get_max_z]) # TODO: - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
-      [false, true].each { |on_water|
-        zlevels.each { |zlevel| #
-          ['area', 'closed_way', 'way', 'node'].each{ |type|
+      [false, true].each do |on_water|
+        zlevels.each do |zlevel| #
+          ['area', 'closed_way', 'way', 'node'].each do |type|
             if CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
               return true
             end
-          }
-        }
-      }
+          end
+        end
+      end
       return false
     end
 
@@ -186,8 +186,8 @@ module CartoCSSHelper
     end
 
     def how_rendered_as_composite(key, value, suggested_composite, zlevels = [Configuration.get_max_z]) # TODO: - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
-      [false, true].each { |on_water|
-        zlevels.each { |zlevel|
+      [false, true].each do |on_water|
+        zlevels.each do |zlevel|
           result = how_rendered_on_zlevel_as_composite({ key => value }, 'closed_way', zlevel, on_water, suggested_composite)
           if result != nil
             return result
@@ -200,8 +200,8 @@ module CartoCSSHelper
           if result != nil
             return result
           end
-        }
-      }
+        end
+      end
       if suggested_composite != nil
         return how_rendered_as_composite key, value, nil
       end
@@ -223,11 +223,11 @@ module CartoCSSHelper
         end
         return nil
       end
-      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_compositions.each { |composite|
+      CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_compositions.each do |composite|
         if is_rendered_with_this_composite tags, type, composite, zlevel, on_water
           return composite
         end
-      }
+      end
       return nil
     end
 
@@ -238,12 +238,12 @@ module CartoCSSHelper
     def is_rendered_with_this_composite(tags, type, provided_composite, zlevel, on_water)
       tags_with_composite = deep_clone(tags)
       composite = deep_clone(provided_composite)
-      composite.each { |key, value|
+      composite.each do |key, value|
         if tags_with_composite[key] != nil
           return false # shadowing
         end
         tags_with_composite[key] = value
-      }
+      end
       with_composite = Scene.new(tags_with_composite, zlevel, on_water, type, true)
       only_composite = Scene.new(composite, zlevel, on_water, type, true)
       empty = Scene.new({}, zlevel, on_water, type, true)

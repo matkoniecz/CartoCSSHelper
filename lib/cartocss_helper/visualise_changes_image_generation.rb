@@ -96,21 +96,21 @@ module CartoCSSHelper
 
     def self.remove_magic_from_tags(tags)
       magicless_tags = {}
-      tags.each {|key, value|
+      tags.each do |key, value|
         if value == :any
           value = 'any tag value'
         end
         magicless_tags[key] = value
-      }
+      end
       return magicless_tags
     end
 
     def self.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
       collection = []
-      zlevel_range.each { |zlevel|
+      zlevel_range.each do |zlevel|
         scene = Scene.new(tags, zlevel, on_water, type)
         collection.push(ImageForComparison.new(scene.get_image_filename, "z#{zlevel}"))
-      }
+      end
       return collection
     end
 
@@ -193,7 +193,7 @@ module CartoCSSHelper
 
     def self.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size = 400)
       collection = []
-      zlevels.each { |zlevel|
+      zlevels.each do |zlevel|
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
         filename = "#{cache_folder + "#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
@@ -202,7 +202,7 @@ module CartoCSSHelper
           TilemillHandler.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
         end
         collection.push(ImageForComparison.new(filename, "z#{zlevel}"))
-      }
+      end
       return collection
     end
 
@@ -218,7 +218,7 @@ module CartoCSSHelper
 
     def self.dict_to_pretty_tag_list(dict)
       result = ''
-      dict.to_a.each { |tag|
+      dict.to_a.each do |tag|
         if result != ''
           result << '; '
         end
@@ -227,7 +227,7 @@ module CartoCSSHelper
           value = '{any value}'
         end
         result << "#{tag[0]}=#{value}"
-      }
+      end
       return result
     end
   end

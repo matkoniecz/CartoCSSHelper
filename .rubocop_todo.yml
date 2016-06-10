@@ -78,25 +78,6 @@ Style/AndOr:
   Exclude:
     - 'lib/cartocss_helper/validator.rb'
 
-# Offense count: 48
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
-# SupportedStyles: line_count_based, semantic, braces_for_chaining
-# ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
-# FunctionalMethods: let, let!, subject, watch
-# IgnoredMethods: lambda, proc, it
-Style/BlockDelimiters:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/git.rb'
-    - 'lib/cartocss_helper/heuristic.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/validator.rb'
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact

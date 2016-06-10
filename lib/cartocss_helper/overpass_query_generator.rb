@@ -150,14 +150,14 @@ module CartoCSSHelper
 
     def self.turn_list_of_tags_in_overpass_filter(tags)
       element = ''
-      tags.each {|tag|
+      tags.each do |tag|
         if tag[1] == :any_value
           element += "\t['#{tag[0]}']"
         else
           element += "\t['#{tag[0]}'='#{tag[1]}']"
         end
         element += "\n"
-      }
+      end
       return element
     end
 
@@ -290,21 +290,21 @@ module CartoCSSHelper
     end
 
     def self.delete_file(filename, reason)
-      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'log.txt', 'a') { |file|
+      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'log.txt', 'a') do |file|
         message = "deleting #{filename}, #{File.size(filename) / 1024 / 1024}MB - #{reason}"
         puts message
         file.puts(message)
         File.delete(filename)
-      }
+      end
     end
 
     def self.delete_large_overpass_caches(threshold_in_MB)
       # TODO: - find library that deals with caches like this, bug here may be unfunny
-      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') {|file|
+      Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') do |file|
         if File.size(file) > (1024 * 1024 * threshold_in_MB)
           delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
         end
-      }
+      end
     end
   end
 end

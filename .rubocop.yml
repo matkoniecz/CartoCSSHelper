@@ -32,6 +32,10 @@ Style/BracesAroundHashParameters:
 Style/RaiseArgs:
   Enabled: false
 
+#? I am not sure...
+Style/PredicateName:
+  Enabled: false
+
 #syntactic sugar without gain
 Style/NonNilCheck:
   Enabled: false
