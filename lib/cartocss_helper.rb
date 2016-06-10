@@ -13,7 +13,6 @@ require_relative 'cartocss_helper/generic_downloader.rb'
 require_relative 'data/testing_locations'
 include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
-include GenericDownloader
 
 module CartoCSSHelper
   def self.test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types = ['node', 'closed_way', 'way'], min = 4, skip = 0)

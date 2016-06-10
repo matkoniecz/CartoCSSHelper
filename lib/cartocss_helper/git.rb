@@ -8,9 +8,9 @@ module CartoCSSHelper
     def checkout(branch, debug = false)
       Dir.chdir(Configuration.get_path_to_tilemill_project_folder) {
         require 'open3'
-        command = "git checkout #{branch} #{silence}"
+        command = "git checkout #{branch}"
         begin
-          execute_command(command, debug)
+          execute_command(command, ignore_stderr_presence: true)
         rescue FailedCommandException => e
           raise 'failed checkout to ' + branch + ' due to ' + e
         end

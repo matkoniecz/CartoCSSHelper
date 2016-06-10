@@ -1,5 +1,4 @@
 require_relative 'generic_downloader.rb'
-include GenericDownloader
 
 module CartoCSSHelper
   class OverpassDownloader

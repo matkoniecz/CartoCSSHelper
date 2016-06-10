@@ -4,6 +4,12 @@ include SystemHelper
 
 module CartoCSSHelper
   class TilemillHandler
+    def self.try_again(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      return if debug
+      puts 'rerunning failed image generation with enabled debug'
+      run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)
+    end
+
     def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
       if File.exist?(export_filename)
         if debug
@@ -17,18 +23,19 @@ module CartoCSSHelper
       command = "node /usr/share/tilemill/index.js export #{project_name} '#{export_filename}' #{params}"
 
       begin
-        execute_command(command, debug)
+        execute_command(command, debug, ignore_stderr_presence: true)
       rescue FailedCommandException => e
-        unless debug
-          puts 'rerunning failed image generation with enabled debug'
-          return self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)
-        end
+        try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
+        puts e
         raise 'generation of file ' + export_filename + ' failed'
       end
-      raise 'silent failure' unless File.exist?(export_filename)
+      if !File.exist?(export_filename)
+        try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
+        raise 'generation of file ' + export_filename + 'silently failed'
+      end
     end
 
-    def get_bbox_string(lat, lon, bbox_size)
+    def self.get_bbox_string(lat, lon, bbox_size)
       latitude_bb_size = bbox_size[0]
       longitude_bb_size = bbox_size[1]
       #--bbox=[xmin,ymin,xmax,ymax]
