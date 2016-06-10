@@ -102,14 +102,6 @@ Style/ColonMethodCall:
     - 'lib/cartocss_helper/configuration.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-
 # Offense count: 25
 Style/Documentation:
   Enabled: false

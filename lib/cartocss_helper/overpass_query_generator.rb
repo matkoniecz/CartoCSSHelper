@@ -134,12 +134,11 @@ module CartoCSSHelper
       locator += 'out center;'
       locator += "\n"
       locator += '/*'
-      range_string = ''
-      if range == :infinity
-        range_string = 'infinity'
-      else
-        range_string = "#{range / 1000}km"
-      end
+      range_string = if range == :infinity
+                       'infinity'
+                     else
+                       "#{range / 1000}km"
+                     end
       locator += "\nrange: #{range_string}"
       locator += "\nhttp://www.openstreetmap.org/#map=17/#{latitude}/#{longitude}"
       locator += "\n"
@@ -151,11 +150,11 @@ module CartoCSSHelper
     def self.turn_list_of_tags_in_overpass_filter(tags)
       element = ''
       tags.each do |tag|
-        if tag[1] == :any_value
-          element += "\t['#{tag[0]}']"
-        else
-          element += "\t['#{tag[0]}'='#{tag[1]}']"
-        end
+        element += if tag[1] == :any_value
+                     "\t['#{tag[0]}']"
+                   else
+                     "\t['#{tag[0]}'='#{tag[1]}']"
+                   end
         element += "\n"
       end
       return element
