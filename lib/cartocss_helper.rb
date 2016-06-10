@@ -22,7 +22,7 @@ module CartoCSSHelper
   end
 
   def self.test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min = 4, skip = 0)
-    type = type[0] if type.kind_of?(Array)
+    type = type[0] if type.is_a?(Array)
     generated = 0
 
     n = 0
@@ -93,8 +93,8 @@ module CartoCSSHelper
     raise "#{new_branch} is not a string, it is #{new_branch.class}" unless new_branch.class == String
     raise "#{old_branch} is not a string, it is #{old_branch.class}" unless old_branch.class == String
     raise "#{header} is not a string, it is #{header.class}" unless header.class == String
-    raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
-    raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+    raise "#{download_bbox_size} is not a number" unless download_bbox_size.is_a? Numeric
+    raise "#{image_size} is not a integer" unless image_size.is_a? Integer
 
     latitude, longitude = get_latitude_longitude_from_url(url)
     header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' ' + image_size.to_s + 'px'
@@ -129,14 +129,14 @@ module CartoCSSHelper
 
   def self.visualise_place_by_file(filename, latitude, longitude, zlevels, new_branch, old_branch = 'master', header = nil, bb = 0.04, image_size = 350)
     raise "#{filename} does not exists" unless File.exist?(filename)
-    raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
-    raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
+    raise "#{latitude} is not a number" unless latitude.is_a? Numeric
+    raise "#{longitude} is not a number" unless longitude.is_a? Numeric
     raise "#{zlevels} is not a range" unless zlevels.class == Range
     raise "#{new_branch} is not a string" unless new_branch.class == String
     raise "#{old_branch} is not a string" unless old_branch.class == String
     raise "#{header} is not a string" unless header.class == String
-    raise "#{bb} is not a number" unless bb.kind_of? Numeric
-    raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+    raise "#{bb} is not a number" unless bb.is_a? Numeric
+    raise "#{image_size} is not a integer" unless image_size.is_a? Integer
 
     header = filename if header == nil
     header += ' ' + old_branch + '->' + new_branch + '[' + latitude.to_s + ',' + longitude.to_s + ']' + ' ' + image_size.to_s + 'px'

@@ -48,14 +48,14 @@ module CartoCSSHelper
       new_job.print
 
       raise "#{filename} does not exists" unless File.exist?(filename)
-      raise "#{latitude} is not a number" unless latitude.kind_of? Numeric
-      raise "#{longitude} is not a number" unless longitude.kind_of? Numeric
+      raise "#{latitude} is not a number" unless latitude.is_a? Numeric
+      raise "#{longitude} is not a number" unless longitude.is_a? Numeric
       raise "#{zlevels} is not a range" unless zlevels.class == Range
       raise "#{header} is not a string" unless header.class == String
       raise "#{new_branch} is not a string" unless new_branch.class == String
       raise "#{old_branch} is not a string" unless old_branch.class == String
-      raise "#{download_bbox_size} is not a number" unless download_bbox_size.kind_of? Numeric
-      raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
+      raise "#{download_bbox_size} is not a number" unless download_bbox_size.is_a? Numeric
+      raise "#{image_size} is not a integer" unless image_size.is_a? Integer
 
       @@jobs.push(new_job)
     end
