@@ -20,28 +20,21 @@ module CartoCSSHelper
     end
 
     class MapGenerationJob
-      attr_reader :filename, :active
+      attr_reader :filename
       def initialize(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
-        @filename = filename
         @latitude = latitude
         @longitude = longitude
         @zlevels = zlevels
         @header = header
         @old_branch = old_branch
         @new_branch = new_branch
-        @download_bbox_size = download_bbox_size
         @image_size = image_size
-        @active = true
+        @filename = filename
+        @data_source = CartoCSSHelper::VisualDiff::FileDataSource.new(@latitude, @longitude, download_bbox_size, @filename)
       end
 
       def run_job
-        unless @active
-          return
-        end
-        print
-        source = CartoCSSHelper::VisualDiff::FileDataSource.new(@latitude, @longitude, @download_bbox_size, @filename)
-        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, source)
-        @active = false
+        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, @data_source)
       end
 
       def print
@@ -68,16 +61,18 @@ module CartoCSSHelper
     end
 
     def self.run_jobs
-      for i in 0..@@jobs.length - 1
-        next unless @@jobs[i].active
-        @@jobs[i].run_job
-        for x in 0..@@jobs.length - 1
-          if @@jobs[i].filename == @@jobs[x].filename
-            @@jobs[x].run_job
-          end
+      new_job_array = []
+      @@jobs[0].run_job
+      for x in 1..@@jobs.length - 1
+        if @@jobs[0].filename == @@jobs[x].filename
+          # requires loading the same file as just run job
+          # it may be safely run without reloading database
+          @@jobs[x].run_job
+        else
+          new_job_array << @@jobs[x].filename
         end
       end
-      @@jobs = []
+      @@jobs = new_job_array
     end
 
     def self.shuffle_jobs(seed)
