@@ -24,3 +24,16 @@ Style/TrailingCommaInLiteral:
 #see https://github.com/bbatsov/rubocop/issues/1747
 Style/SpecialGlobalVars:
   Enabled: false
+
+#this folder contains functions returning arrays of data, so functions will be long
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/cartocss_helper/style_specific/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/cartocss_helper/style_specific/**/*'
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'lib/cartocss_helper/style_specific/**/*'

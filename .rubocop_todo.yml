@@ -6,6 +6,9 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+Metrics/AbcSize:
+  Max: 500
+
 # Offense count: 1
 Lint/ConditionPosition:
   Exclude:
@@ -33,10 +36,6 @@ Lint/UnusedMethodArgument:
     - 'lib/cartocss_helper/validator.rb'
     - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
 
-# Offense count: 25
-Metrics/AbcSize:
-  Max: 702
-
 # Offense count: 1
 Metrics/BlockNesting:
   Max: 4
@@ -44,7 +43,7 @@ Metrics/BlockNesting:
 # Offense count: 4
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 255
+  Max: 250
 
 # Offense count: 6
 Metrics/CyclomaticComplexity:
