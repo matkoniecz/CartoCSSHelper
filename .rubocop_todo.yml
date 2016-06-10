@@ -112,11 +112,6 @@ Style/Documentation:
 Style/For:
   Enabled: false
 
-# Offense count: 2
-Style/IdenticalConditionalBranches:
-  Exclude:
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-
 # Offense count: 3
 Style/IfInsideElse:
   Exclude:

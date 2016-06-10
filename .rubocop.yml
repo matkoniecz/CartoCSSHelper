@@ -36,6 +36,11 @@ Style/RaiseArgs:
 Style/PredicateName:
   Enabled: false
 
+#failed to detect anything useful here
+Style/IdenticalConditionalBranches:
+  Exclude:
+    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
+
 #syntactic sugar without gain
 Style/NonNilCheck:
   Enabled: false
