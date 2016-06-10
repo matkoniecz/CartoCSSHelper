@@ -9,7 +9,7 @@ class GenericDownloader
   end
 
   def initialize(timeout: 20, error_message: nil, retry_on_timeout: true)
-    @timeout = timeout
+    @request_timeout = timeout
     @retry_count = 0
     @error_message = error_message
     @lethal_exceptions = [URI::InvalidURIError, RestClient::ResourceNotFound]
@@ -66,7 +66,8 @@ class GenericDownloader
   end
 
   def fetch_data_from_url_using_rest_client(url)
-    data = RestClient::Request.execute(method: :get, url: url, timeout: timeout)
+    data = RestClient::Request.execute(method: :get, url: url, timeout: @request_timeout)
+    
     # see https://github.com/rest-client/rest-client/issues/370, will be fixed in 2.0
     # published versions listed on https://rubygems.org/gems/rest-client/versions/
     return String.new(data)

@@ -9,8 +9,7 @@ module CartoCSSHelper
       url = OverpassDownloader.format_query_into_url(query)
       timeout = OverpassDownloader.get_allowed_timeout_in_seconds
       downloader = GenericDownloader.new(timeout: timeout, retry_on_timeout: false)
-      downloader.get_specified_resource(url)
-      return String.new(response) # see https://github.com/rest-client/rest-client/issues/370, will be fixed in 2.0 - see https://rubygems.org/gems/rest-client/versions/
+      return downloader.get_specified_resource(url)
     rescue GenericDownloader::RequestTimeout => e
       puts 'Overpass API refused to process this request. It will be not attempted again, most likely query is too complex. It is also possible that Overpass servers are unavailable'
       puts
