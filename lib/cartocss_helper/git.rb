@@ -10,7 +10,7 @@ module CartoCSSHelper
         require 'open3'
         command = "git checkout #{branch}"
         begin
-          execute_command(command, ignore_stderr_presence: true)
+          execute_command(command, debug, ignore_stderr_presence: true)
         rescue FailedCommandException => e
           raise 'failed checkout to ' + branch + ' due to ' + e
         end
