@@ -12,29 +12,35 @@ module CartoCSSHelper
       return @@loaded_filename
     end
 
-    def self.load_data_into_database(data_filename, debug = false)
+    def self.get_command_to_load_using_osmpgsql(data_filename)
+      return "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}'"
+    end
+
+    def self.is_already_loaded(data_filename)
       if get_filename_of_recently_loaded_file == data_filename
         puts "\tavoided reloading the same file! <#{data_filename}>"
+        return true
+      end
+      return false
+    end
+
+    def self.load_data_into_database(data_filename, debug = false)
+      if is_already_loaded(data_filename)
         return
       end
       start_time = Time.now
       puts "\tloading data into database <#{data_filename}>"
       @@loaded_filename = nil
-      command = "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}'"
       begin
-        execute_command(command, debug)
+        execute_command(get_command_to_load_using_osmpgsql, debug)
       rescue FailedCommandException => e
         puts 'loading data into database failed'
-        if !debug
-          puts 'retry with enabled debug'
-          load_data_into_database(data_filename, true)
-        else
-          raise 'osm2pgsql failed'
-        end
+        raise e if debug
+        puts 'retry with enabled debug'
+        load_data_into_database(data_filename, true)
       end
       @@loaded_filename = data_filename
-      time_in_seconds = Time.now - start_time
-      puts "\tloading lasted #{time_in_seconds.to_i}s"
+      puts "\tloading lasted #{(Time.now - start_time).to_i}s"
     end
   end
 
