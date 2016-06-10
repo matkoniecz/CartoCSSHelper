@@ -26,8 +26,8 @@ module CartoCSSHelper
     end
 
     def self.format_query_into_url(query)
-      query = query.gsub(/\n/, '')
-      query = query.gsub(/\t/, '')
+      query = query.delete("\n")
+      query = query.delete("\t")
       base_overpass_url = OverpassDownloader.get_overpass_instance_url
       return base_overpass_url + '/interpreter?data=' + URI.escape(query)
     end

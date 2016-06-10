@@ -63,12 +63,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 11
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Performance/StringReplacement:
-  Exclude:
-    - 'lib/cartocss_helper/overpass_downloader.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

@@ -67,7 +67,7 @@ class GenericDownloader
 
   def fetch_data_from_url_using_rest_client(url)
     data = RestClient::Request.execute(method: :get, url: url, timeout: @request_timeout)
-    
+
     # see https://github.com/rest-client/rest-client/issues/370, will be fixed in 2.0
     # published versions listed on https://rubygems.org/gems/rest-client/versions/
     return String.new(data)
