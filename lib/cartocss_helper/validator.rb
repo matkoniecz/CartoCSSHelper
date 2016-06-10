@@ -83,7 +83,7 @@ module CartoCSSHelper
           print "\t"
           tag_info.print
           puts
-      end
+        end
       }
     end
 
