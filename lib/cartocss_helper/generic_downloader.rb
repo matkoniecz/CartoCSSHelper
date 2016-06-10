@@ -1,4 +1,5 @@
 require 'ruby-progressbar'
+require 'rest-client'
 
 class GenericDownloader
   class ResourcePernamentlyUnavailable < StandardError

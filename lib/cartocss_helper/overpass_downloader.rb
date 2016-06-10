@@ -1,4 +1,5 @@
 require_relative 'generic_downloader.rb'
+require 'uri' # for URI.escape
 
 module CartoCSSHelper
   class OverpassDownloader
