@@ -22,25 +22,19 @@ module CartoCSSHelper
   end
 
   def self.test_tag_on_real_data_for_this_type(tags, new_branch, old_branch, zlevels, type, min = 4, skip = 0)
-    if type.kind_of?(Array)
-      type = type[0]
-    end
+    type = type[0] if type.kind_of?(Array)
     generated = 0
 
     n = 0
     max_n = CartoCSSHelper.get_maxn_for_nth_location
     max_n -= skip
     skip_string = ''
-    if skip > 0
-      skip_string = " (#{skip} locations skipped)"
-    end
+    skip_string = " (#{skip} locations skipped)" if skip > 0
     while generated < min
       location = CartoCSSHelper.get_nth_location(n + skip)
       generated += 1 if CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
       n += 1
-      if n > max_n
-        return
-      end
+      return if n > max_n
       puts "#{n}/#{max_n} locations checked #{skip_string}. #{generated}/#{min} testing location found"
     end
   end
@@ -92,9 +86,7 @@ module CartoCSSHelper
   end
 
   def self.visualise_place_by_url(url, zlevels, new_branch, old_branch = 'master', header = nil, download_bbox_size = 0.04, image_size = 350)
-    if header == nil
-      header = url
-    end
+    header = url if header == nil
 
     raise "#{url} is not a string, it is #{url.class}" unless url.class == String
     raise "#{zlevels} is not a range, it is #{zlevels.class}" unless zlevels.class == Range
@@ -116,9 +108,7 @@ module CartoCSSHelper
   def self.download_remote_file(url, clear_cache = False)
     filename = get_place_of_storage_of_resource_under_url(url)
     if clear_cache
-      if File.exist?(filename)
-        File.delete(filename)
-      end
+      File.delete(filename) if File.exist?(filename)
     end
     unless File.exist?(filename)
       url = url
@@ -148,9 +138,7 @@ module CartoCSSHelper
     raise "#{bb} is not a number" unless bb.kind_of? Numeric
     raise "#{image_size} is not a integer" unless image_size.kind_of? Integer
 
-    if header == nil
-      header = filename
-    end
+    header = filename if header == nil
     header += ' ' + old_branch + '->' + new_branch + '[' + latitude.to_s + ',' + longitude.to_s + ']' + ' ' + image_size.to_s + 'px'
     CartoCSSHelper::VisualDiff.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, bb, image_size)
   end

@@ -31,9 +31,7 @@ module CartoCSSHelper
     end
 
     def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size = 0.1)
-      if size > 0.5
-        return nil, nil
-      end
+      return nil, nil if size > 0.5
 
       bb = bbox_string(latitude, longitude, size.to_f)
 
@@ -54,9 +52,7 @@ module CartoCSSHelper
     def self.download_osm_data_for_location(latitude, longitude, size, accept_cache = true)
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exist?(filename)
-        if accept_cache
-          return filename
-        end
+        return filename if accept_cache
         delete_file(filename, 'query refusing to accept cache was used')
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
@@ -127,9 +123,7 @@ module CartoCSSHelper
       # special support for following tag values:  :any_value
       locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
       locator += "\n"
-      if type == 'closed_way'
-        type = 'way'
-      end
+      type = 'way' if type == 'closed_way'
       locator += OverpassQueryGenerator.get_query_element_to_get_location(tags, latitude, longitude, type, range)
       locator += 'out center;'
       locator += "\n"
@@ -225,9 +219,7 @@ module CartoCSSHelper
     end
 
     def self.get_timestamp_of_file(timestamp_filename)
-      unless File.exist?(timestamp_filename)
-        return nil
-      end
+      return nil unless File.exist?(timestamp_filename)
       f = File.new(timestamp_filename)
       timestamp = f.mtime.to_i
       f.close
@@ -277,15 +269,9 @@ module CartoCSSHelper
     end
 
     def self.attempt_cleanup
-      if not_enough_free_space
-        delete_large_overpass_caches 500
-      end
-      if not_enough_free_space
-        delete_large_overpass_caches 100
-      end
-      if not_enough_free_space
-        delete_large_overpass_caches 50
-      end
+      delete_large_overpass_caches 500 if not_enough_free_space
+      delete_large_overpass_caches 100 if not_enough_free_space
+      delete_large_overpass_caches 50 if not_enough_free_space
     end
 
     def self.delete_file(filename, reason)

@@ -6,9 +6,7 @@ module CartoCSSHelper
   class DataFileLoader
     @@loaded_filename = nil
     def self.get_filename_of_recently_loaded_file
-      if @@loaded_filename == Configuration.get_data_filename
-        return nil
-      end
+      return nil if @@loaded_filename == Configuration.get_data_filename
       return @@loaded_filename
     end
 
@@ -25,9 +23,7 @@ module CartoCSSHelper
     end
 
     def self.load_data_into_database(data_filename, debug = false)
-      if is_already_loaded(data_filename)
-        return
-      end
+      return if is_already_loaded(data_filename)
       start_time = Time.now
       puts "\tloading data into database <#{data_filename}>"
       @@loaded_filename = nil

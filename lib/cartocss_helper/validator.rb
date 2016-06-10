@@ -104,9 +104,7 @@ module CartoCSSHelper
     def is_tag_documented(list, key, value)
       list.each do |tag_info|
         next unless key == tag_info.key
-        if value == tag_info.value
-          return true
-        end
+        return true if value == tag_info.value
       end
       return false
     end
@@ -134,9 +132,7 @@ module CartoCSSHelper
         value = element[1]
         state = Info.get_expected_state(key, value)
         tags = { key => value }
-        if state == :ignore
-          next
-        end
+        next if state == :ignore
         if state == :composite
           tags.merge!(Info.get_expected_composite(key, value))
         end
@@ -151,28 +147,20 @@ module CartoCSSHelper
       closed_way = Scene.new(tags, zlevel, on_water, 'closed_way', true)
       empty = Scene.new({}, zlevel, on_water, 'node', true)
       if way.is_output_different(empty)
-        unless closed_way.is_output_different(empty)
-          puts tags
-        end
+        puts tags unless closed_way.is_output_different(empty)
       end
     end
 
     def check_missing_names(tags, zlevel, interactive = false, on_water = false)
       not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-      if not_required.include?(tags)
-        return
-      end
+      return if not_required.include?(tags)
       ['node', 'closed_way', 'way'].each do |type|
-        if not_required.include?(tags.merge({ type: type }))
-          next
-        end
+        next if not_required.include?(tags.merge({ type: type }))
         unless is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
           # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
         end
-        if tags['name'] != nil
-          tags.delete('name')
-        end
+        tags.delete('name') if tags['name'] != nil
         unless is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
           puts "#{tags} - label is missing on z#{zlevel} #{type}"
           next
@@ -188,9 +176,7 @@ module CartoCSSHelper
           # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
         end
-        if tags['name'] != nil
-          tags.delete('name')
-        end
+        tags.delete('name') if tags['name'] != nil
         if is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
           puts "#{tags} - label is unxpectedly displayed on z#{zlevel} #{type}"
         end

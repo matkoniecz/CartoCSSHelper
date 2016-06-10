@@ -12,9 +12,7 @@ module CartoCSSHelper
 
     def self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
       if File.exist?(export_filename)
-        if debug
-          puts 'wanted file exists'
-        end
+        puts 'wanted file exists' if debug
         return
       end
       bbox = get_bbox_string(lat, lon, bbox_size)

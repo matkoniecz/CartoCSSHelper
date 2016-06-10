@@ -117,22 +117,6 @@ Style/IfInsideElse:
   Exclude:
     - 'lib/cartocss_helper/tag_lister.rb'
 
-# Offense count: 48
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/configuration.rb'
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/git.rb'
-    - 'lib/cartocss_helper/image_generator.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/tilemill_handler.rb'
-    - 'lib/cartocss_helper/validator.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 Style/NilComparison:

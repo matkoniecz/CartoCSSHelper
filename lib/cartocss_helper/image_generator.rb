@@ -24,16 +24,12 @@ module CartoCSSHelper
     end
 
     def is_output_different(another_scene)
-      if @on_water != another_scene.on_water
-        raise 'on_water mismatch'
-      end
+      raise 'on_water mismatch' if @on_water != another_scene.on_water
       return !is_output_identical(another_scene)
     end
 
     def is_output_identical(another_scene)
-      if @on_water != another_scene.on_water
-        raise 'on_water mismatch'
-      end
+      raise 'on_water mismatch' if @on_water != another_scene.on_water
       # Returns true if the contents of a file A and a file B are identical.
       return FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
     end
@@ -44,9 +40,7 @@ module CartoCSSHelper
 
     def on_water_string
       on_water_string = ''
-      if @on_water
-        on_water_string = 'on_water'
-      end
+      on_water_string = 'on_water' if @on_water
       return on_water_string
     end
 
@@ -55,13 +49,9 @@ module CartoCSSHelper
       lon = 20
       lon = 0 if @on_water
       export_filename = self.get_filename
-      if File.exist?(export_filename)
-        return export_filename
-      end
+      return export_filename if File.exist?(export_filename)
       description = "tags: #{@tags.to_s}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
-      if @show_what_is_generated
-        puts "generating: #{description}"
-      end
+      puts "generating: #{description}" if @show_what_is_generated
       generate_map(lat, lon, debug)
       unless File.exist?(export_filename)
         description = "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
@@ -79,9 +69,7 @@ module CartoCSSHelper
 
     def get_filename
       water_part = ''
-      if @on_water
-        water_part = '_water'
-      end
+      water_part = '_water' if @on_water
       return Configuration.get_path_to_folder_for_branch_specific_cache + @tags.to_a.sort.to_s + '_' + @zlevel.to_s + water_part + '_' + @type + '.png'
     end
 

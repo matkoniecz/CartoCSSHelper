@@ -82,9 +82,7 @@ module CartoCSSHelper
     def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, new_branch, old_branch)
       tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
-      if on_water
-        on_water_string = ' on water'
-      end
+      on_water_string = ' on water' if on_water
       header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{ type }#{ on_water_string }"
       puts "visualise_changes_synthethic_test <#{header}> #{old_branch} -> #{new_branch}"
       Git.checkout(old_branch)
@@ -97,9 +95,7 @@ module CartoCSSHelper
     def self.remove_magic_from_tags(tags)
       magicless_tags = {}
       tags.each do |key, value|
-        if value == :any
-          value = 'any tag value'
-        end
+        value = 'any tag value' if value == :any
         magicless_tags[key] = value
       end
       return magicless_tags
@@ -161,13 +157,9 @@ module CartoCSSHelper
 
     def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
       prefix = ''
-      if @@job_pooling
-        prefix = 'pool <- '
-      end
+      prefix = 'pool <- ' if @@job_pooling
       add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size, prefix)
-      unless @@job_pooling
-        run_jobs
-      end
+      run_jobs unless @@job_pooling
     end
 
     def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, new_branch, old_branch, image_size, source)
@@ -219,13 +211,9 @@ module CartoCSSHelper
     def self.dict_to_pretty_tag_list(dict)
       result = ''
       dict.to_a.each do |tag|
-        if result != ''
-          result << '; '
-        end
+        result << '; ' if result != ''
         value = "'#{tag[1]}'"
-        if tag[1] == :any_value
-          value = '{any value}'
-        end
+        value = '{any value}' if tag[1] == :any_value
         result << "#{tag[0]}=#{value}"
       end
       return result

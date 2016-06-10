@@ -43,17 +43,13 @@ module CartoCSSHelper::Configuration
   end
 
   def get_style_file_location
-    if @style_file == nil
-      @style_file = find_style_file_location
-    end
+    @style_file = find_style_file_location if @style_file == nil
     return @style_file
   end
 
   def find_style_file_location
     Find.find(get_path_to_tilemill_project_folder) do |path|
-      if path =~ /.*\.style$/
-        return path
-      end
+      return path if path =~ /.*\.style$/
     end
   end
 

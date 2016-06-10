@@ -23,9 +23,7 @@ module CartoCSSHelper
 
     def code_print
       string = "Status.new('#{@key}', '#{@value}', :#{@state}"
-      if @composite != nil
-        string << ", #{@composite.to_s}"
-      end
+      string << ", #{@composite.to_s}" if @composite != nil
       string << '),'
       puts string
     end
@@ -35,9 +33,7 @@ module CartoCSSHelper
     def self.get_expected_state(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each do |documented|
         next unless documented.key == key
-        if documented.value == value
-          return documented.state
-        end
+        return documented.state if documented.value == value
       end
       return nil
     end
@@ -45,9 +41,7 @@ module CartoCSSHelper
     def self.get_expected_composite(key, value)
       CartoCSSHelper::Configuration.get_style_specific_data.list_of_documented_tags.each do |documented|
         next unless documented.key == key
-        if documented.value == value
-          return documented.composite
-        end
+        return documented.composite if documented.value == value
       end
       return nil
     end
@@ -142,9 +136,7 @@ module CartoCSSHelper
     end
 
     def is_key_rendered_and_value_ignored(key, value)
-      if notis_rendered key, get_generic_tag_value
-        return false
-      end
+      return false if notis_rendered key, get_generic_tag_value
       [false, true].each do |on_water|
         [Configuration.get_max_z].each do |zlevel|
           ['area', 'closed_way', 'way', 'node'].each do |type|
@@ -179,9 +171,7 @@ module CartoCSSHelper
 
     def is_rendered_as_composite(key, value, suggested_composite = nil, zlevels = [Configuration.get_max_z]) # TODO: - note that some tags may be rendered up to X zoom level, but checking all zlevels would take too much time
       reason = how_rendered_as_composite key, value, suggested_composite, zlevels
-      if reason == nil
-        return false
-      end
+      return false if reason == nil
       return true
     end
 
@@ -189,17 +179,11 @@ module CartoCSSHelper
       [false, true].each do |on_water|
         zlevels.each do |zlevel|
           result = how_rendered_on_zlevel_as_composite({ key => value }, 'closed_way', zlevel, on_water, suggested_composite)
-          if result != nil
-            return result
-          end
+          return result if result != nil
           result = how_rendered_on_zlevel_as_composite({ key => value }, 'way', zlevel, on_water, suggested_composite)
-          if result != nil
-            return result
-          end
+          return result if result != nil
           result = how_rendered_on_zlevel_as_composite({ key => value }, 'node', zlevel, on_water, suggested_composite)
-          if result != nil
-            return result
-          end
+          return result if result != nil
         end
       end
       if suggested_composite != nil
@@ -249,9 +233,7 @@ module CartoCSSHelper
       empty = Scene.new({}, zlevel, on_water, type, true)
       return false if with_composite.is_output_identical(empty)
       return false if with_composite.is_output_identical(only_composite)
-      if composite['area'] != nil
-        return true
-      end
+      return true if composite['area'] != nil
       composite['area'] = 'yes'
       composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type, true)
       return false if with_composite.is_output_identical(composite_interpreted_as_area)
