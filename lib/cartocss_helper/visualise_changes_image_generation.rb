@@ -101,7 +101,7 @@ module CartoCSSHelper
     end
 
     def self.remove_magic_from_tags(tags)
-      magicless_tags = Hash.new
+      magicless_tags = {}
       tags.each {|key, value|
         if value == :any
           value = 'any tag value'
