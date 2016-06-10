@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.license     = 'CC0'
 
   s.required_rubygems_version = '>= 1.8.23'
+  s.required_ruby_version = '>= 2.1.0' # https://en.wikipedia.org/wiki/Ruby_(programming_language)#Table_of_versions
 
   # If you have other dependencies, add them here
   # open3 is from stdlib
