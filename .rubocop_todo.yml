@@ -209,13 +209,6 @@ Style/PredicateName:
     - 'lib/cartocss_helper/tag_lister.rb'
     - 'lib/cartocss_helper/validator.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/RedundantParentheses:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-
 # Offense count: 7
 # Cop supports --auto-correct.
 Style/RedundantSelf:

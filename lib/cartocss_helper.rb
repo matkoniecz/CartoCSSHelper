@@ -80,13 +80,15 @@ module CartoCSSHelper
   end
 
   def self.get_latitude_longitude_from_url(url)
-    if (url.scan(/[\/]((-|)\d+(\.\d+))/)).length >= 2
-      latitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[0][0].to_f
-      longitude = url.scan(/[\/]((-|)\d+(\.\d+))/)[1][0].to_f
+    lat_lon = url.scan(/[\/]((-|)\d+(\.\d+))/)
+    if lat_lon.length >= 2
+      latitude = lat_lon[0][0].to_f
+      longitude = lat_lon[1][0].to_f
       return latitude, longitude
     end
-    latitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[0][0].to_f
-    longitude = url.scan(/[\/=]((-|)\d+(\.\d+))/)[1][0].to_f
+    lat_lon = url.scan(/[\/=]((-|)\d+(\.\d+))/)
+    latitude = lat_lon[0][0].to_f
+    longitude = lat_lon[1][0].to_f
     return latitude, longitude
   end
 

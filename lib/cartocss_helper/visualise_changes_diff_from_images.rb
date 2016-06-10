@@ -64,7 +64,7 @@ module CartoCSSHelper
       render_diff_note offset
       offset += @diff_note_space + @margin * 0.5
       render_images_with_labels offset
-      offset += (@compared.length) * (@margin + @image_size)
+      offset += @compared.length * (@margin + @image_size)
       render_footer offset
     end
 
@@ -81,7 +81,7 @@ module CartoCSSHelper
       y += @margin * 1.5
       y += @diff_note_space
       y += @margin * 0.5
-      y += (@compared.length) * (@image_size + @margin)
+      y += @compared.length * (@image_size + @margin)
       y += @diff_note_space
       return y
     end
