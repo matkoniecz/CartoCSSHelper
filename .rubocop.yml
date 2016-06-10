@@ -36,6 +36,10 @@ Style/RaiseArgs:
 Style/PredicateName:
   Enabled: false
 
+#? I am not sure...
+Style/NilComparison:
+  Enabled: false
+
 #failed to detect anything useful here
 Style/IdenticalConditionalBranches:
   Exclude:
