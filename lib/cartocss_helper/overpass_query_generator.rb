@@ -8,7 +8,7 @@ module CartoCSSHelper
   class OverpassQueryGenerator
     class NoLocationFound < StandardError
     end
-    #TODO - split into cache handling and Overpass handling
+    #TODO: - split into cache handling and Overpass handling
     def self.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters = 20)
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
@@ -248,7 +248,7 @@ module CartoCSSHelper
       return query_cache_filename
     end
 
-    def self.check_for_free_space #TODO it really does not belong here...
+    def self.check_for_free_space #TODO: it really does not belong here...
       if not_enough_free_space
         attempt_cleanup
         if not_enough_free_space
@@ -294,7 +294,7 @@ module CartoCSSHelper
     end
 
     def self.delete_large_overpass_caches(threshold_in_MB)
-      #todo - find library that deals with caches like this, bug here may be unfunny
+      #TODO: - find library that deals with caches like this, bug here may be unfunny
       Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') {|file|
         if File.size(file) > (1024 * 1024 * threshold_in_MB)
           delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")

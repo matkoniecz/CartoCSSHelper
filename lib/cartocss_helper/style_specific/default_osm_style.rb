@@ -650,14 +650,14 @@ module CartoCSSHelper
         TagRenderingStatus.new('width', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
         TagRenderingStatus.new('wood', CartoCSSHelper::Heuristic.get_generic_tag_value, :ignored),
 
-          #heuristic detecting tags that do not exist - result of transformations in SQL unless noted otherwise
+        #heuristic detecting tags that do not exist - result of transformations in SQL unless noted otherwise
         TagRenderingStatus.new('shop', 'other', :ignored),
         TagRenderingStatus.new('highway', 'runway', :ignored),
         TagRenderingStatus.new('highway', 'taxiway', :ignored),
         TagRenderingStatus.new('access', 'yes', :ignored), #as access is assumed to be yes constructions "access=null or access=yes" are typical
         TagRenderingStatus.new('tunnel', 'no', :ignored), #tunnel=no is assumed as default and has no chance to override anything
 
-          #TODO - population is used only with numeric values. Currently there is no way to express this
+        #TODO: - population is used only with numeric values. Currently there is no way to express this
       ]
     end
 
@@ -683,7 +683,7 @@ module CartoCSSHelper
         { 'highway' => 'construction' }, #construction=motorway...
         { 'highway' => 'track' }, #tracktype=grade1...
         { 'amenity' => 'parking' }, #access=*...
-          #{'barrier' => 'hedge'}, #area=yes
+        #{'barrier' => 'hedge'}, #area=yes
         { 'natural' => 'wetland' }, #wetland=bog...
       ]
     end
@@ -725,7 +725,7 @@ module CartoCSSHelper
         { 'railway' => 'level_crossing' },
         { 'railway' => 'subway_entrance' }, #correct tagging is rare, usually it is name of station
 
-          #intentional, see https://github.com/gravitystorm/openstreetmap-carto/pull/1183
+        #intentional, see https://github.com/gravitystorm/openstreetmap-carto/pull/1183
         { 'tunnel' => 'culvert', 'waterway' => 'river' },
         { 'tunnel' => 'culvert', 'waterway' => 'stream' },
         { 'tunnel' => 'culvert', 'waterway' => 'ditch' },

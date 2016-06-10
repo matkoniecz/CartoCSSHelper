@@ -101,15 +101,6 @@ Style/BlockDelimiters:
     - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 152
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-    - 'lib/cartocss_helper/validator.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact
@@ -127,34 +118,12 @@ Style/ClassCheck:
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
 # Offense count: 8
-Style/ClassVars:
-  Exclude:
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
-# Offense count: 8
 # Cop supports --auto-correct.
 Style/ColonMethodCall:
   Exclude:
     - 'lib/cartocss_helper.rb'
     - 'lib/cartocss_helper/configuration.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: Keywords.
-# Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
-Style/CommentAnnotation:
-  Exclude:
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/CommentIndentation:
-  Exclude:
-    - 'lib/cartocss_helper/style_specific/default_osm_style.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

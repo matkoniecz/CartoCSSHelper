@@ -21,6 +21,13 @@ Style/WordArray:
 Style/TrailingCommaInLiteral:
   Enabled: false
 
+Style/ClassVars:
+  Enabled: false
+
+#? I am not sure...
+Style/BracesAroundHashParameters:
+  Enabled: false
+
 #see https://github.com/bbatsov/rubocop/issues/1747
 Style/SpecialGlobalVars:
   Enabled: false
