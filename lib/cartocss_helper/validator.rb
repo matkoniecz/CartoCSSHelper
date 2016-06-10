@@ -171,7 +171,7 @@ module CartoCSSHelper
     def check_unwanted_names(tags, zlevel, interactive = false, on_water = false)
       ['node', 'closed_way', 'way'].each do |type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-        next unless not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
+        next unless not_required.include?(tags) || not_required.include?(tags.merge({ type: type }))
         unless is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
           # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
