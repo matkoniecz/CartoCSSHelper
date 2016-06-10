@@ -48,6 +48,7 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Exclude:
     - 'lib/cartocss_helper/style_specific/**/*'
+    - 'lib/data/**/*'
 
 Metrics/ModuleLength:
   Exclude:
