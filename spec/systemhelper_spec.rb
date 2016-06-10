@@ -15,6 +15,6 @@ describe SystemHelper do
     expect { SystemHelper.execute_command(">&2 echo error") }.to raise_error FailedCommandException
   end
   it "should not raise exception on ignored stderr" do
-    expect( SystemHelper.execute_command(">&2 echo error", ignore_stderr_presence: true)).to eq "error"
+    expect(SystemHelper.execute_command(">&2 echo error", ignore_stderr_presence: true)).to eq "error"
   end
 end

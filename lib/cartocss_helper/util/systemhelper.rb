@@ -12,10 +12,10 @@ module SystemHelper
           raise FailedCommandException.new('failed command ' + command + ' due to error code ' + wait_thr.value)
         end
       end
-      if !ignore_stderr_presence
+      unless ignore_stderr_presence
         raise FailedCommandException.new('failed command ' + command + ' due to ' + error) if error != ''
       end
-      return error+stdout
+      return error + stdout
     end
     raise 'impossible happened'
   end
