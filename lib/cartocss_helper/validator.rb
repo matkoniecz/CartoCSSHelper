@@ -163,11 +163,11 @@ module CartoCSSHelper
     end
 
     def check_missing_names(tags, zlevel, interactive = false, on_water = false)
+      not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
+      if not_required.include?(tags)
+        return
+      end
       ['node', 'closed_way', 'way'].each{|type|
-        not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
-        if not_required.include?(tags)
-          return
-        end
         if not_required.include?(tags.merge({ :type => type }))
           next
         end

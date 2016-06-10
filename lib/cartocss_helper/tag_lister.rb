@@ -121,8 +121,8 @@ module CartoCSSHelper
           puts "#{key}=#{value} - primary generic tag value"
         elsif is_key_rendered_and_value_ignored(key, value)
           puts "#{key}=#{value} - primary, but rendering the same as generic value"
-        elsif
-        puts "#{key}=#{value} - primary"
+        else
+          puts "#{key}=#{value} - primary"
         end
       else
         if is_rendered_as_composite key, value, @last_composite
