@@ -119,7 +119,7 @@ module CartoCSSHelper
         File.delete(filename)
       end
     end
-    if !File.exist?(filename)
+    unless File.exist?(filename)
       url = url
       timeout = 600
       get_specified_resource(url, timeout: timeout)

@@ -141,7 +141,7 @@ module CartoCSSHelper
         [Configuration.get_max_z].each { |zlevel|
           ['area', 'closed_way', 'way', 'node'].each{ |type|
             next unless CartoCSSHelper::Info.rendered_on_zlevel({ key => value }, type, zlevel, on_water)
-            if !is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
+            unless is_key_rendered_and_value_ignored_set(key, value, type, zlevel, on_water)
               return false
             end
           }

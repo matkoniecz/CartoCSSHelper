@@ -35,7 +35,7 @@ module CartoCSSHelper
       end
 
       def run_job
-        if !@active
+        unless @active
           return
         end
         print
@@ -130,7 +130,7 @@ module CartoCSSHelper
       end
 
       def load
-        if !@loaded
+        unless @loaded
           DataFileLoader.load_data_into_database(@data_filename)
           puts "\tgenerating images"
           @loaded = true
@@ -170,7 +170,7 @@ module CartoCSSHelper
         prefix = 'pool <- '
       end
       add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size, prefix)
-      if !@@job_pooling
+      unless @@job_pooling
         run_jobs
       end
     end
@@ -202,7 +202,7 @@ module CartoCSSHelper
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)
         cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
         filename = "#{cache_folder + "#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
-        if !File.exist?(filename)
+        unless File.exist?(filename)
           source.load
           TilemillHandler.run_tilemill_export_image(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
         end

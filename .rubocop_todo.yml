@@ -169,25 +169,6 @@ Style/IfUnlessModifier:
     - 'lib/cartocss_helper/validator.rb'
     - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
 
-# Offense count: 18
-# Cop supports --auto-correct.
-Style/NegatedIf:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/data_file_handling.rb'
-    - 'lib/cartocss_helper/image_generator.rb'
-    - 'lib/cartocss_helper/overpass_query_generator.rb'
-    - 'lib/cartocss_helper/tag_lister.rb'
-    - 'lib/cartocss_helper/tilemill_handler.rb'
-    - 'lib/cartocss_helper/validator.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/NegatedWhile:
-  Exclude:
-    - 'lib/cartocss_helper/validator.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/NestedParenthesizedCalls:

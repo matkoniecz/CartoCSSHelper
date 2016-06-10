@@ -28,7 +28,7 @@ module CartoCSSHelper
       if debug
         puts command
       end
-      if !system(command)
+      unless system(command)
         puts 'loading data into database failed'
         if !debug
           puts 'retry with enabled debug'

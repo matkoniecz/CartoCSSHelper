@@ -27,7 +27,7 @@ module CartoCSSHelper
       end
       system command
       unless File.exist?(export_filename)
-        if !debug
+        unless debug
           puts 'rerunning failed image generation with enabled debug'
           return self.run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)
         end

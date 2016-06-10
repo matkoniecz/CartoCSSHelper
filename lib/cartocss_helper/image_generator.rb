@@ -52,7 +52,7 @@ module CartoCSSHelper
         puts "generating: #{description}"
       end
       generate_map(lat, lon, debug)
-      if !File.exist?(export_filename)
+      unless File.exist?(export_filename)
         description = "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
         if debug
           raise description

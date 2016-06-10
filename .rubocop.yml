@@ -28,6 +28,10 @@ Style/ClassVars:
 Style/BracesAroundHashParameters:
   Enabled: false
 
+#syntactic sugar without gain
+Style/NonNilCheck:
+  Enabled: false
+
 #see https://github.com/bbatsov/rubocop/issues/1747
 Style/SpecialGlobalVars:
   Enabled: false

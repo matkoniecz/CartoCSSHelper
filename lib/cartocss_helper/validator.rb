@@ -76,7 +76,7 @@ module CartoCSSHelper
 
     def ensure_that_all_rendered_tags_are_documented(list_of_documented, list_of_rendered)
       list_of_rendered.each { |tag_info|
-        next unless !is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
+        next if is_tag_documented(list_of_documented, tag_info.key, tag_info.value)
         puts 'documented'
         puts "\tmissing"
         puts 'real'
@@ -91,7 +91,7 @@ module CartoCSSHelper
         if Info.get_expected_state(documented.key, documented.value) == :ignored
           next
         end
-        next unless !is_tag_documented(list_of_rendered, documented.key, documented.value)
+        next if is_tag_documented(list_of_rendered, documented.key, documented.value)
         puts 'documented'
         print "\t"
         documented.print
@@ -151,7 +151,7 @@ module CartoCSSHelper
       closed_way = Scene.new(tags, zlevel, on_water, 'closed_way', true)
       empty = Scene.new({}, zlevel, on_water, 'node', true)
       if way.is_output_different(empty)
-        if !closed_way.is_output_different(empty)
+        unless closed_way.is_output_different(empty)
           puts tags
         end
       end
@@ -166,14 +166,14 @@ module CartoCSSHelper
         if not_required.include?(tags.merge({ type: type }))
           next
         end
-        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
+        unless is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
           # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
         end
         if tags['name'] != nil
           tags.delete('name')
         end
-        if !is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
+        unless is_object_displaying_name_as_this_object_type tags, 'a', zlevel, on_water, type
           puts "#{tags} - label is missing on z#{zlevel} #{type}"
           next
         end
@@ -184,7 +184,7 @@ module CartoCSSHelper
       ['node', 'closed_way', 'way'].each{|type|
         not_required = CartoCSSHelper::Configuration.get_style_specific_data.name_label_is_not_required
         next unless not_required.include?(tags) or not_required.include?(tags.merge({ type: type }))
-        if !is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
+        unless is_object_displaying_anything_as_this_object_type tags, zlevel, on_water, type
           # puts key+"="+value+" - not displayed as node on z#{zlevel}"
           next
         end
@@ -198,16 +198,16 @@ module CartoCSSHelper
     end
 
     def check_dy(tags, zlevel, interactive = false, on_water = false)
-      if !is_object_displaying_anything_as_node tags, zlevel, on_water
+      unless is_object_displaying_anything_as_node tags, zlevel, on_water
         # puts key+"="+value+" - not displayed as node on z#{zlevel}"
         return
       end
-      if !is_object_displaying_name_as_node tags, 'a', zlevel, on_water
+      unless is_object_displaying_name_as_node tags, 'a', zlevel, on_water
         # puts key+"="+value+" - label is missing on z#{zlevel} nodes"
         return
       end
       test_name = 'ÉÉÉÉÉÉ ÉÉÉÉÉÉ ÉÉÉÉÉÉ'
-      while !is_object_displaying_name_as_node tags, test_name, zlevel, on_water
+      until is_object_displaying_name_as_node tags, test_name, zlevel, on_water
         puts "#{tags} - name is missing for name '#{test_name}' on z#{zlevel}"
         if interactive
           puts 'press enter'

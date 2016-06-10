@@ -220,7 +220,7 @@ module CartoCSSHelper
     end
 
     def self.get_timestamp_of_file(timestamp_filename)
-      if !File.exist?(timestamp_filename)
+      unless File.exist?(timestamp_filename)
         return nil
       end
       f = File.new(timestamp_filename)
