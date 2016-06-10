@@ -232,12 +232,7 @@ module CartoCSSHelper
     end
 
     def is_rendered_with_this_composite(tags, type, provided_composite, zlevel, on_water)
-      # puts "<<<\n#{tags}\n#{composite}<<<\n\n"
-      # noinspection RubyResolve
-      # see https://youtrack.jetbrains.com/issue/RUBY-16061
       tags_with_composite = Marshal.load(Marshal.dump(tags))
-      # noinspection RubyResolve
-      # see https://youtrack.jetbrains.com/issue/RUBY-16061
       composite = Marshal.load(Marshal.dump(provided_composite))
       composite.each { |key, value|
         if tags_with_composite[key] != nil
