@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   # find is from stdlib
   s.add_dependency 'rest-client', '~> 1.8.0'
   # digest/sha1 is from stdlib
-  s.add_dependency 'sys-filesystem', '~> 1.1.4'
+  s.add_dependency 'sys-filesystem', '~> 1.1'
   # open3 is from stdlib
   # set is from stdlib
   s.add_dependency 'rmagick', '~> 2.15.2'
