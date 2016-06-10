@@ -61,7 +61,6 @@ module CartoCSSHelper
       offset = 0
       render_header
       offset += @header_space + @margin * 1.5
-      render_diff_note offset
       offset += @diff_note_space + @margin * 0.5
       render_images_with_labels offset
       offset += @compared.length * (@margin + @image_size)
@@ -91,15 +90,6 @@ module CartoCSSHelper
       header_drawer.pointsize(@header_space * 3 / 5)
       header_drawer.text(@margin, @header_space, @header)
       header_drawer.draw(@canvas)
-    end
-
-    def render_diff_note(y_offset)
-      drawer = Magick::Draw.new
-      drawer.pointsize(@diff_note_space)
-      # drawer.text(@margin, y_offset, 'before')
-      drawer.draw(@canvas)
-      # drawer.text(@margin*2 + @image_size, y_offset, 'after')
-      drawer.draw(@canvas)
     end
 
     def render_images_with_labels(y_offset)
