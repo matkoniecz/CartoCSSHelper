@@ -124,7 +124,8 @@ module CartoCSSHelper
     unless File.exist?(filename)
       url = url
       timeout = 600
-      get_specified_resource(url, timeout: timeout)
+      downloader = GenericDownloader.new(timeout: timeout)
+      downloader.get_specified_resource(url)
       file = File.new(filename, 'w')
       file.write data
       file.close
