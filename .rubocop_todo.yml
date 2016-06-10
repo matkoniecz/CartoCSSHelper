@@ -128,28 +128,6 @@ Style/RedundantSelf:
     - 'lib/cartocss_helper/image_generator.rb'
     - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceInsideStringInterpolation:
-  Exclude:
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: respond_to, define_method
-Style/SymbolProc:
-  Exclude:
-    - 'lib/cartocss_helper/tag_lister.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

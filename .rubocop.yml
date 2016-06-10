@@ -43,7 +43,15 @@ Style/NilComparison:
 #? I am not sure...
 Style/RegexpLiteral:
   Enabled: false
-  
+
+#not impressed by proposed changes, but maybe it was a bad luck
+Style/UnneededInterpolation:
+  Enabled: false
+
+#not impressed by proposed changes, but maybe it was a bad luck
+Style/SymbolProc:
+  Enabled: false
+
 #failed to detect anything useful here
 Style/IdenticalConditionalBranches:
   Exclude:

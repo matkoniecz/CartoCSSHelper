@@ -83,7 +83,7 @@ module CartoCSSHelper
       tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
       on_water_string = ' on water' if on_water
-      header = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{ type }#{ on_water_string }"
+      header = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type}#{on_water_string}"
       puts "visualise_changes_synthethic_test <#{header}> #{old_branch} -> #{new_branch}"
       Git.checkout(old_branch)
       old = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
@@ -135,7 +135,7 @@ module CartoCSSHelper
 
     def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
       # special support for following tag values:  :any_value
-      header_prefix = "#{ VisualDiff.dict_to_pretty_tag_list(tags) } #{type} [#{ wanted_latitude }, #{ wanted_longitude }] -> "
+      header_prefix = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type} [#{wanted_latitude}, #{wanted_longitude}] -> "
       target_location = '[?, ?]'
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
       puts "visualise_changes_on_real_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
@@ -202,7 +202,7 @@ module CartoCSSHelper
       old_branch = FileHelper::make_string_usable_as_filename(old_branch)
       new_branch = FileHelper::make_string_usable_as_filename(new_branch)
       header_for_filename = FileHelper::make_string_usable_as_filename(header)
-      filename_sufix = "#{ old_branch } -> #{ new_branch }"
+      filename_sufix = "#{old_branch} -> #{new_branch}"
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_output + "#{header_for_filename} #{filename_sufix} #{image_size}px.png"
       diff = FullSetOfComparedImages.new(old, new, header, filename, image_size)
       diff.save
