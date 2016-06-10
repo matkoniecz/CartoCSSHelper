@@ -80,24 +80,32 @@ module CartoCSSHelper
       zlevels = [22, 13] # TODO: - this is specially tuned for Default
       expected_composite = Info.get_expected_composite(key, value)
       if quick_and_more_prone_to_errors
-        if expected_composite != nil
-          if is_rendered_as_composite key, value, expected_composite, zlevels
-            @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
-            return :composite
-          else
-            @last_composite = nil
-            return :ignored
-          end
+        return get_render_state_of_tag_quick_heurestic(key, value, expected_composite, zlevels)
+      end
+      return get_render_state_of_tag_thorough(key, value, expected_composite, zlevels)
+    end
+
+    def get_render_state_of_tag_quick_heurestic
+      if expected_composite != nil
+        if is_rendered_as_composite key, value, expected_composite, zlevels
+          @last_composite = how_rendered_as_composite key, value, expected_composite, zlevels
+          return :composite
         else
-          if is_rendered key, value, zlevels
-            @last_composite = nil
-            return :primary
-          else
-            @last_composite = nil
-            return :ignored
-          end
+          @last_composite = nil
+          return :ignored
+        end
+      else
+        if is_rendered key, value, zlevels
+          @last_composite = nil
+          return :primary
+        else
+          @last_composite = nil
+          return :ignored
         end
       end
+    end
+
+    def get_render_state_of_tag_thorough(key, value, expected_composite, zlevels)
       if is_rendered key, value, zlevels
         @last_composite = nil
         return :primary
