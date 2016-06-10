@@ -25,13 +25,6 @@ Lint/StringConversionInInterpolation:
     - 'lib/cartocss_helper/overpass_downloader.rb'
     - 'lib/cartocss_helper/tag_lister.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'lib/cartocss_helper/git.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
