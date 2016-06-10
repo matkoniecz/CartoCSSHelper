@@ -22,15 +22,20 @@ module CartoCSSHelper
       return query
     end
 
+    def bbox_string(latitude, longitude, size)
+      min_latitude = latitude - size / 2
+      max_latitude = latitude + size / 2
+      min_longitude = longitude - size / 2
+      max_longitude = longitude + size / 2
+      return "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
+    end
+
     def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size = 0.1)
       if size > 0.5
         return nil, nil
       end
-      min_latitude = latitude - size.to_f / 2
-      max_latitude = latitude + size.to_f / 2
-      min_longitude = longitude - size.to_f / 2
-      max_longitude = longitude + size.to_f / 2
-      bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
+
+      bb = bbox_string(latitude, longitude, size.to_f)
 
       query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b)
 
@@ -99,7 +104,9 @@ module CartoCSSHelper
         end
         range = range + [2 * range, 200000].min
         next unless range >= max_range_in_km_for_radius * 1000
-        list = OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity), "find #{tags} #{type} across the world")
+        description = "find #{tags} #{type} across the world"
+        query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity)
+        list = OverpassQueryGenerator.get_overpass_query_results(query, description)
         if list.length != 0
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         else

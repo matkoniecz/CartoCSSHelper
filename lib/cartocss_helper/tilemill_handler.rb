@@ -30,7 +30,7 @@ module CartoCSSHelper
 
     def get_bbox_string(lat, lon, bbox_size)
       latitude_bb_size = bbox_size[0]
-      longitude_bb_size = bbox_size[0]
+      longitude_bb_size = bbox_size[1]
       #--bbox=[xmin,ymin,xmax,ymax]
       xmin = lon - longitude_bb_size / 2
       ymin = lat - latitude_bb_size / 2

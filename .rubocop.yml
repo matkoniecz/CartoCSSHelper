@@ -53,3 +53,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Exclude:
     - 'lib/cartocss_helper/style_specific/**/*'
+
+Metrics/LineLength:
+  Exclude:
+    - 'cartocss_helper.gemspec'
