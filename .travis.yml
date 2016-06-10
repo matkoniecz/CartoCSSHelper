@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.1
+  - 2.2 
+  - 2.3
+
+# https://docs.travis-ci.com/user/caching/
+cache: bundler
+
+# https://github.com/wbzyl/ruby-intro/blob/master/.travis.yml
+script: bundle exec rspec
