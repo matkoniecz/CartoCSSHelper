@@ -85,7 +85,9 @@ module CartoCSSHelper
     end
 
     def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
-      return OverpassQueryGenerator.get_overpass_query_results(OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters), "find #{tags} #{type} within #{range_in_meters / 1000}km from #{latitude}, #{longitude}")
+      desctiption = "find #{tags} #{type} within #{range_in_meters / 1000}km from #{latitude}, #{longitude}"
+      query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters)
+      return OverpassQueryGenerator.get_overpass_query_results(query, desctiption)
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
