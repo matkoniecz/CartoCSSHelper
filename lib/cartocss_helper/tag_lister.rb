@@ -231,9 +231,13 @@ module CartoCSSHelper
       return nil
     end
 
+    def deep_clone(input)
+      return Marshal.load(Marshal.dump(input))
+    end
+
     def is_rendered_with_this_composite(tags, type, provided_composite, zlevel, on_water)
-      tags_with_composite = Marshal.load(Marshal.dump(tags))
-      composite = Marshal.load(Marshal.dump(provided_composite))
+      tags_with_composite = deep_clone(tags)
+      composite = deep_clone(provided_composite)
       composite.each { |key, value|
         if tags_with_composite[key] != nil
           return false # shadowing
@@ -243,19 +247,15 @@ module CartoCSSHelper
       with_composite = Scene.new(tags_with_composite, zlevel, on_water, type, true)
       only_composite = Scene.new(composite, zlevel, on_water, type, true)
       empty = Scene.new({}, zlevel, on_water, type, true)
-      if with_composite.is_output_different(empty)
-        if with_composite.is_output_different(only_composite)
-          if composite['area'] != nil
-            return true
-          end
-          composite['area'] = 'yes'
-          composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type, true)
-          if with_composite.is_output_different(composite_interpreted_as_area)
-            return true
-          end
-        end
+      return false if with_composite.is_output_identical(empty)
+      return false if with_composite.is_output_identical(only_composite)
+      if composite['area'] != nil
+        return true
       end
-      return false
+      composite['area'] = 'yes'
+      composite_interpreted_as_area = Scene.new(composite, zlevel, on_water, type, true)
+      return false if with_composite.is_output_identical(composite_interpreted_as_area)
+      return true
     end
   end
 end

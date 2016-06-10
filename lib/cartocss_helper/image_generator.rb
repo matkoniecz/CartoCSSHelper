@@ -27,22 +27,33 @@ module CartoCSSHelper
       if @on_water != another_scene.on_water
         raise 'on_water mismatch'
       end
+      return !is_output_identical(another_scene)
+    end
+
+    def is_output_identical(another_scene)
+      if @on_water != another_scene.on_water
+        raise 'on_water mismatch'
+      end
       # Returns true if the contents of a file A and a file B are identical.
-      return !FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
+      return FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
     end
 
     def flush_cache
       File.delete(self.get_filename)
     end
 
+    def on_water_string
+      on_water_string = ''
+      if @on_water
+        on_water_string = 'on_water'
+      end
+      return on_water_string
+    end
+
     def get_image_filename(debug = false)
       lat = 0
       lon = 20
-      on_water_string = ''
-      if @on_water
-        lon = 0
-        on_water_string = 'on_water'
-      end
+      lon = 0 if @on_water
       export_filename = self.get_filename
       if File.exist?(export_filename)
         return export_filename
