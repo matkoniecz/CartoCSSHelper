@@ -1,5 +1,3 @@
-require 'rest-client'
-require 'ruby-progressbar'
 require_relative 'generic_downloader.rb'
 include GenericDownloader
 

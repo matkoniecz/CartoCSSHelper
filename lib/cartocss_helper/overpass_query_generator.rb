@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require 'rest-client'
 require 'digest/sha1'
 require 'sys/filesystem'
 require_relative 'overpass_downloader.rb'
