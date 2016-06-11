@@ -9,7 +9,7 @@ require_relative 'cartocss_helper/overpass_query_generator.rb'
 require_relative 'cartocss_helper/data_file_handling.rb'
 require_relative 'cartocss_helper/validator.rb'
 require_relative 'cartocss_helper/git.rb'
-require_relative 'cartocss_helper/generic_downloader.rb'
+require_relative 'cartocss_helper/util/generic_downloader.rb'
 require_relative 'data/testing_locations'
 include CartoCSSHelper::Validator
 include CartoCSSHelper::Git
