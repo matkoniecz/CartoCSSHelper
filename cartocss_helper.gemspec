@@ -27,6 +27,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '~> 0.40.0'
   s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
 
+  # Required by codeclimate, see https://docs.codeclimate.com/docs/setting-up-test-coverage#how-to for docs.
+  s.add_development_dependency 'codeclimate-test-reporter'
+
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
   s.require_path = 'lib'
