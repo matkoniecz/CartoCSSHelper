@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rubocop', '~> 0.40.0'
   s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
+  s.add_development_dependency 'travis', '~> 1.8'
 
   # Required by codeclimate, see https://docs.codeclimate.com/docs/setting-up-test-coverage#how-to for docs.
   s.add_development_dependency 'codeclimate-test-reporter'
