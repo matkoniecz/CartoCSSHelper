@@ -13,7 +13,7 @@ module SystemHelper
         end
       end
       unless ignore_stderr_presence
-        raise FailedCommandException.new('failed command ' + command + ' due to ' + error) if error != ''
+        raise FailedCommandException.new('failed command ' + command + ' due to <' + error + '> on stderr') if error != ''
       end
       return error + stdout
     end
