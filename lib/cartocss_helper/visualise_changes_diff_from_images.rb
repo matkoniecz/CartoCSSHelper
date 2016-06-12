@@ -98,9 +98,19 @@ module CartoCSSHelper
       end
     end
 
+    def read_image_from_disk(filename)
+      return Magick::Image.read(filename)[0]
+    rescue Magick::ImageMagickError => e
+      # for example on loading corrupted empty file (for example CartoCSSHelper was interuppted during writing to disk...)
+      puts "reading image <#{filename}> from disk failed"
+      puts e.class
+      puts e
+      raise e
+    end
+
     def render_row_of_labelled_images(processed, y_offset)
-      left_image = Magick::Image.read(processed.left_file_location)[0]
-      right_image = Magick::Image.read(processed.right_file_location)[0]
+      left_image = read_image_from_disk(processed.left_file_location)
+      right_image = read_image_from_disk(processed.right_file_location)
       drawer = Magick::Draw.new
       drawer.pointsize(@diff_note_space * 4 / 5)
       if left_image == right_image
