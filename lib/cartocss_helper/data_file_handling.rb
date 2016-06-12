@@ -11,7 +11,7 @@ module CartoCSSHelper
     end
 
     def self.get_command_to_load_using_osmpgsql(data_filename)
-      return "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}'"
+      return "osm2pgsql --create --slim --cache 10 --number-processes 1 --hstore --unlogged --style #{Configuration.get_style_file_location} --multi-geometry '#{data_filename}'"
     end
 
     def self.is_already_loaded(data_filename)
