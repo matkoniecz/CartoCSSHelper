@@ -28,7 +28,7 @@ module CartoCSSHelper
       puts "\tloading data into database <#{data_filename}>"
       @@loaded_filename = nil
       begin
-        execute_command(get_command_to_load_using_osmpgsql, debug)
+        execute_command(get_command_to_load_using_osmpgsql(data_filename), debug, ignore_stderr_presence: true) # osm2pgsql outputs everything to stderr
       rescue FailedCommandException => e
         puts 'loading data into database failed'
         raise e if debug
