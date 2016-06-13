@@ -253,6 +253,12 @@ module CartoCSSHelper
       end
     end
 
+    def self.attempt_cleanup
+      delete_large_overpass_caches 500 if not_enough_free_space
+      delete_large_overpass_caches 100 if not_enough_free_space
+      delete_large_overpass_caches 50 if not_enough_free_space
+    end
+
     def self.not_enough_free_space
       minimum_gb = 2
       if get_available_space_for_cache_in_gb < minimum_gb
@@ -266,12 +272,6 @@ module CartoCSSHelper
     def self.get_available_space_for_cache_in_gb
       stat = Sys::Filesystem.stat(CartoCSSHelper::Configuration.get_path_to_folder_for_cache)
       return stat.block_size * stat.blocks_available / 1024 / 1024 / 1024
-    end
-
-    def self.attempt_cleanup
-      delete_large_overpass_caches 500 if not_enough_free_space
-      delete_large_overpass_caches 100 if not_enough_free_space
-      delete_large_overpass_caches 50 if not_enough_free_space
     end
 
     def self.delete_file(filename, reason)
