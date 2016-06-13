@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.11'
 
   # Required by codeclimate, see https://docs.codeclimate.com/docs/setting-up-test-coverage#how-to for docs.
-  s.add_development_dependency 'codeclimate-test-reporter'
+  s.add_development_dependency 'codeclimate-test-reporter', '~> 0.5'
 
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
