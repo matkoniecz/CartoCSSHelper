@@ -3,6 +3,9 @@ require_relative 'util/systemhelper.rb'
 include SystemHelper
 
 module CartoCSSHelper
+  class TilemillFailedToGenerateFile < StandardError
+  end
+
   class TilemillHandler
     def self.try_again(lat, lon, zlevel, bbox_size, image_size, export_filename)
       puts 'rerunning failed image generation with enabled debug'
@@ -24,11 +27,11 @@ module CartoCSSHelper
       rescue FailedCommandException => e
         try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
         puts e
-        raise 'generation of file ' + export_filename + ' failed'
+        raise TilemillFailedToGenerateFile, 'generation of file ' + export_filename + ' failed'
       end
       unless File.exist?(export_filename)
         try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
-        raise 'generation of file ' + export_filename + 'silently failed'
+        raise TilemillFailedToGenerateFile, 'generation of file ' + export_filename + 'silently failed'
       end
     end
 
