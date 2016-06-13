@@ -5,7 +5,6 @@ include SystemHelper
 module CartoCSSHelper
   class TilemillHandler
     def self.try_again(lat, lon, zlevel, bbox_size, image_size, export_filename)
-      return if debug
       puts 'rerunning failed image generation with enabled debug'
       run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)
     end
