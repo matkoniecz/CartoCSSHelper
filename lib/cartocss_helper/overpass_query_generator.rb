@@ -57,9 +57,9 @@ module CartoCSSHelper
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
       text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})")
-      file = File.new(filename, 'w')
-      file.write text
-      file.close
+      File.new(filename, 'w') do |file|
+        file.write text
+      end
       return filename
     end
 
