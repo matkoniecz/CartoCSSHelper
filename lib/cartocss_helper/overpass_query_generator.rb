@@ -275,7 +275,7 @@ module CartoCSSHelper
     end
 
     def self.delete_file(filename, reason)
-      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'log.txt', 'a') do |file|
+      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'deleting_files_log.txt', 'a') do |file|
         message = "deleting #{filename}, #{File.size(filename) / 1024 / 1024}MB - #{reason}"
         puts message
         file.puts(message)
