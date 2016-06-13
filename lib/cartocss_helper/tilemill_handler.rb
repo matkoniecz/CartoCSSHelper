@@ -27,11 +27,11 @@ module CartoCSSHelper
       rescue FailedCommandException => e
         try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
         puts e
-        raise TilemillFailedToGenerateFile, 'generation of file ' + export_filename + ' failed'
+        raise TilemillFailedToGenerateFile, "generation of file #{export_filename} failed"
       end
       unless File.exist?(export_filename)
         try_again(lat, lon, zlevel, bbox_size, image_size, export_filename) unless debug
-        raise TilemillFailedToGenerateFile, 'generation of file ' + export_filename + 'silently failed'
+        raise TilemillFailedToGenerateFile, "generation of file #{export_filename} failed"
       end
     end
 
