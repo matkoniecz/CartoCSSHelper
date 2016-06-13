@@ -8,7 +8,7 @@ module CartoCSSHelper
     class NoLocationFound < StandardError
     end
     # TODO: - split into cache handling and Overpass handling
-    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters = 20)
+    def self.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters: 20)
       filter_a = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_a)
       filter_b = OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags_b)
 
@@ -22,7 +22,7 @@ module CartoCSSHelper
       return query
     end
 
-    def self.bbox_string(latitude, longitude, size)
+    def self.overpass_bbox_string(latitude, longitude, size)
       min_latitude = latitude - size / 2
       max_latitude = latitude + size / 2
       min_longitude = longitude - size / 2
@@ -30,18 +30,16 @@ module CartoCSSHelper
       return "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
     end
 
-    def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size = 0.1)
-      return nil, nil if size > 0.5
-
-      bb = bbox_string(latitude, longitude, size.to_f)
-
-      query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b)
-
-      list = OverpassQueryGenerator.get_overpass_query_results(query, "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{size}")
+    def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, bb_size: 0.1, distance_in_meters: 20)
+      return nil, nil if bb_size > 0.5
+      bb = overpass_bbox_string(latitude, longitude, bb_size.to_f)
+      query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters: distance_in_meters)
+      description = "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{bb_size}"
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
       if list.length != 0
         return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
       end
-      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, size * 2)
+      return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, bb_size: bb_size * 2, distance_in_meters: distance_in_meters)
     end
 
     def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
@@ -64,11 +62,7 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_download_data_around_location(latitude, longitude, size)
-      min_latitude = latitude - size.to_f / 2
-      max_latitude = latitude + size.to_f / 2
-      min_longitude = longitude - size.to_f / 2
-      max_longitude = longitude + size.to_f / 2
-      bb = "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
+      bb = overpass_bbox_string(latitude, longitude, size)
       query = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}];"
       query += "\n"
       query += "(node(#{bb});<;);"
