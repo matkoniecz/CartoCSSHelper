@@ -244,7 +244,7 @@ module CartoCSSHelper
       return query_cache_filename
     end
 
-    def self.check_for_free_space # TODO: it really does not belong here...
+    def self.check_for_free_space # TODO: it really does not belong here... - do system helpera? aż do końca klasy
       if not_enough_free_space
         attempt_cleanup
         if not_enough_free_space
