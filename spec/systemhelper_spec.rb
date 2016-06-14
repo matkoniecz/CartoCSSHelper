@@ -15,7 +15,13 @@ describe SystemHelper do
     expect { SystemHelper.execute_command(">&2 echo error") }.to raise_error FailedCommandException
   end
   it "should raise exception on an error code" do
-    expect { SystemHelper.execute_command("exit 700") }.to raise_error FailedCommandException
+    expect { SystemHelper.execute_command("exit 180") }.to raise_error FailedCommandException
+  end
+  it "should not raise exception on an ignored error code" do
+    expect( SystemHelper.execute_command("exit 180", allowed_return_codes: [180]) ).to eq ""
+  end
+  it "should raise exception on not ignored error code" do
+    expect { SystemHelper.execute_command("exit 1", allowed_return_codes: [180]) }.to raise_error FailedCommandException
   end
   it "should not raise exception on a success code" do
     expect(SystemHelper.execute_command("exit 0")).to eq ""

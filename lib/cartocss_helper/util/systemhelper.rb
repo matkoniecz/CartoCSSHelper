@@ -2,14 +2,18 @@ class FailedCommandException < StandardError
 end
 
 module SystemHelper
-  def execute_command(command, debug = false, allowed_return_codes = [], ignore_stderr_presence: false)
+  def execute_command(command, debug = false, allowed_return_codes: [], ignore_stderr_presence: false)
     puts command if debug
     Open3.popen3(command) do |_, stdout, stderr, wait_thr|
       error = stderr.read.chomp
       stdout = stdout.read.chomp
-      unless allowed_return_codes.include?(wait_thr.value)
+      returned = wait_thr.value.exitstatus
+
+      puts "command executed" if debug
+
+      unless allowed_return_codes.include?(returned)
         unless wait_thr.value.success?
-          raise FailedCommandException.new("failed command #{command} due to error code #{wait_thr.value}")
+          raise FailedCommandException.new("failed command #{command} due to error code #{returned}")
         end
       end
       unless ignore_stderr_presence
