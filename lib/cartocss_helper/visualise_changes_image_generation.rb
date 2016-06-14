@@ -62,6 +62,9 @@ module CartoCSSHelper
 
     def self.run_jobs
       new_job_array = []
+      if @@jobs == []
+        return
+      end
       @@jobs[0].run_job
       for x in 1..@@jobs.length - 1
         if @@jobs[0].filename == @@jobs[x].filename
