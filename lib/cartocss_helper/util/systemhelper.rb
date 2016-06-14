@@ -2,25 +2,29 @@ class FailedCommandException < StandardError
 end
 
 module SystemHelper
+  def check_error_code(command, stderr, status, allowed_return_codes)
+    returned = status.exitstatus
+    return if status.success?
+    return if allowed_return_codes.include?(returned)
+    explanation = "failed command #{command} due to error code #{returned}. stderr was #{stderr}"
+    raise FailedCommandException.new(explanation)
+  end
+
+  def check_stderr(command, stderr, status, ignore_stderr_presence)
+    return if ignore_stderr_presence
+    return if stderr == ''
+    returned = status.exitstatus
+    explanation = "failed command #{command} due to < #{stderr}> on stderr. return code was #{returned}"
+    raise FailedCommandException.new(explanation)
+  end
+
   def execute_command(command, debug = false, allowed_return_codes: [], ignore_stderr_presence: false)
     puts command if debug
-    Open3.popen3(command) do |_, stdout, stderr, wait_thr|
-      error = stderr.read.chomp
-      stdout = stdout.read.chomp
-      returned = wait_thr.value.exitstatus
+    stdout, stderr, status = Open3.capture3(command)
 
-      puts "command executed" if debug
+    check_error_code(command, stderr, status, allowed_return_codes)
+    check_stderr(command, stderr, status, ignore_stderr_presence)
 
-      unless allowed_return_codes.include?(returned)
-        unless wait_thr.value.success?
-          raise FailedCommandException.new("failed command #{command} due to error code #{returned}")
-        end
-      end
-      unless ignore_stderr_presence
-        raise FailedCommandException.new("failed command #{command} due to < #{error}> on stderr") if error != ''
-      end
-      return error + stdout
-    end
-    raise 'impossible happened'
+    return stderr + stdout
   end
 end
