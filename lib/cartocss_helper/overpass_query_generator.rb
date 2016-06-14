@@ -100,8 +100,7 @@ module CartoCSSHelper
         if list.length != 0
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         else
-          puts 'failed to find such location'
-          raise NoLocationFound
+          raise NoLocationFound, "failed to find #{tags} #{type} across the world"
         end
       end
     end
