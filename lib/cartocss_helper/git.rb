@@ -12,7 +12,7 @@ module CartoCSSHelper
         begin
           execute_command(command, debug, ignore_stderr_presence: true) # or maybe just do not run if it is currently in the wanted branch?
         rescue FailedCommandException => e
-          raise 'failed checkout to ' + branch + ' due to ' + e
+          raise "failed checkout to #{branch} due to #{e}"
         end
       end
     end
