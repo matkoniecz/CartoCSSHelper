@@ -5,7 +5,7 @@ module CartoCSSHelper
   class OverpassDownloader
     class OverpassRefusedResponse < IOError; end
 
-    def self.run_overpass_query(query, _description, _retry_count = 0, _retry_max = 5)
+    def self.run_overpass_query(query, description)
       url = OverpassDownloader.format_query_into_url(query)
       timeout = OverpassDownloader.get_allowed_timeout_in_seconds
       downloader = GenericDownloader.new(timeout: timeout, stop_on_timeout: false)
