@@ -12,17 +12,17 @@ class RestClientWrapper
     return execute_fetch_data_from_url(url, request_timeout)
   # http://www.rubydoc.info/gems/rest-client/1.8.0/RestClient/Exception
   rescue RestClient::RequestTimeout => e
-    raise RequestTimeout, e
+    raise RequestTimeout, e.to_s
   rescue RestClient::ExceptionWithResponse => e
     raise_exception_about_returned_response(e)
   rescue RestClient::MaxRedirectsReached, RestClient::SSLCertificateNotVerified, RestClient::ServerBrokeConnection, SocketError, URI::InvalidURIError
-    raise ExceptionWithoutResponse.new(e)
+    raise ExceptionWithoutResponse.new(e), e.to_s
   rescue ArgumentError => e
     raise_issue_359_exception(e)
   rescue => e
     puts 'unhandled exception! It is a clear bug!'
     puts "<#{e.class} error happened>"
-    raise e
+    raise e, e.to_s
   end
 
   def execute_fetch_data_from_url(url, request_timeout)
@@ -40,7 +40,7 @@ class RestClientWrapper
     failure = ExceptionWithResponse.new(e)
     failure.http_code = e.http_code
     failure.response = e.response
-    raise failure
+    raise failure, e.to_s
   end
 
   def wait
