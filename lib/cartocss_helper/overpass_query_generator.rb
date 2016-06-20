@@ -132,8 +132,12 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
+      return get_query_to_get_location_set_format(tags, type, latitude, longitude, range, "[out:csv(::lat,::lon;false)]")
+    end
+
+    def self.get_query_to_get_location_set_format(tags, type, latitude, longitude, range, format)
       # special support for following tag values:  :any_value
-      locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}][out:csv(::lat,::lon;false)];"
+      locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}]#{format};"
       locator += "\n"
       type = 'way' if type == 'closed_way'
       locator += OverpassQueryGenerator.get_query_element_to_get_location(tags, latitude, longitude, type, range)
