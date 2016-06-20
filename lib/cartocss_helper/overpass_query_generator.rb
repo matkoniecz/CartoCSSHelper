@@ -198,7 +198,6 @@ module CartoCSSHelper
     end
 
     def self.get_query_cache_filename(query)
-      # noinspection RubyResolve
       hash = Digest::SHA1.hexdigest query
       query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
       return query_cache_filename
