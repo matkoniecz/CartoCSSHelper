@@ -89,24 +89,27 @@ module CartoCSSHelper
       return OverpassQueryGenerator.get_overpass_query_results(query, description)
     end
 
+    def self.get_elements_across_world(tags, type)
+        description = "find #{tags} #{type} across the world"
+        query = OverpassQueryGenerator.get_query_to_get_location(tags, type, 0, 0, :infinity)
+        return OverpassQueryGenerator.get_overpass_query_results(query, description)
+    end
+
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
       # special support for following tag values:  :any_value
       range = 10 * 1000
-      loop do
+      while range <= max_range_in_km_for_radius * 1000
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
         if list.length != 0
           return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
         end
         range += [2 * range, 200000].min
-        next unless range >= max_range_in_km_for_radius * 1000
-        description = "find #{tags} #{type} across the world"
-        query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, :infinity)
-        list = OverpassQueryGenerator.get_overpass_query_results(query, description)
-        if list.length != 0
-          return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
-        else
-          raise NoLocationFound, "failed to find #{tags} #{type} across the world"
-        end
+      end
+      list = get_elements_across_world(tags, type)
+      if list.length != 0
+        return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
+      else
+        raise NoLocationFound, "failed to find #{tags} #{type} across the world"
       end
     end
 
