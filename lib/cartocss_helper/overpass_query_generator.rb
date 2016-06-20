@@ -86,13 +86,15 @@ module CartoCSSHelper
     def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
       description = "find #{tags} #{type} within #{range_in_meters / 1000}km from #{latitude}, #{longitude}"
       query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters)
-      return OverpassQueryGenerator.get_overpass_query_results(query, description)
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
+      return list_returned_by_overpass_to_array(list)
     end
 
     def self.get_elements_across_world(tags, type)
-        description = "find #{tags} #{type} across the world"
-        query = OverpassQueryGenerator.get_query_to_get_location(tags, type, 0, 0, :infinity)
-        return OverpassQueryGenerator.get_overpass_query_results(query, description)
+      description = "find #{tags} #{type} across the world"
+      query = OverpassQueryGenerator.get_query_to_get_location(tags, type, 0, 0, :infinity)
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
+      return list_returned_by_overpass_to_array(list)
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
@@ -101,23 +103,32 @@ module CartoCSSHelper
       while range <= max_range_in_km_for_radius * 1000
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
         if list.length != 0
-          return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
+          return list[0]
         end
         range += [2 * range, 200000].min
       end
       list = get_elements_across_world(tags, type)
       if list.length != 0
-        return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
+        return list[0]
       else
         raise NoLocationFound, "failed to find #{tags} #{type} across the world"
       end
     end
 
     def self.list_returned_by_overpass_to_a_single_location(list)
-      list = list.match(/((|-)[\d\.]+)\s+((|-)[\d\.]+)/).to_a
-      lat = Float(list[1])
-      lon = Float(list[3])
-      return lat, lon
+      list = list_returned_by_overpass_to_array(list)
+      return list[0]
+    end
+
+    def self.list_returned_by_overpass_to_array(list)
+        list = list.split("\n")
+        new_list = list.map do |x| 
+          x = x.split("\t")
+          x[0] = x[0].to_f
+          x[1] = x[1].to_f
+          x
+        end
+        return new_list
     end
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
