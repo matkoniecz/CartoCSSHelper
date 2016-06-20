@@ -170,6 +170,7 @@ module CartoCSSHelper
       file = File.new(get_query_cache_refused_response_filename(query), 'w')
       file.write ''
       file.close
+      write_to_cache(query, '')
     end
 
     def self.write_to_cache(query, response)
@@ -229,7 +230,6 @@ module CartoCSSHelper
         cached = OverpassDownloader.run_overpass_query query, description
       rescue OverpassDownloader::OverpassRefusedResponse
         mark_query_as_refused(query)
-        write_to_cache(query, '')
         raise OverpassDownloader::OverpassRefusedResponse
       end
       write_to_cache(query, cached)
