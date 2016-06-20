@@ -102,9 +102,7 @@ module CartoCSSHelper
       range = 10 * 1000
       while range <= max_range_in_km_for_radius * 1000
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
-        if list.length != 0
-          return list[0]
-        end
+        return list[0] if list.length != 0
         range += [2 * range, 200000].min
       end
       list = get_elements_across_world(tags, type)
@@ -121,14 +119,14 @@ module CartoCSSHelper
     end
 
     def self.list_returned_by_overpass_to_array(list)
-        list = list.split("\n")
-        new_list = list.map do |x| 
-          x = x.split("\t")
-          x[0] = x[0].to_f
-          x[1] = x[1].to_f
-          x
-        end
-        return new_list
+      list = list.split("\n")
+      new_list = list.map do |x|
+        x = x.split("\t")
+        x[0] = x[0].to_f
+        x[1] = x[1].to_f
+        x
+      end
+      return new_list
     end
 
     def self.get_query_to_get_location(tags, type, latitude, longitude, range)
