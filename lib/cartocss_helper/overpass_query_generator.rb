@@ -2,6 +2,7 @@
 require 'digest/sha1'
 require 'sys/filesystem'
 require_relative 'overpass_downloader.rb'
+require_relative 'util/systemhelper.rb'
 
 module CartoCSSHelper
   class OverpassQueryGenerator
@@ -55,7 +56,7 @@ module CartoCSSHelper
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exist?(filename)
         return filename if accept_cache
-        delete_file(filename, 'query refusing to accept cache was used')
+        SystemHelper.delete_file(filename, 'query refusing to accept cache was used')
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
       text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})")
@@ -213,49 +214,25 @@ module CartoCSSHelper
     end
 
     def self.check_for_free_space # TODO: it really does not belong here... - do system helpera? aż do końca klasy
-      if not_enough_free_space
+      if SystemHelper.not_enough_free_space
         attempt_cleanup
-        if not_enough_free_space
+        if SystemHelper.not_enough_free_space
           raise 'not enough free space on disk with cache folder'
         end
       end
     end
 
     def self.attempt_cleanup
-      delete_large_overpass_caches 500 if not_enough_free_space
-      delete_large_overpass_caches 100 if not_enough_free_space
-      delete_large_overpass_caches 50 if not_enough_free_space
-    end
-
-    def self.not_enough_free_space
-      minimum_gb = 2
-      if get_available_space_for_cache_in_gb < minimum_gb
-        puts "get_available_space_for_cache_in_gb: #{get_available_space_for_cache_in_gb}, minimum_gb: #{minimum_gb}"
-        return true
-      else
-        return false
-      end
-    end
-
-    def self.get_available_space_for_cache_in_gb
-      stat = Sys::Filesystem.stat(CartoCSSHelper::Configuration.get_path_to_folder_for_cache)
-      return stat.block_size * stat.blocks_available / 1024 / 1024 / 1024
-    end
-
-    def self.delete_file(filename, reason)
-      open(CartoCSSHelper::Configuration.get_path_to_folder_for_output + 'deleting_files_log.txt', 'a') do |file|
-        message = "deleting #{filename}, #{File.size(filename) / 1024 / 1024}MB - #{reason}"
-        puts message
-        file.puts(message)
-        File.delete(filename)
-      end
+      delete_large_overpass_caches 500 if SystemHelper.not_enough_free_space
+      delete_large_overpass_caches 100 if SystemHelper.not_enough_free_space
+      delete_large_overpass_caches 50 if SystemHelper.not_enough_free_space
     end
 
     def self.delete_large_overpass_caches(threshold_in_MB)
       # TODO: - find library that deals with caches like this, bug here may be unfunny
       Dir.glob(CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '*') do |file|
         if File.size(file) > (1024 * 1024 * threshold_in_MB)
-          delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
+          SystemHelper.delete_file(file, "removing everpass cache entries larger than #{threshold_in_MB} MB to make free space on the disk")
         end
       end
     end
