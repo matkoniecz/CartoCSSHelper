@@ -162,39 +162,6 @@ module CartoCSSHelper
       return element
     end
 
-    def self.get_overpass_query_results_file_location(query, description, debug = false)
-      filename = get_query_cache_filename(query)
-      get_overpass_query_results(query, description, debug)
-      return filename
-    end
-
-    def self.get_overpass_query_results(query, description, debug = false)
-      cached = get_overpass_query_results_from_cache(query)
-      if cached == ''
-        if File.exist?(get_query_cache_refused_response_filename(query))
-          raise OverpassDownloader::OverpassRefusedResponse
-        end
-      end
-      return cached unless cached == nil
-
-      check_for_free_space
-
-      puts 'Running Overpass query (connection initiated on ' + Time.now.to_s + ') ' + description
-      if debug
-        puts query
-        puts
-      end
-      begin
-        cached = OverpassDownloader.run_overpass_query query, description
-      rescue OverpassDownloader::OverpassRefusedResponse
-        mark_query_as_refused(query)
-        write_to_cache(query, '')
-        raise OverpassDownloader::OverpassRefusedResponse
-      end
-      write_to_cache(query, cached)
-      return cached
-    end
-
     def self.get_query_cache_refused_response_filename(query)
       return get_query_cache_filename(query) + '_response_refused'
     end
@@ -235,6 +202,39 @@ module CartoCSSHelper
       hash = Digest::SHA1.hexdigest query
       query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
       return query_cache_filename
+    end
+
+    def self.get_overpass_query_results_file_location(query, description, debug = false)
+      filename = get_query_cache_filename(query)
+      get_overpass_query_results(query, description, debug)
+      return filename
+    end
+
+    def self.get_overpass_query_results(query, description, debug = false)
+      cached = get_overpass_query_results_from_cache(query)
+      if cached == ''
+        if File.exist?(get_query_cache_refused_response_filename(query))
+          raise OverpassDownloader::OverpassRefusedResponse
+        end
+      end
+      return cached unless cached == nil
+
+      check_for_free_space
+
+      puts 'Running Overpass query (connection initiated on ' + Time.now.to_s + ') ' + description
+      if debug
+        puts query
+        puts
+      end
+      begin
+        cached = OverpassDownloader.run_overpass_query query, description
+      rescue OverpassDownloader::OverpassRefusedResponse
+        mark_query_as_refused(query)
+        write_to_cache(query, '')
+        raise OverpassDownloader::OverpassRefusedResponse
+      end
+      write_to_cache(query, cached)
+      return cached
     end
 
     def self.check_for_free_space # TODO: it really does not belong here... - do system helpera? aż do końca klasy
