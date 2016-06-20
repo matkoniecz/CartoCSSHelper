@@ -105,7 +105,7 @@ module CartoCSSHelper
   end
 
   def self.get_place_of_storage_of_resource_under_url(url)
-    return CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '.manual.cache' + FileHelper::make_string_usable_as_filename(url)
+    return CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '.manual.cache' + FileHelper.make_string_usable_as_filename(url)
   end
 
   def self.download_remote_file(url, clear_cache = False)

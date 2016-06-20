@@ -61,7 +61,7 @@ module CartoCSSHelper::Configuration
     if @path_to_folder_for_output == nil
       raise 'Set your configuration data using CartoCSSHelper::Configuration.set_path_to_folder_for_output(path)'
     end
-    FileUtils::mkdir_p @path_to_folder_for_output
+    FileUtils.mkdir_p @path_to_folder_for_output
     return @path_to_folder_for_output
   end
 
@@ -73,25 +73,25 @@ module CartoCSSHelper::Configuration
     if @path_to_folder_for_cache == nil
       raise 'Set your configuration data using CartoCSSHelper::Configuration.set_path_to_folder_for_cache(path)'
     end
-    FileUtils::mkdir_p @path_to_folder_for_cache
+    FileUtils.mkdir_p @path_to_folder_for_cache
     return @path_to_folder_for_cache
   end
 
   def get_path_to_folder_for_branch_specific_cache
     location = File.join(get_path_to_folder_for_cache, 'generated_images', CartoCSSHelper::Git.get_commit_hash, '')
-    FileUtils::mkdir_p location
+    FileUtils.mkdir_p location
     return location
   end
 
   def get_path_to_folder_for_overpass_cache
     location = File.join(get_path_to_folder_for_cache, 'overpass', '')
-    FileUtils::mkdir_p location
+    FileUtils.mkdir_p location
     return location
   end
 
   def get_path_to_folder_for_notes_api_cache
     location = File.join(get_path_to_folder_for_cache, 'notes-api', '')
-    FileUtils::mkdir_p location
+    FileUtils.mkdir_p location
     return location
   end
 

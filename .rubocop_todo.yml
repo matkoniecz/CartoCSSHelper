@@ -71,14 +71,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/cartocss_helper/configuration.rb'
 
-# Offense count: 9
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'lib/cartocss_helper.rb'
-    - 'lib/cartocss_helper/configuration.rb'
-    - 'lib/cartocss_helper/visualise_changes_image_generation.rb'
-
 # Offense count: 30
 Style/Documentation:
   Enabled: false
