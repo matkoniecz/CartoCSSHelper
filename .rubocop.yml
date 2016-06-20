@@ -24,6 +24,9 @@ Style/TrailingCommaInLiteral:
 Style/ClassVars:
   Enabled: false
 
+Lint/UnusedMethodArgument:
+  AutoCorrect: False
+
 #false positive
 Style/VariableName:
   Enabled: false

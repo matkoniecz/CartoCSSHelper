@@ -89,6 +89,12 @@ module CartoCSSHelper::Configuration
     return location
   end
 
+  def get_path_to_folder_for_notes_api_cache
+    location = File.join(get_path_to_folder_for_cache, 'notes-api', '')
+    FileUtils::mkdir_p location
+    return location
+  end
+
   def get_data_filename
     return get_path_to_folder_for_branch_specific_cache + 'data.osm'
   end

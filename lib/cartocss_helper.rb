@@ -10,6 +10,7 @@ require_relative 'cartocss_helper/data_file_handling.rb'
 require_relative 'cartocss_helper/validator.rb'
 require_relative 'cartocss_helper/git.rb'
 require_relative 'cartocss_helper/util/generic_downloader.rb'
+require_relative 'cartocss_helper/notes_downloader.rb'
 require_relative 'cartocss_helper/style_specific/default_osm_style.rb'
 require_relative 'data/testing_locations'
 

@@ -49,7 +49,8 @@ class GenericDownloader
     raise exception_with_response
   end
 
-  def get_specified_resource(url)
+  def get_specified_resource(url, description: nil)
+    puts description if description
     return @wrapper.fetch_data_from_url(url, @request_timeout)
   rescue ExceptionWithResponse => e
     output_shared_error_part(url, e)
