@@ -108,7 +108,7 @@ module CartoCSSHelper
     return CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + '.manual.cache' + FileHelper.make_string_usable_as_filename(url)
   end
 
-  def self.download_remote_file(url, clear_cache = False)
+  def self.download_remote_file(url, clear_cache = false)
     filename = get_place_of_storage_of_resource_under_url(url)
     if clear_cache
       File.delete(filename) if File.exist?(filename)
@@ -116,11 +116,8 @@ module CartoCSSHelper
     unless File.exist?(filename)
       url = url
       timeout = 600
-      downloader = GenericDownloader.new(timeout: timeout)
-      downloader.get_specified_resource(url)
-      file = File.new(filename, 'w')
-      file.write data
-      file.close
+      downloader = GenericCachedDownloader.new(timeout: timeout)
+      return downloader.get_specified_resource(url, filename)
     end
   end
 
