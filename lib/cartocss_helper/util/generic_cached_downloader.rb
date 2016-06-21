@@ -27,6 +27,14 @@ class GenericCachedDownloader
     return nil
   end
 
+  def get_cache_timestamp(cache_filename)
+    return nil unless File.exist?(cache_filename)
+    f = File.new(cache_filename)
+    timestamp = f.mtime.to_i
+    f.close
+    return timestamp
+  end
+
   def download(url, description)
     downloader = GenericDownloader.new(timeout: @request_timeout, error_message: @error_message, stop_on_timeout: @stop_on_timeout, wrapper: @wrapper)
     return downloader.get_specified_resource(url, description: description)

@@ -193,14 +193,6 @@ module CartoCSSHelper
       file.close
     end
 
-    def self.get_timestamp_of_file(timestamp_filename)
-      return nil unless File.exist?(timestamp_filename)
-      f = File.new(timestamp_filename)
-      timestamp = f.mtime.to_i
-      f.close
-      return timestamp
-    end
-
     def self.get_query_cache_filename(query)
       hash = Digest::SHA1.hexdigest query
       query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
