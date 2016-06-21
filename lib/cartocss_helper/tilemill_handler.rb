@@ -7,11 +7,6 @@ module CartoCSSHelper
   end
 
   class TilemillHandler
-    def self.try_again(lat, lon, zlevel, bbox_size, image_size, export_filename)
-      puts 'rerunning failed image generation with enabled debug'
-      run_tilemill_export_image(lat, lon, zlevel, bbox_size, image_size, export_filename, true)
-    end
-
     def self.cache_exists(export_filename, debug)
       if File.exist?(export_filename)
         puts 'wanted file exists' if debug
@@ -32,8 +27,9 @@ module CartoCSSHelper
 
       return if cache_exists(export_filename, debug)
       command_to_execute = command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      output = nil
       begin
-        execute_command(command_to_execute, debug, ignore_stderr_presence: true)
+        output = execute_command(command_to_execute, debug, ignore_stderr_presence: true)
       rescue FailedCommandException => e
         puts e
         raise TilemillFailedToGenerateFile, "generation of file #{export_filename} failed due to #{e}"
@@ -42,7 +38,7 @@ module CartoCSSHelper
       puts "generated in #{(Time.now - start).to_i} s"
 
       return if cache_exists(export_filename, false)
-      raise TilemillFailedToGenerateFile, "generation of file #{export_filename} silently failed with command <#{command_to_execute}>"
+      raise TilemillFailedToGenerateFile, "generation of file #{export_filename} silently failed with command <#{command_to_execute}> and output <#{output}>"
     end
 
     def self.get_bbox_string(lat, lon, bbox_size)
