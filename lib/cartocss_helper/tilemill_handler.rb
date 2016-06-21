@@ -35,7 +35,7 @@ module CartoCSSHelper
         raise TilemillFailedToGenerateFile, "generation of file #{export_filename} failed due to #{e}"
       end
 
-      puts "generated in #{(Time.now - start).to_i} s"
+      puts "generated in #{(Time.now - start).to_i}s (#{Git.get_commit_hash})"
 
       return if cache_exists(export_filename, false)
       raise TilemillFailedToGenerateFile, "generation of file #{export_filename} silently failed with command <#{command_to_execute}> and output <#{output}>"
