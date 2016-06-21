@@ -112,4 +112,8 @@ module CartoCSSHelper::Configuration
   def get_overpass_instance_url
     return @overpass_instance_url
   end
+
+  def renderer
+    :tilemill
+  end
 end

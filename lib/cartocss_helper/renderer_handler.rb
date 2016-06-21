@@ -22,9 +22,14 @@ module CartoCSSHelper
       return "node /usr/share/tilemill/index.js export #{project_name} '#{export_filename}' #{params}"
     end
 
+    def self.commands(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      return { tilemill: tilemill_command(lat, lon, zlevel, bbox_size, image_size, export_filename) }
+    end
+
     def self.get_cache_file_location(export_filename)
+      renderer = CartoCSSHelper::Configuration.renderer
       cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
-      return cache_folder + export_filename
+      return cache_folder + renderer.to_s + "_" + export_filename
     end
 
     def self.image_available_from_cache(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
@@ -38,7 +43,10 @@ module CartoCSSHelper
 
       start = Time.now
 
-      command_to_execute = tilemill_command(lat, lon, zlevel, bbox_size, image_size, export_location)
+      renderer = CartoCSSHelper::Configuration.renderer
+      set_of_commands = commands(lat, lon, zlevel, bbox_size, image_size, export_location)
+      command_to_execute = set_of_commands[renderer]
+
       execute_rendering_command(command_to_execute, export_location, debug)
 
       puts "generated in #{(Time.now - start).to_i}s (#{Git.get_commit_hash})"
