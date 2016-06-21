@@ -30,13 +30,13 @@ describe CartoCSSHelper do
   end
 
   it "should have plenty of testing locations" do
-    expect(CartoCSSHelper.get_list_of_testing_locations.count).to be >100
-    expect(CartoCSSHelper.get_maxn_for_nth_location).to be >100
+    expect(CartoCSSHelper.get_list_of_testing_locations.count).to be > 100
+    expect(CartoCSSHelper.get_maxn_for_nth_location).to be > 100
   end
 
   it "should have plenty of different testing locations" do
     (1..CartoCSSHelper.get_maxn_for_nth_location).each do |n|
-      expect(CartoCSSHelper.get_nth_location(n)).to_not be CartoCSSHelper.get_nth_location(n-1)
+      expect(CartoCSSHelper.get_nth_location(n)).to_not be CartoCSSHelper.get_nth_location(n - 1)
     end
   end
 

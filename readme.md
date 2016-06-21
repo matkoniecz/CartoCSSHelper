@@ -28,13 +28,13 @@ Unfortunately, standard `gem install cartocss_helper` may not be enough as Carto
 
 ###Examples
 
-It is assumed that TileMill project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
+It is assumed that CartoCSS project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
 
     require 'cartocss_helper'
 
     CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
-    tilemill_project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
-    CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(tilemill_project_location)
+    project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
+    CartoCSSHelper::Configuration.set_path_to_cartocss_project_folder(project_location)
     output_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', '')
     CartoCSSHelper::Configuration.set_path_to_folder_for_output(output_folder)
     cache_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-tmp', '')
@@ -48,8 +48,8 @@ or, to just test on real examples of landuse=quarry tagged on ways (most will fo
     require 'cartocss_helper'
 
     CartoCSSHelper::Configuration.set_style_specific_data(CartoCSSHelper::StyleDataForDefaultOSM.get_style_data)
-    tilemill_project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
-    CartoCSSHelper::Configuration.set_path_to_tilemill_project_folder(tilemill_project_location)
+    project_location = File.join(ENV['HOME'], 'Documents', 'MapBox', 'project', 'osm-carto', '')
+    CartoCSSHelper::Configuration.set_path_to_cartocss_project_folder(project_location)
     output_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-output', '')
     CartoCSSHelper::Configuration.set_path_to_folder_for_output(output_folder)
     cache_folder = File.join(ENV['HOME'], 'Documents', 'CartoCSSHelper-tmp', '')

@@ -27,19 +27,20 @@ module CartoCSSHelper::Configuration
     return get_style_specific_data.min_z
   end
 
-  def set_path_to_tilemill_project_folder(path)
+  # Link to project folder itself, not to folder containing various projects.
+  def set_path_to_cartocss_project_folder(path)
     @style_path = path
   end
 
-  def get_path_to_tilemill_project_folder
+  def get_path_to_cartocss_project_folder
     if @style_path == nil
       raise 'Set your configuration data using CartoCSSHelper::Configuration.set_style_path(path)'
     end
     return @style_path
   end
 
-  def get_tilemill_project_name
-    return get_path_to_tilemill_project_folder.split(File::SEPARATOR)[-1]
+  def get_cartocss_project_name
+    return get_path_to_cartocss_project_folder.split(File::SEPARATOR)[-1]
   end
 
   def get_style_file_location
@@ -48,7 +49,7 @@ module CartoCSSHelper::Configuration
   end
 
   def find_style_file_location
-    Find.find(get_path_to_tilemill_project_folder) do |path|
+    Find.find(get_path_to_cartocss_project_folder) do |path|
       return path if path =~ /.*\.style$/
     end
   end

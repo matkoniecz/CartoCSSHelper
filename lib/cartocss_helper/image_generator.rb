@@ -2,12 +2,14 @@
 require_relative 'configuration.rb'
 require_relative 'heuristic.rb'
 require_relative 'data_file_handling.rb'
-require_relative 'tilemill_handler.rb'
+require_relative 'renderer_handler.rb'
 require 'fileutils'
 include CartoCSSHelper::Configuration
 include CartoCSSHelper::Heuristic
 
 module CartoCSSHelper
+  # Defines and generates images for synthethic comparison
+  # it is mostly glue between renderer and generator of synthethic data files
   class Scene
     attr_reader :tags, :zlevel, :on_water, :type
     def initialize(tags, zlevel, on_water, type, show_what_is_generated = false)
@@ -21,6 +23,7 @@ module CartoCSSHelper
         @tags['area'] = 'yes'
         @type = 'closed_way'
       end
+      @generated_image_location = nil
     end
 
     def is_output_different(another_scene)
@@ -44,25 +47,18 @@ module CartoCSSHelper
       return on_water_string
     end
 
-    def get_image_filename(debug = false)
+    def get_image_filename(debug = false) # TODO: misleading name - should be location
       lat = 0
       lon = 20
       lon = 0 if @on_water
-      export_filename = self.get_filename
-      return export_filename if File.exist?(export_filename)
+      return @generated_image_location if File.exist?(@generated_image_location)
       description = "tags: #{@tags.to_s}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
       puts "generating: #{description}" if @show_what_is_generated
       generate_map(lat, lon, debug)
-      unless File.exist?(export_filename)
-        description = "get_image failed - #{description}. File <\n#{export_filename}\n> was expected."
-        if debug
-          raise description
-        else
-          puts description
-          return get_image_filename(true)
-        end
+      unless File.exist?(@generated_image_location) && @generated_image_location != nil
+        raise "get_image failed - #{description}. File <\n#{@generated_image_location}\n> was expected."
       end
-      return export_filename
+      return @generated_image_location
     end
 
     protected
@@ -70,7 +66,7 @@ module CartoCSSHelper
     def get_filename
       water_part = ''
       water_part = '_water' if @on_water
-      return Configuration.get_path_to_folder_for_branch_specific_cache + @tags.to_a.sort.to_s + '_' + @zlevel.to_s + water_part + '_' + @type + '.png'
+      return @tags.to_a.sort.to_s + '_' + @zlevel.to_s + water_part + '_' + @type + '.png'
     end
 
     def generate_map(lat, lon, debug)
@@ -87,7 +83,7 @@ module CartoCSSHelper
     def generate_image(lat, lon, debug)
       export_filename = self.get_filename
       bbox_size = self.get_bbox_size
-      TilemillHandler.run_tilemill_export_image(lat, lon, @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
+      @generated_image_location = RendererHandler.request_image_from_renderer(lat, lon, @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
     end
   end
 end
