@@ -51,7 +51,9 @@ module CartoCSSHelper
       lat = 0
       lon = 20
       lon = 0 if @on_water
-      return @generated_image_location if File.exist?(@generated_image_location)
+      if @generated_image_location != nil
+        return @generated_image_location if File.exist?(@generated_image_location)
+      end
       description = "tags: #{@tags.to_s}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
       puts "generating: #{description}" if @show_what_is_generated
       generate_map(lat, lon, debug)

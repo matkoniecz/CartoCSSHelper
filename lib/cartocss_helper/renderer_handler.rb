@@ -16,20 +16,54 @@ module CartoCSSHelper
     end
 
     def self.tilemill_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      raise 'mapnik reference overrride impossible for TileMill!' if CartoCSSHelper::Configuration.mapnik_reference_version_override
       bbox = get_bbox_string(lat, lon, bbox_size)
       params = "--format=png --width=#{image_size} --height=#{image_size} --static_zoom=#{zlevel} --bbox=\"#{bbox}\""
       project_name = CartoCSSHelper::Configuration.get_cartocss_project_name
       return "node /usr/share/tilemill/index.js export #{project_name} '#{export_filename}' #{params}"
     end
 
-    def self.commands(lat, lon, zlevel, bbox_size, image_size, export_filename)
-      return { tilemill: tilemill_command(lat, lon, zlevel, bbox_size, image_size, export_filename) }
+    def self.kosmtik_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      mapnik_override = CartoCSSHelper::Configuration.mapnik_reference_version_override
+      additional_params = ""
+      additional_params += " --mapnik-version=#{mapnik_override}" if mapnik_override
+      return base_kosmtik_command(lat, lon, zlevel, bbox_size, image_size, export_filename, additional_params: additional_params)
+    end
+
+    def self.magnacarto_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      mapnik_override = CartoCSSHelper::Configuration.mapnik_reference_version_override
+      additional_params = " --renderer=magnacarto"
+      additional_params += " --mapnik-version=#{mapnik_override}" if mapnik_override
+      return base_kosmtik_command(lat, lon, zlevel, bbox_size, image_size, export_filename, additional_params: additional_params)
+    end
+
+    def self.base_kosmtik_command(lat, lon, zlevel, bbox_size, image_size, export_filename, additional_params: '')
+      bbox = get_bbox_string(lat, lon, bbox_size)
+      params = "--format=png --width=#{image_size} --height=#{image_size} --bounds=\"#{bbox}\""
+      project_name = CartoCSSHelper::Configuration.get_cartocss_project_name
+      yaml = CartoCSSHelper::Configuration.project_file_location
+      kosmtik = "#{CartoCSSHelper::Configuration.path_to_kosmtik}index.js"
+      return "node #{kosmtik} export #{yaml} --output '#{export_filename}' #{additional_params} #{params}"
+    end
+
+    def self.find_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      if CartoCSSHelper::Configuration.renderer == :tilemill
+        return tilemill_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      elsif CartoCSSHelper::Configuration.renderer == :kosmtik
+        return kosmtik_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      elsif CartoCSSHelper::Configuration.renderer == :magnacarto
+        return magnacarto_command(lat, lon, zlevel, bbox_size, image_size, export_filename)
+      end
     end
 
     def self.get_cache_file_location(export_filename)
-      renderer = CartoCSSHelper::Configuration.renderer
+      renderer = "#{CartoCSSHelper::Configuration.renderer}_"
       cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
-      return cache_folder + renderer.to_s + "_" + export_filename
+      mapnik_reference = 'mapnik_reference=default_'
+      if CartoCSSHelper::Configuration.mapnik_reference_version_override
+        mapnik_reference = "mapnik_reference=#{CartoCSSHelper::Configuration.mapnik_reference_version_override}_"
+      end
+      return "#{cache_folder}#{renderer}#{mapnik_reference}#{export_filename}"
     end
 
     def self.image_available_from_cache(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
@@ -43,9 +77,8 @@ module CartoCSSHelper
 
       start = Time.now
 
-      renderer = CartoCSSHelper::Configuration.renderer
-      set_of_commands = commands(lat, lon, zlevel, bbox_size, image_size, export_location)
-      command_to_execute = set_of_commands[renderer]
+      command_to_execute = find_command(lat, lon, zlevel, bbox_size, image_size, export_location)
+      puts command_to_execute
 
       execute_rendering_command(command_to_execute, export_location, debug)
 

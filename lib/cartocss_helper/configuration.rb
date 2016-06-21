@@ -54,6 +54,12 @@ module CartoCSSHelper::Configuration
     end
   end
 
+  def project_file_location
+    Find.find(get_path_to_cartocss_project_folder) do |path|
+      return path if path =~ /.*\.yaml$/
+    end
+  end
+
   def set_path_to_folder_for_output(path)
     @path_to_folder_for_output = path
   end
@@ -113,7 +119,32 @@ module CartoCSSHelper::Configuration
     return @overpass_instance_url
   end
 
-  def renderer
+  def set_path_to_kosmtik(path)
+    @kosmtik_path = path
+  end
+
+  def path_to_kosmtik
+    @kosmtik_path
+  end
+
+  def default_renderer
     :tilemill
+  end
+
+  def set_renderer(renderer)
+    @renderer = renderer
+  end
+
+  def renderer
+    return default_renderer if @renderer == nil
+    return @renderer
+  end
+
+  def mapnik_reference_version_override
+    @mapnik_reference_version
+  end
+
+  def set_mapnik_reference_version_override(version)
+    @mapnik_reference_version = version
   end
 end
