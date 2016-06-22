@@ -8,8 +8,9 @@ class GenericCachedDownloader
     @wrapper = wrapper
   end
 
-  def get_specified_resource(url, cache_filename, description: nil)
+  def get_specified_resource(url, cache_filename, description: nil, invalidate_cache: false)
     cache = read_from_cache(cache_filename)
+    cache = nil if invalidate_cache
     return cache if cache != nil
     response = download(url, description)
     write_cache(response, cache_filename)
