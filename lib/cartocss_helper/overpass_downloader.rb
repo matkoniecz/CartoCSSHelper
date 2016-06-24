@@ -27,7 +27,7 @@ module CartoCSSHelper
     end
 
     def self.format_query_into_url(query)
-      query = query.gsub(/\/\/.*\n/, '') #add proper parsing - it will mutilate // inside quotes etc 
+      query = query.gsub(/\/\/.*\n/, '') # add proper parsing - it will mutilate // inside quotes etc
       query = query.gsub('\\', '\\\\')
       query = query.delete("\n")
       query = query.delete("\t")
