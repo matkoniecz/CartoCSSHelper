@@ -56,14 +56,18 @@ module CartoCSSHelper
       end
     end
 
-    def self.get_cache_file_location(export_filename)
+    def self.renderer_marking
       renderer = "#{CartoCSSHelper::Configuration.renderer}_"
-      cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
       mapnik_reference = 'mapnik_reference=default_'
       if CartoCSSHelper::Configuration.mapnik_reference_version_override
         mapnik_reference = "mapnik_reference=#{CartoCSSHelper::Configuration.mapnik_reference_version_override}_"
       end
-      return "#{cache_folder}#{renderer}#{mapnik_reference}#{export_filename}"
+      return "#{renderer}#{mapnik_reference}"
+    end
+
+    def self.get_cache_file_location(export_filename)
+      cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
+      return "#{cache_folder}#{renderer_marking}#{export_filename}"
     end
 
     def self.image_available_from_cache(lat, lon, zlevel, bbox_size, image_size, export_filename, debug = false)
