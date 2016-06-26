@@ -1,5 +1,6 @@
 require 'ruby-progressbar'
 require_relative 'rest-client_wrapper.rb'
+require_relative 'logger.rb'
 
 class BuggyRestClient < StandardError
 end
@@ -29,12 +30,12 @@ class GenericDownloader
   end
 
   def output_shared_error_part(url, e)
-    puts @error_message unless @error_message.nil?
-    puts
-    puts url
-    puts
-    puts e.class
-    puts e
+    Log.warn @error_message unless @error_message.nil?
+    Log.warn
+    Log.warn url
+    Log.warn
+    Log.warn e.class
+    Log.warn e
   end
 
   def retry_allowed(exception_with_response)
@@ -50,12 +51,12 @@ class GenericDownloader
   end
 
   def get_specified_resource(url, description: nil)
-    puts description if description
+    Log.info description if description
     return @wrapper.fetch_data_from_url(url, @request_timeout)
   rescue ExceptionWithResponse => e
     output_shared_error_part(url, e)
-    puts e.response
-    puts e.http_code
+    Log.warn e.response
+    Log.warn e.http_code
     get_specified_resource(url) if retry_allowed(e)
   rescue ExceptionWithoutResponse => e
     output_shared_error_part(url, e)
