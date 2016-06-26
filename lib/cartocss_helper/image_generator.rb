@@ -34,11 +34,11 @@ module CartoCSSHelper
     def is_output_identical(another_scene)
       raise 'on_water mismatch' if @on_water != another_scene.on_water
       # Returns true if the contents of a file A and a file B are identical.
-      return FileUtils.compare_file(self.get_image_filename, another_scene.get_image_filename)
+      return FileUtils.compare_file(get_image_filename, another_scene.get_image_filename)
     end
 
     def flush_cache
-      File.delete(self.get_filename)
+      File.delete(get_filename)
     end
 
     def on_water_string
@@ -54,7 +54,7 @@ module CartoCSSHelper
       if @generated_image_location != nil
         return @generated_image_location if File.exist?(@generated_image_location)
       end
-      description = "tags: #{@tags.to_s}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
+      description = "tags: #{@tags}, zlevel: #{@zlevel}, type: #{@type} #{on_water_string}"
       puts "generating: #{description}" if @show_what_is_generated
       generate_map(lat, lon, debug)
       unless File.exist?(@generated_image_location) && @generated_image_location != nil
@@ -83,8 +83,8 @@ module CartoCSSHelper
     end
 
     def generate_image(lat, lon, debug)
-      export_filename = self.get_filename
-      bbox_size = self.get_bbox_size
+      export_filename = get_filename
+      bbox_size = get_bbox_size
       @generated_image_location = RendererHandler.request_image_from_renderer(lat, lon, @zlevel, [bbox_size, bbox_size], 200, export_filename, debug)
     end
   end

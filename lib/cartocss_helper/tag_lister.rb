@@ -23,7 +23,7 @@ module CartoCSSHelper
 
     def code_print
       string = "Status.new('#{@key}', '#{@value}', :#{@state}"
-      string << ", #{@composite.to_s}" if @composite != nil
+      string << ", #{@composite}" if @composite != nil
       string << '),'
       puts string
     end

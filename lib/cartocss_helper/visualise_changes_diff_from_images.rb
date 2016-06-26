@@ -10,7 +10,7 @@ module CartoCSSHelper
 
     def identical(another_image)
       # Returns true if the contents of a file A and a file B are identical.
-      return FileUtils.compare_file(self.file_location, another_image.file_location)
+      return FileUtils.compare_file(file_location, another_image.file_location)
     end
   end
 
