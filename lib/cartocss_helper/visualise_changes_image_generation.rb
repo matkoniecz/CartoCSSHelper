@@ -35,7 +35,7 @@ module CartoCSSHelper
       end
 
       def run_job
-        CartoCSSHelper::VisualDiff.visualise_changes_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, @data_source)
+        CartoCSSHelper::VisualDiff.visualise_for_given_source(@latitude, @longitude, @zlevels, @header, @new_branch, @old_branch, @image_size, @data_source)
       end
 
       def print
@@ -81,11 +81,15 @@ module CartoCSSHelper
       @@jobs.shuffle!(random: Random.new(seed))
     end
 
-    def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, new_branch, old_branch)
+    def self.make_header(tags, type, on_water)
       on_water_string = ''
       on_water_string = ' on water' if on_water
-      header = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type}#{on_water_string}"
-      puts "visualise_changes_synthethic_test <#{header}> #{old_branch} -> #{new_branch}"
+      return "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type}#{on_water_string}"
+    end
+
+    def self.visualise_on_synthethic_data(tags, type, on_water, zlevel_range, new_branch, old_branch)
+      header = make_header(tags, type, on_water)
+      puts "visualise_on_synthethic_data <#{header}> #{old_branch} -> #{new_branch}"
       Git.checkout(old_branch)
       old = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
       Git.checkout(new_branch)
@@ -125,12 +129,12 @@ module CartoCSSHelper
       end
     end
 
-    def self.visualise_changes_on_real_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
+    def self.visualise_on_overpass_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
       # special support for following tag values:  :any_value
       header_prefix = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type} [#{wanted_latitude}, #{wanted_longitude}] -> "
       target_location = '[?, ?]'
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
-      puts "visualise_changes_on_real_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
+      puts "visualise_on_overpass_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
       begin
         latitude, longitude = OverpassQueryGenerator.locate_element_with_given_tags_and_type tags, type, wanted_latitude, wanted_longitude
         target_location = "[#{latitude}, #{longitude}]"
@@ -138,23 +142,23 @@ module CartoCSSHelper
         puts 'No nearby instances of tags and tag is not extremely rare - no generation of nearby location and wordwide search was impossible. No diff image will be generated for this location.'
         return false
       end
-      visualise_changes_for_location(latitude, longitude, zlevels, header_prefix + target_location + header_sufix, new_branch, old_branch)
+      visualise_for_location(latitude, longitude, zlevels, header_prefix + target_location + header_sufix, new_branch, old_branch)
       return true
     end
 
-    def self.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
+    def self.visualise_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
       filename = OverpassQueryGenerator.get_file_with_downloaded_osm_data_for_location(latitude, longitude, download_bbox_size)
-      visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
+      visualise_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
     end
 
-    def self.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
+    def self.visualise_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size = 0.4, image_size = 400)
       prefix = ''
       prefix = 'pool <- ' if @@job_pooling
       add_job(filename, latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size, prefix)
       run_jobs unless @@job_pooling
     end
 
-    def self.visualise_changes_for_given_source(latitude, longitude, zlevels, header, new_branch, old_branch, image_size, source)
+    def self.visualise_for_given_source(latitude, longitude, zlevels, header, new_branch, old_branch, image_size, source)
       Git.checkout old_branch
       old = VisualDiff.collect_images_for_real_data_test(latitude, longitude, zlevels, source, image_size)
       Git.checkout new_branch

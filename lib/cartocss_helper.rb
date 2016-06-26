@@ -35,7 +35,7 @@ module CartoCSSHelper
     skip_string = " (#{skip} locations skipped)" if skip > 0
     while generated < min
       location = CartoCSSHelper.get_nth_location(n + skip)
-      generated += 1 if CartoCSSHelper::VisualDiff.visualise_changes_on_real_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
+      generated += 1 if CartoCSSHelper::VisualDiff.visualise_on_overpass_data(tags, type, location[0], location[1], zlevels, new_branch, old_branch)
       n += 1
       return if n > max_n
       puts "#{n}/#{max_n} locations checked #{skip_string}. #{generated}/#{min} testing location found"
@@ -58,7 +58,7 @@ module CartoCSSHelper
   def self.test_tag_on_sythetic_data(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
     types.each do |type|
-      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
+      CartoCSSHelper::VisualDiff.visualise_on_synthethic_data(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
     end
   end
 
@@ -71,7 +71,7 @@ module CartoCSSHelper
   def self.probe(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
     syn_tags = add_common_secondary_tags(tags)
     types.each do |type|
-      CartoCSSHelper::VisualDiff.visualise_changes_synthethic_test(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
+      CartoCSSHelper::VisualDiff.visualise_on_synthethic_data(syn_tags, type, test_on_water, zlevels, new_branch, old_branch)
     end
   end
 
@@ -95,7 +95,7 @@ module CartoCSSHelper
 
     latitude, longitude = get_latitude_longitude_from_url(url)
     header += ' ' + old_branch + '->' + new_branch + ' ' + zlevels.to_s + ' ' + image_size.to_s + 'px'
-    CartoCSSHelper::VisualDiff.visualise_changes_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
+    CartoCSSHelper::VisualDiff.visualise_for_location(latitude, longitude, zlevels, header, new_branch, old_branch, download_bbox_size, image_size)
   end
 
   def self.get_place_of_storage_of_resource_under_url(url)
@@ -134,6 +134,6 @@ module CartoCSSHelper
 
     header = filename if header == nil
     header += ' ' + old_branch + '->' + new_branch + '[' + latitude.to_s + ',' + longitude.to_s + ']' + ' ' + image_size.to_s + 'px'
-    CartoCSSHelper::VisualDiff.visualise_changes_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, bb, image_size)
+    CartoCSSHelper::VisualDiff.visualise_for_location_from_file(filename, latitude, longitude, zlevels, header, new_branch, old_branch, bb, image_size)
   end
 end
