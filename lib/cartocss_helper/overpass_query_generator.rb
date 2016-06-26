@@ -35,7 +35,7 @@ module CartoCSSHelper
       return nil, nil if bb_size > 0.5
       bb = overpass_bbox_string(latitude, longitude, bb_size.to_f)
       query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters: distance_in_meters)
-      description = "find #{VisualDiff.dict_to_pretty_tag_list(tags_a)} nearby #{VisualDiff.dict_to_pretty_tag_list(tags_b)} - bb size: #{bb_size}"
+      description = "find #{VisualDiff.tag_dict_to_string(tags_a)} nearby #{VisualDiff.tag_dict_to_string(tags_b)} - bb size: #{bb_size}"
       list = OverpassQueryGenerator.get_overpass_query_results(query, description)
       if list.length != 0
         return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)

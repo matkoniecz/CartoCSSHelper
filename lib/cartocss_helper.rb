@@ -63,7 +63,7 @@ module CartoCSSHelper
   end
 
   def self.test(tags, new_branch, old_branch = 'master', zlevels = Configuration.get_min_z..Configuration.get_max_z, types = ['node', 'closed_way', 'way'], test_on_water = false)
-    puts "processing #{VisualDiff.dict_to_pretty_tag_list(tags)}"
+    puts "processing #{VisualDiff.tag_dict_to_string(tags)}"
     test_tag_on_sythetic_data(tags, new_branch, old_branch, zlevels, types, test_on_water)
     test_tag_on_real_data(tags, new_branch, old_branch, zlevels, types)
   end

@@ -84,7 +84,7 @@ module CartoCSSHelper
     def self.make_header(tags, type, on_water)
       on_water_string = ''
       on_water_string = ' on water' if on_water
-      return "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type}#{on_water_string}"
+      return "#{VisualDiff.tag_dict_to_string(tags)} #{type}#{on_water_string}"
     end
 
     def self.visualise_on_synthethic_data(tags, type, on_water, zlevel_range, new_branch, old_branch)
@@ -131,7 +131,7 @@ module CartoCSSHelper
 
     def self.visualise_on_overpass_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
       # special support for following tag values:  :any_value
-      header_prefix = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type} [#{wanted_latitude}, #{wanted_longitude}] -> "
+      header_prefix = "#{VisualDiff.tag_dict_to_string(tags)} #{type} [#{wanted_latitude}, #{wanted_longitude}] -> "
       target_location = '[?, ?]'
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
       puts "visualise_on_overpass_data <#{header_prefix}#{header_sufix}> #{old_branch} -> #{new_branch}"
@@ -198,7 +198,7 @@ module CartoCSSHelper
       diff.save
     end
 
-    def self.dict_to_pretty_tag_list(dict)
+    def self.tag_dict_to_string(dict)
       result = ''
       dict.to_a.each do |tag|
         result << '; ' if result != ''
