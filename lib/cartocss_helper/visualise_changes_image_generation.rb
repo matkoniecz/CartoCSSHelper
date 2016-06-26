@@ -166,12 +166,6 @@ module CartoCSSHelper
       VisualDiff.pack_image_sets old, new, header, new_branch, old_branch, image_size
     end
 
-    def self.scale(zlevel, reference_value, reference_zlevel)
-      diff = zlevel - reference_zlevel
-      rescaler = 2.0**diff
-      return reference_value * rescaler
-    end
-
     def self.get_render_bbox_size(zlevel, wanted_image_size, latitude)
       longitude_equator_rendered_length_in_pixels = 256 * 2**zlevel
       longitude_size = 360 * wanted_image_size.to_f / longitude_equator_rendered_length_in_pixels
