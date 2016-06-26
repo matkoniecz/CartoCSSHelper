@@ -82,7 +82,6 @@ module CartoCSSHelper
       start = Time.now
 
       command_to_execute = find_command(lat, lon, zlevel, bbox_size, image_size, export_location)
-      puts command_to_execute
 
       execute_rendering_command(command_to_execute, export_location, debug)
 
