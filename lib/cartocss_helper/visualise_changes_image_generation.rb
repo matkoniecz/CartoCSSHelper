@@ -82,7 +82,6 @@ module CartoCSSHelper
     end
 
     def self.visualise_changes_synthethic_test(tags, type, on_water, zlevel_range, new_branch, old_branch)
-      tags = VisualDiff.remove_magic_from_tags(tags)
       on_water_string = ''
       on_water_string = ' on water' if on_water
       header = "#{VisualDiff.dict_to_pretty_tag_list(tags)} #{type}#{on_water_string}"
@@ -92,15 +91,6 @@ module CartoCSSHelper
       Git.checkout(new_branch)
       new = VisualDiff.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
       VisualDiff.pack_image_sets old, new, header, new_branch, old_branch, 200
-    end
-
-    def self.remove_magic_from_tags(tags)
-      magicless_tags = {}
-      tags.each do |key, value|
-        value = 'any tag value' if value == :any
-        magicless_tags[key] = value
-      end
-      return magicless_tags
     end
 
     def self.collect_images_for_synthethic_test(tags, type, on_water, zlevel_range)
