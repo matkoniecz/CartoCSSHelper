@@ -125,7 +125,7 @@ module CartoCSSHelper
       end
 
       def get_timestamp
-        return OverpassQueryGenerator.get_timestamp_of_file(@data_filename)
+        return GenericCachedDownloader.new.get_cache_timestamp(@data_filename)
       end
     end
 
@@ -177,13 +177,12 @@ module CartoCSSHelper
       collection = []
       zlevels.each do |zlevel|
         render_bbox_size = VisualDiff.get_render_bbox_size(zlevel, image_size, latitude)
-        cache_folder = CartoCSSHelper::Configuration.get_path_to_folder_for_branch_specific_cache
-        filename = "#{cache_folder + "#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"}"
-        unless RendererHandler.image_available_from_cache(lat, lon, zlevel, bbox_size, image_size, export_filename)
+        filename = "#{latitude} #{longitude} #{zlevel}zlevel #{image_size}px #{source.get_timestamp} #{source.download_bbox_size}.png"
+        unless RendererHandler.image_available_from_cache(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
           source.load
-          RendererHandler.request_image_from_renderer(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
         end
-        collection.push(ImageForComparison.new(filename, "z#{zlevel}"))
+        file_location = RendererHandler.request_image_from_renderer(latitude, longitude, zlevel, render_bbox_size, image_size, filename)
+        collection.push(ImageForComparison.new(file_location, "z#{zlevel}"))
       end
       return collection
     end
