@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   # open3 is from stdlib
   # fileutils is from stdlib
   # find is from stdlib
-  s.add_dependency 'rest-client', '~> 1.8.0' # on upgrade search for rubydoc.info/gems/rest-client in code
+  s.add_dependency 'rest-client', '~> 1.8' # on upgrade search for rubydoc.info/gems/rest-client in code
   # digest/sha1 is from stdlib
   s.add_dependency 'sys-filesystem', '~> 1.1', '>= 1.1.0'
   # open3 is from stdlib
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rmagick', '~> 2.0'
   s.add_dependency 'ruby-progressbar', '~> 1.8'
 
-  s.add_development_dependency 'rubocop', '>0.41'
+  s.add_development_dependency 'rubocop', '~> 0.41', '> 0.41'
   s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
   s.add_development_dependency 'travis', '~> 1.8'
   s.add_development_dependency 'simplecov', '~> 0.11'
