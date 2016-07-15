@@ -43,7 +43,7 @@ class GenericDownloader
     if @stop_on_timeout
       raise exception_with_response if exception_with_response.is_a?(RequestTimeout)
     end
-    if [429, 503].include?(exception_with_response.http_code)
+    if [429, 503, 504].include?(exception_with_response.http_code)
       @retry_count += 1
       return true
     end
