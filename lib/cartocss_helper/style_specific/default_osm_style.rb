@@ -237,6 +237,7 @@ module CartoCSSHelper
         TagRenderingStatus.new('layer', '-4', :composite, { 'highway' => 'service' }), # modifies ordering
         TagRenderingStatus.new('layer', '-5', :composite, { 'highway' => 'service' }), # modifies ordering
         TagRenderingStatus.new('leisure', 'common', :primary),
+        TagRenderingStatus.new('leisure', 'dog_park', :primary),
         TagRenderingStatus.new('leisure', 'garden', :primary),
         TagRenderingStatus.new('leisure', 'golf_course', :primary),
         TagRenderingStatus.new('leisure', 'marina', :primary),
@@ -261,6 +262,7 @@ module CartoCSSHelper
         TagRenderingStatus.new('man_made', 'groyne', :primary),
         TagRenderingStatus.new('man_made', 'lighthouse', :primary),
         TagRenderingStatus.new('man_made', 'mast', :primary),
+        TagRenderingStatus.new('man_made', 'obelisk', :primary),
         TagRenderingStatus.new('man_made', 'pier', :primary),
         TagRenderingStatus.new('man_made', 'water_tower', :primary),
         TagRenderingStatus.new('man_made', 'windmill', :primary),
