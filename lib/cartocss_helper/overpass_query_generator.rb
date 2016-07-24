@@ -3,6 +3,7 @@ require 'digest/sha1'
 require 'sys/filesystem'
 require_relative 'overpass_downloader.rb'
 require_relative 'util/systemhelper.rb'
+require_relative 'util/logger.rb'
 
 module CartoCSSHelper
   class OverpassQueryGenerator
@@ -48,7 +49,7 @@ module CartoCSSHelper
       description = "download data for #{latitude} #{longitude} (#{size})"
       get_overpass_query_results(query, description)
 
-      filename = get_query_cache_filename(query)
+      filename = OverpassDownloader.cache_filename(query)
       return filename
     end
 
@@ -184,7 +185,7 @@ module CartoCSSHelper
     end
 
     def self.get_query_cache_refused_response_filename(query)
-      return get_query_cache_filename(query) + '_response_refused'
+      return OverpassDownloader.cache_filename(query) + '_response_refused'
     end
 
     def self.mark_query_as_refused(query)
@@ -193,13 +194,12 @@ module CartoCSSHelper
       file.close
     end
 
-    def self.get_query_cache_filename(query)
-      hash = Digest::SHA1.hexdigest query
-      query_cache_filename = CartoCSSHelper::Configuration.get_path_to_folder_for_overpass_cache + hash + '_query.cache'
-      return query_cache_filename
+    def self.get_query_cache_filename(_query)
+      Log.warn "call OverpassDownloader.cache_filename directly"
+      return OverpassDownloader.cache_filename
     end
 
-    def self.get_overpass_query_results(query, description, debug = false)
+    def self.get_overpass_query_results(query, description, debug = false, invalidate_cache: false) # TODO: - make debug parameter named
       if File.exist?(get_query_cache_refused_response_filename(query))
         raise OverpassDownloader::OverpassRefusedResponse
       end
@@ -207,14 +207,13 @@ module CartoCSSHelper
       check_for_free_space
 
       if debug
-        puts query
-        puts
+        Log.info query
+        Log.info
       end
 
-      cache_filename = get_query_cache_filename(query)
       description = 'Running Overpass query (connection initiated on ' + Time.now.to_s + ') ' + description
       begin
-        return OverpassDownloader.run_overpass_query query, description, cache_filename
+        return OverpassDownloader.run_overpass_query query, description, invalidate_cache: invalidate_cache
       rescue OverpassDownloader::OverpassRefusedResponse
         mark_query_as_refused(query)
         raise OverpassDownloader::OverpassRefusedResponse
