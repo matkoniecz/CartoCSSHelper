@@ -85,7 +85,9 @@ module CartoCSSHelper
 
       execute_rendering_command(command_to_execute, export_location, debug)
 
-      puts "generated in #{(Time.now - start).to_i}s (#{Git.get_commit_hash})"
+      generation_time = (Time.now - start).to_i
+
+      puts "generated in #{generation_time}s (#{Git.get_commit_hash})"
       return export_location
     end
 
