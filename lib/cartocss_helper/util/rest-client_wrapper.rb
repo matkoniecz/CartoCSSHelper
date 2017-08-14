@@ -15,7 +15,7 @@ class RestClientWrapper
     raise RequestTimeout, e.to_s
   rescue RestClient::ExceptionWithResponse => e
     raise_exception_about_returned_response(e)
-  rescue RestClient::MaxRedirectsReached, RestClient::SSLCertificateNotVerified, RestClient::ServerBrokeConnection, SocketError, URI::InvalidURIError
+  rescue RestClient::SSLCertificateNotVerified, RestClient::ServerBrokeConnection, SocketError, URI::InvalidURIError
     raise ExceptionWithoutResponse.new(e), e.to_s
   rescue ArgumentError => e
     raise_issue_359_exception(e)
