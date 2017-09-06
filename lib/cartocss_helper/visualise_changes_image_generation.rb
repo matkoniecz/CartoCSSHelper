@@ -130,7 +130,7 @@ module CartoCSSHelper
     end
 
     def self.visualise_on_overpass_data(tags, type, wanted_latitude, wanted_longitude, zlevels, new_branch, old_branch = 'master')
-      # special support for following tag values:  :any_value
+      # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       header_prefix = "#{VisualDiff.tag_dict_to_string(tags)} #{type} [#{wanted_latitude}, #{wanted_longitude}] -> "
       target_location = '[?, ?]'
       header_sufix = " #{old_branch}->#{new_branch} #{zlevels}"
@@ -198,14 +198,7 @@ module CartoCSSHelper
     end
 
     def self.tag_dict_to_string(dict)
-      result = ''
-      dict.to_a.each do |tag|
-        result << '; ' if result != ''
-        value = "'#{tag[1]}'"
-        value = '{any value}' if tag[1] == :any_value
-        result << "#{tag[0]}=#{value}"
-      end
-      return result
+      return OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(dict)
     end
   end
 end

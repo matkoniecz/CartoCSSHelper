@@ -99,7 +99,7 @@ module CartoCSSHelper
     end
 
     def self.locate_element_with_given_tags_and_type(tags, type, latitude, longitude, max_range_in_km_for_radius = 1600)
-      # special support for following tag values:  :any_value
+      # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       range = 10 * 1000
       while range <= max_range_in_km_for_radius * 1000
         list = OverpassQueryGenerator.get_elements_near_given_location(tags, type, latitude, longitude, range)
@@ -135,7 +135,7 @@ module CartoCSSHelper
     end
 
     def self.get_query_to_get_location_set_format(tags, type, latitude, longitude, range, format)
-      # special support for following tag values:  :any_value
+      # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}]#{format};"
       locator += "\n"
       type = 'way' if type == 'closed_way'
@@ -157,20 +157,35 @@ module CartoCSSHelper
     end
 
     def self.turn_list_of_tags_in_overpass_filter(tags)
+      # special support for following tag values:  :any_value, {operation: :not_equal_to, value: "tag"}
       element = ''
       tags.each do |tag|
-        element += if tag[1] == :any_value
-                     "\t['#{tag[0]}']"
-                   else
-                     "\t['#{tag[0]}'='#{tag[1]}']"
-                   end
+        element += turn_tag_into_overpass_filter(tag)
         element += "\n"
       end
       return element
     end
 
+    def self.turn_tag_into_overpass_filter(tag)
+       if tag[1].class == Hash
+         if tag[1][:operation] == :not_equal_to
+           if tag[1][:value] == :any_value
+             return "\t['#{tag[0]}'!~'.*']"
+           else
+             return "\t['#{tag[0]}'!='#{tag[1][:value]}']"
+           end
+         else
+           raise "unexpected operation in #{tag[1]}"
+         end
+       elsif tag[1] == :any_value
+         return "\t['#{tag[0]}']"
+       else
+         return "\t['#{tag[0]}'='#{tag[1]}']"
+       end
+     end
+
     def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
-      # special support for following tag values:  :any_value
+      # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       # TODO - escape value with quotation signs in them
       element = "(#{type}"
       element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags)
