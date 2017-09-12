@@ -28,12 +28,6 @@ describe RestClientWrapper do
     expect { a.fetch_data_from_url("url", 1) }.to raise_error ExceptionWithResponse
   end
 
-  it "should raise ExceptionWithoutResponse on other expected exceptions emitted by RestClient" do
-    a = RestClientWrapper.new
-    allow(RestClient::Request).to receive(:execute).and_raise(RestClient::MaxRedirectsReached)
-    expect { a.fetch_data_from_url("url", 1) }.to raise_error ExceptionWithoutResponse
-  end
-
   it "should raise RequestTimeout on RequestTimeout::ExceptionWithResponse emitted by RestClient" do
     a = RestClientWrapper.new
     allow(RestClient::Request).to receive(:execute).and_raise(RestClient::RequestTimeout)
