@@ -10,7 +10,6 @@ class RestClientWrapper
     wait if url == @last_url_fetched
     @last_url_fetched = url
     return execute_fetch_data_from_url(url, request_timeout)
-  # http://www.rubydoc.info/gems/rest-client/1.8.0/RestClient/Exception
   rescue RestClient::RequestTimeout => e
     raise RequestTimeout, e.to_s
   rescue RestClient::ExceptionWithResponse => e

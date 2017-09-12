@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   # open3 is from stdlib
   # fileutils is from stdlib
   # find is from stdlib
-  s.add_dependency 'rest-client', '~> 1.8' # on upgrade search for rubydoc.info/gems/rest-client in code
+  s.add_dependency 'rest-client', '~> 2.0'
   # digest/sha1 is from stdlib
   s.add_dependency 'sys-filesystem', '~> 1.1', '>= 1.1.0'
   # open3 is from stdlib
