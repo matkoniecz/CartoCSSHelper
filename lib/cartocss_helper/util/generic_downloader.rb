@@ -57,7 +57,11 @@ class GenericDownloader
     output_shared_error_part(url, e)
     Log.warn e.response
     Log.warn e.http_code
-    get_specified_resource(url) if retry_allowed(e)
+    if retry_allowed(e)
+      get_specified_resource(url)
+    else
+      raise e
+    end
   rescue ExceptionWithoutResponse => e
     output_shared_error_part(url, e)
     raise e

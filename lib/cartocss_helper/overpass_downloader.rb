@@ -32,6 +32,17 @@ module CartoCSSHelper
       puts
       puts e
       raise OverpassRefusedResponse
+    rescue ExceptionWithResponse => e
+      if e.http_code == 400
+        puts "invalid query"
+        puts
+        puts query
+        puts
+        puts url
+        puts
+        puts e
+      end
+      raise e
     end
 
     def self.get_allowed_timeout_in_seconds
