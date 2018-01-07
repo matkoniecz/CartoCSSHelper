@@ -215,14 +215,12 @@ module CartoCSSHelper
       # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       # TODO - escape value with quotation signs in them
       element = "(#{type}"
-      element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags)
-      element += "\n"
+      element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags).strip
       if range != :infinity
-        element += "\t(around:#{range},#{latitude},#{longitude});"
-        element += "\n"
+        element += "(around:#{range},#{latitude},#{longitude});"
       end
       element += ');'
-      element += "\n"
+      element += "\n\n"
       return element
     end
 

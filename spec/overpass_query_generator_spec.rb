@@ -19,4 +19,8 @@ describe CartoCSSHelper::OverpassQueryGenerator do
   it "should handle wildcard - :any_value symbol" do
     expect(CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter([["surface", :any_value]])).to eq "\t['surface']\n"
   end
+  it "can accept tags in dictionaries" do
+    expect(CartoCSSHelper::OverpassQueryGenerator.get_query_element_to_get_location({'surface' => 'wood'}, 10, 10, 'node', 100)).to eq "(node['surface'='wood'](around:100,10,10););\n\n"
+  end
+
 end
