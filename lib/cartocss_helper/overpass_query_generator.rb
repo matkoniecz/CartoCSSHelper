@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 require 'digest/sha1'
 require 'sys/filesystem'
 require_relative 'overpass_downloader.rb'

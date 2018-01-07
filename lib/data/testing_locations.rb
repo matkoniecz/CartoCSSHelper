@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CartoCSSHelper
   def self.get_list_of_testing_locations
     return [

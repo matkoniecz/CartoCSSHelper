@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CartoCSSHelper
   module Heuristic
     require 'set'

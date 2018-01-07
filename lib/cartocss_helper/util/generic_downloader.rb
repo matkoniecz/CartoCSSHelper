@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ruby-progressbar'
 require_relative 'rest-client_wrapper.rb'
 require_relative 'logger.rb'

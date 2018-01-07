@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CartoCSSHelper
   class StyleSpecificData
     attr_reader :min_z, :max_z, :list_of_documented_tags, :list_of_documented_compositions, :name_label_is_not_required

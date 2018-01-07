@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'util/generic_downloader.rb'
 require_relative 'util/generic_cached_downloader.rb'
 require 'uri' # for URI.escape

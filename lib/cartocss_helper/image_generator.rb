@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 require_relative 'configuration.rb'
 require_relative 'heuristic.rb'
 require_relative 'data_file_handling.rb'

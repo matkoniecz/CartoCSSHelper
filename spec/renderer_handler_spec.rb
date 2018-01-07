@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/cartocss_helper.rb'
 require 'spec_helper'
 

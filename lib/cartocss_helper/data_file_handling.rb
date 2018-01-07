@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 require_relative 'configuration'
 require_relative 'util/systemhelper.rb'
 

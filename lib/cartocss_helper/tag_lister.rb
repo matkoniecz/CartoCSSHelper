@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'configuration.rb'
 require_relative 'image_generator.rb'
 include CartoCSSHelper::Configuration

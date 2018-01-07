@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'visualise_changes_diff_from_images'
 require_relative 'git'
 require_relative 'renderer_handler'

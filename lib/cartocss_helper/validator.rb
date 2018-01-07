@@ -1,4 +1,5 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
 require_relative 'heuristic.rb'
 require_relative 'image_generator.rb'
 require_relative 'configuration.rb'
