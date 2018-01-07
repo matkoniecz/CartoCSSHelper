@@ -82,3 +82,7 @@ Tests are written using rspec. Use `rspec` command to run them.
 
 [![Code Climate](https://codeclimate.com/github/matkoniecz/CartoCSSHelper/badges/gpa.svg)](https://codeclimate.com/github/matkoniecz/CartoCSSHelper)
 [![Build Status](https://travis-ci.org/matkoniecz/CartoCSSHelper.svg?branch=master)](https://travis-ci.org/matkoniecz/CartoCSSHelper)
+
+### RubyGems link
+
+[https://rubygems.org/gems/cartocss_helper](https://rubygems.org/gems/cartocss_helper)
