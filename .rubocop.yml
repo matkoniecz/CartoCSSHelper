@@ -1,3 +1,7 @@
+# not preferred as this rule makes harder to move/add/remove items
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
 # change without benefit ( foobar == nil into foobar.nil?)
 Style/NilComparison:
   Enabled: false
