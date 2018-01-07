@@ -74,6 +74,9 @@ It is also possible to look for certain keys, with any value:
     tags = {'landuse' => 'village_green', 'tourism' => 'attraction', 'name' => :any_value}
     CartoCSSHelper.test tags, 'master', 'v2.28.1'
 
+### Tests
+
+Tests are written using rspec. Use `rspec` command to run them.
 
 ### Automated stuff
 
