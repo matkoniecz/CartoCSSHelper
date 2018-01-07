@@ -22,5 +22,7 @@ describe CartoCSSHelper::OverpassQueryGenerator do
   it "can accept tags in dictionaries" do
     expect(CartoCSSHelper::OverpassQueryGenerator.get_query_element_to_get_location({'surface' => 'wood'}, 10, 10, 'node', 100)).to eq "(node['surface'='wood'](around:100,10,10););\n\n"
   end
-
+  it "can accept negations" do
+    expect(CartoCSSHelper::OverpassQueryGenerator.get_query_element_to_get_location({'surface' => {:operation => :not_equal_to, :value => 'wood'}}, 10, 10, 'node', 100)).to eq "(node['surface'!='wood'](around:100,10,10););\n\n"
+  end
 end
