@@ -184,10 +184,14 @@ module CartoCSSHelper
        return {operator: operator, key: key, value: value}
      end
 
+    def self.overpass_escape(text)
+      return text.gsub("\\", "\\\\\\").gsub("'", "\\\\'")
+    end
+
     def self.turn_tag_into_overpass_filter(tag)
       filter_data = translate_tag_object_into_filter_data(tag)
-      value = filter_data[:value]
-      key = filter_data[:key]
+      value = overpass_escape(filter_data[:value])
+      key = overpass_escape(filter_data[:key])
       operator = filter_data[:operator]
       if value == :any_value && operator == :equal
          return "\t['#{key}']"
