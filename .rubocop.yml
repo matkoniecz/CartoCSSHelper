@@ -99,3 +99,5 @@ Metrics/LineLength:
   Exclude:
     - 'cartocss_helper.gemspec'
 
+AllCops:
+  TargetRubyVersion: 2.3
