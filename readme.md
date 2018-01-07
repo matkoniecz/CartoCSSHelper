@@ -1,4 +1,4 @@
-##CartoCSS Helper
+## CartoCSS Helper
 
 It is a tool making development of CartoCSS styles more efficient. Allows to write simple Ruby scripts that generate comparison images of how rendering changed between two versions of map style. It is also possible to generate validation reports detecting for example too low values of text-dy. Loading data using osm2pgsql, rendering with TileMill, obtaining test data from overpass turbo.
 
@@ -12,7 +12,7 @@ It is work in progress, major problems that should be solved include:
 * Executing git checkout commands on map style git repository during normal script operation (https://github.com/matkoniecz/CartoCSSHelper/issues/9)
 * Current rendering method is obnoxiously slow. (https://github.com/matkoniecz/CartoCSSHelper/issues/1)
 
-###Installation
+### Installation
 
 Assumes that osm2pgsql and TileMill are installed.
 
@@ -26,7 +26,7 @@ Unfortunately, standard `gem install cartocss_helper` may not be enough as Carto
 2. `gem install --user-install rmagick`
 3. `gem install --user-install cartocss_helper`.
 
-###Examples
+### Examples
 
 It is assumed that CartoCSS project with Default OSM Style (https://github.com/gravitystorm/openstreetmap-carto/) is located at `~/Documents/MapBox/project/osm-carto`.
 
@@ -75,7 +75,7 @@ It is also possible to look for certain keys, with any value:
     CartoCSSHelper.test tags, 'master', 'v2.28.1'
 
 
-###Automated stuff
+### Automated stuff
 
 [![Code Climate](https://codeclimate.com/github/matkoniecz/CartoCSSHelper/badges/gpa.svg)](https://codeclimate.com/github/matkoniecz/CartoCSSHelper)
 [![Build Status](https://travis-ci.org/matkoniecz/CartoCSSHelper.svg?branch=master)](https://travis-ci.org/matkoniecz/CartoCSSHelper)
