@@ -72,7 +72,8 @@ Style/IdenticalConditionalBranches:
 Style/NonNilCheck:
   Enabled: false
 
-#see https://github.com/bbatsov/rubocop/issues/1747
+# see https://github.com/bbatsov/rubocop/issues/1747#issuecomment-223370141
+# this auto-correct rule may break things and is not a clear improvement
 Style/SpecialGlobalVars:
   Enabled: false
 
