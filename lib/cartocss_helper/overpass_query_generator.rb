@@ -166,22 +166,40 @@ module CartoCSSHelper
       return element
     end
 
-    def self.turn_tag_into_overpass_filter(tag)
+    def self.translate_tag_object_into_filter_data(tag)
+       operator = :equal
+       key = tag[0]
+       value = :any_value
        if tag[1].class == Hash
+         # complex operation
          if tag[1][:operation] == :not_equal_to
-           if tag[1][:value] == :any_value
-             return "\t['#{tag[0]}'!~'.*']"
-           else
-             return "\t['#{tag[0]}'!='#{tag[1][:value]}']"
-           end
+           operator = :not_equal
          else
            raise "unexpected operation in #{tag[1]}"
          end
-       elsif tag[1] == :any_value
-         return "\t['#{tag[0]}']"
+         value = tag[1][:value]
        else
-         return "\t['#{tag[0]}'='#{tag[1]}']"
+         value = tag[1]
        end
+       return {operator: operator, key: key, value: value}
+     end
+
+    def self.turn_tag_into_overpass_filter(tag)
+      filter_data = translate_tag_object_into_filter_data(tag)
+      value = filter_data[:value]
+      key = filter_data[:key]
+      operator = filter_data[:operator]
+      if value == :any_value && operator == :equal
+         return "\t['#{key}']"
+      elsif value == :any_value && operator == :not_equal
+         return "\t['#{key}'!~'.*']"
+      elsif value != :any_value && operator == :equal
+         return "\t['#{key}'='#{value}']"
+      elsif value != :any_value && operator == :not_equal
+         return "\t['#{key}'!='#{value}']"
+      else
+        raise "unexpected situation in <#{tag}>"
+      end
      end
 
     def self.get_query_element_to_get_location(tags, latitude, longitude, type, range)
