@@ -191,9 +191,13 @@ module CartoCSSHelper
 
     def self.turn_tag_into_overpass_filter(tag)
       filter_data = translate_tag_object_into_filter_data(tag)
-      value = overpass_escape(filter_data[:value])
-      key = overpass_escape(filter_data[:key])
+      value = filter_data[:value]
+      key = filter_data[:key]
       operator = filter_data[:operator]
+
+      value = overpass_escape(value) if value != :any_value
+      key = overpass_escape(key)
+
       if value == :any_value && operator == :equal
         return "\t['#{key}']"
       elsif value == :any_value && operator == :not_equal
