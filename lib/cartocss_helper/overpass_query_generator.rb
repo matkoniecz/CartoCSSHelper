@@ -167,21 +167,21 @@ module CartoCSSHelper
     end
 
     def self.translate_tag_object_into_filter_data(tag)
-       operator = :equal
-       key = tag[0]
-       value = :any_value
-       if tag[1].class == Hash
-         # complex operation
-         if tag[1][:operation] == :not_equal_to
-           operator = :not_equal
-         else
-           raise "unexpected operation in #{tag[1]}"
-         end
-         value = tag[1][:value]
-       else
-         value = tag[1]
-       end
-       return {operator: operator, key: key, value: value}
+      operator = :equal
+      key = tag[0]
+      value = :any_value
+      if tag[1].class == Hash
+        # complex operation
+        if tag[1][:operation] == :not_equal_to
+          operator = :not_equal
+        else
+          raise "unexpected operation in #{tag[1]}"
+        end
+        value = tag[1][:value]
+      else
+        value = tag[1]
+      end
+      return { operator: operator, key: key, value: value }
      end
 
     def self.overpass_escape(text)
@@ -194,13 +194,13 @@ module CartoCSSHelper
       key = overpass_escape(filter_data[:key])
       operator = filter_data[:operator]
       if value == :any_value && operator == :equal
-         return "\t['#{key}']"
+        return "\t['#{key}']"
       elsif value == :any_value && operator == :not_equal
-         return "\t['#{key}'!~'.*']"
+        return "\t['#{key}'!~'.*']"
       elsif value != :any_value && operator == :equal
-         return "\t['#{key}'='#{value}']"
+        return "\t['#{key}'='#{value}']"
       elsif value != :any_value && operator == :not_equal
-         return "\t['#{key}'!='#{value}']"
+        return "\t['#{key}'!='#{value}']"
       else
         raise "unexpected situation in <#{tag}>"
       end
