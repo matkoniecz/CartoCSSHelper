@@ -1,6 +1,6 @@
 inherit_from: .rubocop_todo.yml
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 Style/RedundantReturn:
@@ -28,7 +28,7 @@ Lint/UnusedMethodArgument:
   AutoCorrect: False
 
 #false positive
-Style/VariableName:
+Naming/VariableName:
   Enabled: false
 
 #? I am not sure...
@@ -40,7 +40,7 @@ Style/RaiseArgs:
   Enabled: false
 
 #? I am not sure...
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 #? I am not sure...
