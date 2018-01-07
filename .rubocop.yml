@@ -1,58 +1,34 @@
-inherit_from: .rubocop_todo.yml
-
-Naming/AccessorMethodName:
-  Enabled: false
-
-Style/RedundantReturn:
-  Enabled: false
-
-Style/AsciiComments:
-  Enabled: false
-
-Style/BlockComments:
-  Enabled: false
-
-Style/StringLiterals:
-  Enabled: false
-
-Style/WordArray:
-  Enabled: false
-
-Style/TrailingCommaInLiteral:
-  Enabled: false
-
-Style/ClassVars:
-  Enabled: false
-
-Lint/UnusedMethodArgument:
-  AutoCorrect: False
-
-#false positive
-Naming/VariableName:
-  Enabled: false
-
-#? I am not sure...
-Style/BracesAroundHashParameters:
-  Enabled: false
-
-#? I am not sure...
-Style/RaiseArgs:
-  Enabled: false
-
-#? I am not sure...
-Naming/PredicateName:
-  Enabled: false
-
-#? I am not sure...
+# change without benefit ( foobar == nil into foobar.nil?)
 Style/NilComparison:
   Enabled: false
 
-#? I am not sure...
-Style/RegexpLiteral:
+# single-quoted strings are worse as adding #{} requires changing ' back into "
+Style/StringLiterals:
   Enabled: false
 
-#? I am not sure...
-Style/ZeroLengthPredicate:
+# explicit return make easier to avoid subtle bugs on changing function
+Style/RedundantReturn:
+  Enabled: false
+
+# sometimes it is necessary to use UTF in comment (especially in cases where some special handling is necessary for nonASCII text) 
+Style/AsciiComments:
+  Enabled: false
+
+# block comments are fine in my opinion
+Style/BlockComments:
+  Enabled: false
+
+# overcomplicated syntax without benefit
+Style/WordArray:
+  Enabled: false
+
+# it is likely to detect bugs, there is no point in masking them by running autocorrect
+Lint/UnusedMethodArgument:
+  AutoCorrect: False
+
+# see https://github.com/bbatsov/rubocop/issues/1747#issuecomment-223370141
+# this auto-correct rule may break things and is not a clear improvement
+Style/SpecialGlobalVars:
   Enabled: false
 
 #not impressed by proposed changes, but maybe it was a bad luck
@@ -75,10 +51,6 @@ Style/NonNilCheck:
 # see https://github.com/bbatsov/rubocop/issues/1747#issuecomment-223370141
 # this auto-correct rule may break things and is not a clear improvement
 Style/SpecialGlobalVars:
-  Enabled: false
-
-#affected by rubocop bug
-Style/GuardClause:
   Enabled: false
 
 #this folder contains functions returning arrays of data, so functions will be long
