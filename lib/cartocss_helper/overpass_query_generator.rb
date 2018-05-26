@@ -219,7 +219,7 @@ module CartoCSSHelper
       if range != :infinity
         element += "(around:#{range},#{latitude},#{longitude});"
       end
-      element += ');'
+      element += ';);'
       element += "\n\n"
       return element
     end
