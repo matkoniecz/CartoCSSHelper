@@ -135,6 +135,9 @@ module CartoCSSHelper
       return get_query_to_get_location_set_format(tags, type, latitude, longitude, range, "[out:csv(::lat,::lon;false)]")
     end
 
+    # TODO: better, more generic function name
+    # get_query_to_get_objects_matching?
+    # put latitude, longitude, range together to avoid passing dummy variables
     def self.get_query_to_get_location_set_format(tags, type, latitude, longitude, range, format)
       # special support for some tag values - see CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter for details
       locator = "[timeout:#{OverpassDownloader.get_allowed_timeout_in_seconds}]#{format};"
