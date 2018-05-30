@@ -221,7 +221,7 @@ module CartoCSSHelper
       element = "(#{type}"
       element += OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter(tags).strip
       if range != :infinity
-        element += "(around:#{range},#{latitude},#{longitude});"
+        element += "(around:#{range},#{latitude},#{longitude})"
       end
       element += ';);'
       element += "\n\n"
