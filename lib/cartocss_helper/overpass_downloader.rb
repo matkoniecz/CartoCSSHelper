@@ -58,11 +58,13 @@ module CartoCSSHelper
       query = query.gsub('\\', '\\\\')
       query = query.delete("\n")
       query = query.delete("\t")
+      query = URI.escape(query)
+      query = query.gsub("&", "%26")
       if query.length > 8174 #8175 is too much and allows crashes
         raise 'see https://github.com/matkoniecz/CartoCSSHelper/issues/35'
       end
       base_overpass_url = OverpassDownloader.get_overpass_instance_url
-      return base_overpass_url + '/interpreter?data=' + URI.escape(query)
+      return base_overpass_url + '/interpreter?data=' + query
     end
 
     def self.get_overpass_instance_url
