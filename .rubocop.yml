@@ -1,61 +1,11 @@
-# not preferred as this rule makes harder to move/add/remove items
-Style/TrailingCommaInLiteral:
-  Enabled: false
-
-# change without benefit ( foobar == nil into foobar.nil?)
-Style/NilComparison:
-  Enabled: false
-
-# single-quoted strings are worse as adding #{} requires changing ' back into "
-Style/StringLiterals:
-  Enabled: false
-
-# explicit return make easier to avoid subtle bugs on changing function
-Style/RedundantReturn:
-  Enabled: false
-
-# sometimes it is necessary to use UTF in comment (especially in cases where some special handling is necessary for nonASCII text) 
-Style/AsciiComments:
-  Enabled: false
-
-# block comments are fine in my opinion
-Style/BlockComments:
-  Enabled: false
-
-# overcomplicated syntax without benefit
-Style/WordArray:
-  Enabled: false
-
-# it is likely to detect bugs, there is no point in masking them by running autocorrect
-Lint/UnusedMethodArgument:
-  AutoCorrect: False
-
-# see https://github.com/bbatsov/rubocop/issues/1747#issuecomment-223370141
-# this auto-correct rule may break things and is not a clear improvement
-Style/SpecialGlobalVars:
-  Enabled: false
-
-#not impressed by proposed changes, but maybe it was a bad luck
-Style/UnneededInterpolation:
-  Enabled: false
-
-#not impressed by proposed changes, but maybe it was a bad luck
-Style/SymbolProc:
-  Enabled: false
+inherit_gem:
+  matkoniecz-ruby-style:
+    - standard_rubocop_config.yml
 
 #failed to detect anything useful here
 Style/IdenticalConditionalBranches:
   Exclude:
     - 'lib/cartocss_helper/visualise_changes_diff_from_images.rb'
-
-#syntactic sugar without gain
-Style/NonNilCheck:
-  Enabled: false
-
-# see https://github.com/bbatsov/rubocop/issues/1747#issuecomment-223370141
-# this auto-correct rule may break things and is not a clear improvement
-Style/SpecialGlobalVars:
-  Enabled: false
 
 #this folder contains functions returning arrays of data, so functions will be long
 Metrics/AbcSize:
@@ -74,6 +24,3 @@ Metrics/ModuleLength:
 Metrics/LineLength:
   Exclude:
     - 'cartocss_helper.gemspec'
-
-AllCops:
-  TargetRubyVersion: 2.3

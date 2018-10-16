@@ -16,8 +16,7 @@ Gem::Specification.new do |s|
   # https://en.wikipedia.org/wiki/Ruby_(programming_language)#Table_of_versions
   # update also versions in
   # .travis.yml
-  # .rubocop.yml (TargetRubyVersion)
-  s.required_ruby_version = '>= 2.3.0'
+  s.required_ruby_version = '>= 2.4.0'
 
   # If you have other dependencies, add them here
   # open3 is from stdlib
@@ -32,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'ruby-progressbar', '~> 1.8'
 
   s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
-  s.add_development_dependency 'rubocop', '~> 0.52', '> 0.48.1'
+  s.add_development_dependency 'matkoniecz-ruby-style'
   s.add_development_dependency 'simplecov', '~> 0.11'
   s.add_development_dependency 'travis', '~> 1.8'
 
