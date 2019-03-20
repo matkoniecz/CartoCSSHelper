@@ -42,9 +42,5 @@ module CartoCSSHelper
       max_longitude = longitude + size / 2
       return "#{min_longitude},#{min_latitude},#{max_longitude},#{max_latitude}"
     end
-
-    def self.get_overpass_instance_url
-      return CartoCSSHelper::Configuration.get_overpass_instance_url
-    end
   end
 end
