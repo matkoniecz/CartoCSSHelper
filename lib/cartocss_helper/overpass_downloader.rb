@@ -60,6 +60,7 @@ module CartoCSSHelper
       query = query.delete("\t")
       query = URI.escape(query)
       query = query.gsub("&", "%26")
+      query = query.gsub('+', '%2B')
       if query.length > 8174 #8175 is too much and allows crashes
         raise 'see https://github.com/matkoniecz/CartoCSSHelper/issues/35'
       end
