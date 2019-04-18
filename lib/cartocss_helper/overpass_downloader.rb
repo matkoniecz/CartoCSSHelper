@@ -54,11 +54,19 @@ module CartoCSSHelper
     end
 
     def self.format_query_into_url(query)
-      query = query.gsub(/\/\/.*\n/, '') # add proper parsing - it will mutilate // inside quotes etc
+      # code causing bug - (// inside quotes, as predited) - why it was even added?
+      #query = query.gsub(/\/\/.*\n/, '') # add proper parsing - it will mutilate // inside quotes etc
+
+      # escape backslash - turns \ into \\
       query = query.gsub('\\', '\\\\')
+
+      # newlines, tabs added in query for readability may be safely deleted
       query = query.delete("\n")
       query = query.delete("\t")
+
       query = URI.escape(query)
+
+      # inside query also & and + must be escaped (entire query is an url parameter)
       query = query.gsub("&", "%26")
       query = query.gsub('+', '%2B')
       if query.length > 8174 #8175 is too much and allows crashes
