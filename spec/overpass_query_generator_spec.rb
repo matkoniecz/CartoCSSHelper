@@ -16,6 +16,9 @@ describe CartoCSSHelper::OverpassQueryGenerator do
   it "should handle backslashes in tags" do
     expect(CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter([["surface", "wood\\"]])).to eq "\t['surface'='wood\\\\']\n"
   end
+  it "should handle slashes in tags" do
+    expect(CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter([["broken_wikipedia", "https://de.wikipedia.org/wiki/Notruf_der_Autoversicherer"]])).to eq "\t['broken_wikipedia'='https://de.wikipedia.org/wiki/Notruf_der_Autoversicherer']\n"
+  end
   it "should handle wildcard - :any_value symbol" do
     expect(CartoCSSHelper::OverpassQueryGenerator.turn_list_of_tags_in_overpass_filter([["surface", :any_value]])).to eq "\t['surface']\n"
   end
