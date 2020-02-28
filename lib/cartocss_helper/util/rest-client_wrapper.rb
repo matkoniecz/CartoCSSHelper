@@ -19,6 +19,8 @@ class RestClientWrapper
   rescue RestClient::SSLCertificateNotVerified, RestClient::ServerBrokeConnection, SocketError, URI::InvalidURIError
     raise ExceptionWithoutResponse.new(e), e.to_s
   rescue ArgumentError => e
+    puts "url:"
+    puts url
     raise_issue_359_exception(e)
   rescue => e
     puts 'unhandled exception! It is a clear bug!'
