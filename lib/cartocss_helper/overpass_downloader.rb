@@ -56,6 +56,8 @@ module CartoCSSHelper
     def self.escape_query(query)
       # code causing bug - (// inside quotes, as predicted) - why it was even added?
       #query = query.gsub(/\/\/.*\n/, '') # add proper parsing - it will mutilate // inside quotes etc
+      # TODO: replace complaint above by a test
+      # maybe URI.escape(query, "/") is sufficient?
 
       # escape backslash - turns \ into \\
       query = query.gsub('\\', '\\\\')
