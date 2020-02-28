@@ -37,13 +37,3 @@ Gem::Specification.new do |s|
   s.files        = Dir['{lib}/**/*.rb', 'bin/*', '*.txt', '*.md']
   s.require_path = 'lib'
 end
-
-=begin
-how to release new gem version:
-
-rm cartocss_helper-*.*.*.gem
-gem build cartocss_helper.gemspec
-gem install cartocss_helper-*.*.*.gem --user-install
-gem push cartocss_helper-*.*.*.gem
-
-=end
