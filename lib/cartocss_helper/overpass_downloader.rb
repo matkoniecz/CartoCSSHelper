@@ -64,7 +64,7 @@ module CartoCSSHelper
       query = query.delete("\n")
       query = query.delete("\t")
 
-      query = URI.escape(query)
+      query = URI.escape(query, "/")
 
       # inside query also & and + must be escaped (entire query is an url parameter)
       query = query.gsub("&", "%26")
