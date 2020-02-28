@@ -2,8 +2,8 @@
 
 require_relative 'util/generic_downloader.rb'
 require_relative 'util/generic_cached_downloader.rb'
-require 'uri' # for URI.escape
 require 'digest/sha1'
+require 'addressable/uri'
 
 module CartoCSSHelper
   class OverpassDownloader
@@ -42,6 +42,9 @@ module CartoCSSHelper
         puts
         puts url
         puts
+        puts "url with %20 replaced back by spaces, %22 by \""
+        puts url.replace("%20", " ").replace("%22", '"')
+        puts
         puts e
       elsif e.http_code == 414
         puts 'see https://github.com/matkoniecz/CartoCSSHelper/issues/35'
@@ -66,7 +69,11 @@ module CartoCSSHelper
       query = query.delete("\n")
       query = query.delete("\t")
 
-      query = URI.escape(query, "/")
+      #query = URI.escape(query) # no escaping for / [add require 'uri' to use it]
+      #query = URI.escape(query, "/") # escapes only / [add require 'uri' to use it]
+      #query = CGI.escape(query) # escapes spaces to + sign
+      query = Addressable::URI.encode_component(query, Addressable::URI::CharacterClasses::QUERY)
+      query = query.gsub("/", "%2F") # escape slashes manually
 
       # inside query also & and + must be escaped (entire query is an url parameter)
       query = query.gsub("&", "%26")
