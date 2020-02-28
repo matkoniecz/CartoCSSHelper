@@ -54,7 +54,7 @@ module CartoCSSHelper
     end
 
     def self.format_query_into_url(query)
-      # code causing bug - (// inside quotes, as predited) - why it was even added?
+      # code causing bug - (// inside quotes, as predicted) - why it was even added?
       #query = query.gsub(/\/\/.*\n/, '') # add proper parsing - it will mutilate // inside quotes etc
 
       # escape backslash - turns \ into \\
