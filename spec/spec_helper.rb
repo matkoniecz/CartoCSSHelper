@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Required by codeclimate, see https://docs.codeclimate.com/docs/setting-up-test-coverage#how-to for docs.
-require "codeclimate-test-reporter"
-
 require 'simplecov'
 SimpleCov.start
 
