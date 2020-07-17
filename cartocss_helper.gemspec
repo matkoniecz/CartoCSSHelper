@@ -22,11 +22,12 @@ Gem::Specification.new do |s|
   # find is from stdlib
   s.add_dependency 'rest-client', '~> 2.0'
   # digest/sha1 is from stdlib
-  s.add_dependency 'sys-filesystem', '~> 1.1', '>= 1.1.0'
+  s.add_dependency 'sys-filesystem', '~> 1.3', '>= 1.1.0'
   # open3 is from stdlib
   # set is from stdlib
   s.add_dependency 'rmagick', '~> 2.0'
   s.add_dependency 'ruby-progressbar', '~> 1.8'
+  s.add_dependency 'addressable', '~> 2.7'
 
   s.add_development_dependency 'rspec', '~> 3.4', '>= 3.4.0'
   s.add_development_dependency 'matkoniecz-ruby-style'
