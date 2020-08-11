@@ -33,35 +33,35 @@ module CartoCSSHelper
       return "#{min_latitude},#{min_longitude},#{max_latitude},#{max_longitude}"
     end
 
-    def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, bb_size: 0.1, distance_in_meters: 20)
+    def self.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, bb_size: 0.1, distance_in_meters: 20, invalidate_cache: false)
       return nil, nil if bb_size > 0.5
       bb = overpass_bbox_string(latitude, longitude, bb_size.to_f)
       query = OverpassQueryGenerator.get_query_to_find_data_pair(bb, tags_a, tags_b, type_a, type_b, distance_in_meters: distance_in_meters)
       description = "find #{VisualDiff.tag_dict_to_string(tags_a)} nearby #{VisualDiff.tag_dict_to_string(tags_b)} - bb size: #{bb_size}"
-      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description, invalidate_cache: invalidate_cache)
       if list.length != 0
         return OverpassQueryGenerator.list_returned_by_overpass_to_a_single_location(list)
       end
       return OverpassQueryGenerator.find_data_pair(tags_a, tags_b, latitude, longitude, type_a, type_b, bb_size: bb_size * 2, distance_in_meters: distance_in_meters)
     end
 
-    def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size)
+    def self.get_file_with_downloaded_osm_data_for_location(latitude, longitude, size, invalidate_cache: false)
       query = get_query_to_download_data_around_location(latitude, longitude, size)
       description = "download data for #{latitude} #{longitude} (#{size})"
-      get_overpass_query_results(query, description)
+      get_overpass_query_results(query, description, invalidate_cache: invalidate_cache)
 
       filename = OverpassDownloader.cache_filename(query)
       return filename
     end
 
-    def self.download_osm_data_for_location(latitude, longitude, size, accept_cache = true)
+    def self.download_osm_data_for_location(latitude, longitude, size, accept_cache = true) # TODO: conflict with invalidate_cache 
       filename = CartoCSSHelper::Configuration.get_path_to_folder_for_cache + "#{latitude} #{longitude} #{size}.osm"
       if File.exist?(filename)
         return filename if accept_cache
         SystemHelper.delete_file(filename, 'query refusing to accept cache was used')
       end
       query = get_query_to_download_data_around_location(latitude, longitude, size)
-      text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})")
+      text = get_overpass_query_results(query, "download data for #{latitude} #{longitude} (#{size})", invalidate_cache: false)
       File.new(filename, 'w') do |file|
         file.write text
       end
@@ -85,17 +85,17 @@ module CartoCSSHelper
       return query
     end
 
-    def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters)
+    def self.get_elements_near_given_location(tags, type, latitude, longitude, range_in_meters, invalidate_cache: false)
       description = "find #{tags} #{type} within #{range_in_meters / 1000}km from #{latitude}, #{longitude}"
       query = OverpassQueryGenerator.get_query_to_get_location(tags, type, latitude, longitude, range_in_meters)
-      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description, invalidate_cache: invalidate_cache)
       return list_returned_by_overpass_to_array(list)
     end
 
-    def self.get_elements_across_world(tags, type)
+    def self.get_elements_across_world(tags, type, invalidate_cache: false)
       description = "find #{tags} #{type} across the world"
       query = OverpassQueryGenerator.get_query_to_get_location(tags, type, 0, 0, :infinity)
-      list = OverpassQueryGenerator.get_overpass_query_results(query, description)
+      list = OverpassQueryGenerator.get_overpass_query_results(query, description, invalidate_cache: invalidate_cache)
       return list_returned_by_overpass_to_array(list)
     end
 
