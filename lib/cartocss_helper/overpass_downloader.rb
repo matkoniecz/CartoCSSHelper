@@ -42,8 +42,8 @@ module CartoCSSHelper
         puts
         puts url
         puts
-        puts "url with %20 replaced back by spaces, %22 by \""
-        puts url.replace("%20", " ").replace("%22", '"')
+        puts "url with %20 replaced back by spaces, %22 by \", newline by %0A"
+        puts url.replace("%20", " ").replace("%22", '"').replace("\n", "%0A")
         puts
         puts e
       elsif e.http_code == 414
@@ -66,7 +66,7 @@ module CartoCSSHelper
       query = query.gsub('\\', '\\\\')
 
       # newlines, tabs added in query for readability may be safely deleted
-      query = query.delete("\n")
+      #query = query.delete("\n") - can be escaped! Results in nicer Overpass failures
       query = query.delete("\t")
 
       #query = URI.escape(query) # no escaping for / [add require 'uri' to use it]
