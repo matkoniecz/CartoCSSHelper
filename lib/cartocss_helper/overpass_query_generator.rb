@@ -245,6 +245,8 @@ module CartoCSSHelper
 
     def self.get_overpass_query_results(query, description, debug = false, invalidate_cache: false) # TODO: - make debug parameter named
       if File.exist?(get_query_cache_refused_response_filename(query))
+        puts("response cached as failed")
+        puts(get_query_cache_refused_response_filename(query))
         raise OverpassDownloader::OverpassRefusedResponse
       end
 
