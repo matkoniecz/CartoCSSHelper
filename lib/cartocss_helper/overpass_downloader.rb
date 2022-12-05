@@ -43,7 +43,7 @@ module CartoCSSHelper
         puts url
         puts
         puts "url with %20 replaced back by spaces, %22 by \", newline by %0A"
-        puts url.replace("%20", " ").replace("%22", '"').replace("\n", "%0A")
+        puts url.gsub("%20", " ").gsub("%22", '"').gsub("\n", "%0A")
         puts
         puts e
       elsif e.http_code == 414

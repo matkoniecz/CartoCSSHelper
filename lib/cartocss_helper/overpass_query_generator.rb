@@ -190,7 +190,7 @@ module CartoCSSHelper
      end
 
     def self.overpass_escape(text)
-      return text.gsub("\\", "\\\\\\").gsub("'", "\\\\'")
+      return text.gsub("\\", "\\\\\\").gsub("'", "\\\\'").gsub('"', '\\\\"')
     end
 
     def self.turn_tag_into_overpass_filter(tag)
