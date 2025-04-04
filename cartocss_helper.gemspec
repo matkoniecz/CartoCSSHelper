@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'cartocss_helper'
-  s.version     = '5.3.0'
+  s.version     = '5.4.0'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Mateusz Konieczny']
   s.email       = ['matkoniecz@gmail.com']
